@@ -88,7 +88,7 @@ p {
     font-family: var(--text-font), serif;
     font-size: 0.8vw;
     align-self: center;
-    padding: 10px 20px;
+    padding: 5px 20px !important;
     border-radius: var(--default-radius);
     border: 1px transparent solid;
 }

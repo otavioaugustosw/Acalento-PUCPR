@@ -1,0 +1,71 @@
+.card {
+    border: 1px solid var(--primary-blue) !important;
+}
+
+.amarelo {
+    background-color: var(--secondary-yellow);
+}
+
+.imagem-horizontal {
+    height: 100%;
+}
+
+.imagem-horizontal img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.card .imagem-vertical {
+    width: 100%;
+    height: 25vh;
+}
+
+.card .imagem-vertical img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.degrade-horizontal {
+    position: relative;
+    display: inline-block;
+}
+
+.degrade-horizontal::after {
+    background: linear-gradient(to right, rgba(0, 0, 255, 0), var(--secondary-yellow));
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.degrade-vertical {
+    position: relative;
+    margin: 0;
+    padding: 0;
+}
+
+.degrade-vertical::after {
+    background: linear-gradient(to bottom, rgba(0, 0, 255, 0), var(--secondary-yellow));
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 50%;
+    z-index: 1;
+}
+
+h5 {
+    font-size: 2rem;
+    margin-top: 2.5vh;
+}
+ p {
+     font-size: 0.9rem;
+     margin-bottom: 0.5vh;
+ }
+

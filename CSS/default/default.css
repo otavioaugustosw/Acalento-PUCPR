@@ -1,0 +1,127 @@
+@font-face {
+    font-family: 'Poppins';
+    src: url('ASSETS/fontes/Poppins.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'PlayfairDisplay';
+    src: url('ASSETS/fontes/PlayfairDisplay.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.container {
+    width: 100%;
+    max-width: 90vw;
+    margin: 0 auto;
+}
+
+html, body {
+    background-color: var(--secondary-yellow);
+    margin: 3vh 2vw 3vh 2vw;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--title-font), Serif, serif;
+    color: var(--primary-blue);
+    font-weight: 600;
+}
+
+p {
+    font-family: var(--text-font), sans-serif;
+    color: var(--primary-blue);
+}
+
+
+:root {
+    /*AZUL PADRÃO*/
+    --primary-blue: #033240;
+    --secondary-blue: #CBDEE4;
+
+    /*VERDE PADRÃO*/
+    --primary-green: #00AA25;
+    --secondary-green: #D8FFE1;
+
+    /*VERMELHO PADRÃO*/
+    --primary-red: #D20004;
+    --secondary-red: #FBCACB;
+
+    /*AMARELO PADRÃO*/
+    --primary-yellow: #FFBF00;
+    --secondary-yellow: #FFF7D8;
+
+    /*FUNDO PADRÃO*/
+    --primary-background: #d8d5ad;
+    --secondary-background: #FFFCD8;
+    --tertiary-background: #FFFEF2;
+
+    /*CORES ACESSIBILIDADE*/
+    --acessibility-primary: #000000;
+    --acessibility-secondary: #cccccc;
+    --acessibility-tertiary: #ffffff;
+
+    /*BORDA PADRÃO*/
+    --default-border: solid 1px var(--primary-blue) !important;
+    --error-border: solid 1px var(--primary-red) !important;
+    --acessibility-border: solid 1px var(--acessibility-primary) !important;
+    --secondary-border: solid 1px var(--primary-background) !important;
+    --default-radius: 12px;
+
+    /*SOMBRA PADRÃO*/
+    --primary-shadow: 2px 2px 20px 1px rgba(0, 116, 255, 0.3);
+    --secondary-shadow: 2px 2px 20px 1px rgba(0, 23, 122, 0.49);
+    --red-shadow: 2px 2px 20px 1px rgba(255, 0, 0, 0.27);
+
+    /*FONTE PADRÃO*/
+    --title-font: 'PlayfairDisplay', serif;
+    --text-font: 'Poppins', sans-serif;
+
+    /*ESPAÇO DO HEADER PADRÃO*/
+    --header-margin: 60px;
+}
+
+/*BOTÃO PADRÃO*/
+
+.btn {
+    font-family: var(--text-font), serif;
+    font-size: 0.8vw;
+    align-self: center;
+    padding: 10px 20px;
+    border-radius: var(--default-radius);
+    border: 1px transparent solid;
+}
+
+.azul {
+    background-color: #033240;
+    color: #FFFEF2;
+}
+
+.azul:hover {
+    background-color: var(--secondary-blue);
+    color: var(--primary-blue);
+}
+
+.azul-claro {
+    background-color: #CBDEE4;
+    color: #033240;
+}
+
+.azul-claro:hover {
+    background-color: #033240;
+    color: #FFFEF2;
+}
+
+.btn-danger:hover {
+    color: var(--primary-red);
+    background-color: var(--secondary-red);
+    border: none;
+}
+.largura-completa {
+    width: 100%;
+}
+
+.largura-50 {
+    width: 49%;
+}

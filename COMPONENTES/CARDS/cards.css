@@ -69,3 +69,8 @@ h5 {
      margin-bottom: 0.5vh;
  }
 
+button {
+    margin-top: 15px !important;
+    font-size: 0.8rem !important;
+ }
+

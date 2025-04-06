@@ -1,13 +1,13 @@
 @font-face {
     font-family: 'Poppins';
-    src: url('ASSETS/fontes/Poppins.ttf') format('truetype');
+    src: url('../../assets/fontes/Poppins.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'PlayfairDisplay';
-    src: url('ASSETS/fontes/PlayfairDisplay.ttf') format('truetype');
+    src: url('../../assets/fontes/PlayfairDisplay.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }

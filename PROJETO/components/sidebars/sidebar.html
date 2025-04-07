@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en" data-bs-theme="auto">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.145.0">
+    <title>Sidebar</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/sidebars/">
+
+    <script src="../../../PROJETO/assets/js/color-modes.js"></script>
+
+    <link href="../../../PROJETO/assets/distinct/bootstrap/bootstrap.min.css" rel="stylesheet">
+
+    <meta name="theme-color" content="#712cf9">
+
+
+
+    <!-- Mudar tema-->
+    <link href="sidebars.css" rel="stylesheet">
+</head>
+<svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+    <symbol id="check2" viewBox="0 0 16 16">
+        <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+    </symbol>
+    <symbol id="circle-half" viewBox="0 0 16 16">
+        <path d="M8 15A7 7 0 1 0 8 1v14zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16z"/>
+    </symbol>
+    <symbol id="moon-stars-fill" viewBox="0 0 16 16">
+        <path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z"/>
+        <path d="M10.794 3.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387a1.734 1.734 0 0 0-1.097 1.097l-.387 1.162a.217.217 0 0 1-.412 0l-.387-1.162A1.734 1.734 0 0 0 9.31 6.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387a1.734 1.734 0 0 0 1.097-1.097l.387-1.162zM13.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.156 1.156 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.156 1.156 0 0 0-.732-.732l-.774-.258a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732L13.863.1z"/>
+    </symbol>
+    <symbol id="sun-fill" viewBox="0 0 16 16">
+        <path d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"/>
+    </symbol>
+</svg>
+
+
+<div class="dropdown position-fixed bottom-0 end-0 mb-3 me-3 bd-mode-toggle">
+    <button class="btn btn-bd-primary py-2 dropdown-toggle d-flex align-items-center" id="bd-theme"
+            type="button" aria-expanded="false" data-bs-toggle="dropdown" aria-label="Toggle theme (auto)">
+        <svg class="bi my-1 theme-icon-active" aria-hidden="true"><use href="#circle-half"></use></svg>
+        <span class="visually-hidden" id="bd-theme-text">Temas</span>
+    </button>
+    <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="bd-theme-text">
+        <li>
+            <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="light" aria-pressed="false">
+                <svg class="bi me-2 opacity-50" aria-hidden="true"><use href="#sun-fill"></use></svg>
+                Claro
+                <svg class="bi ms-auto d-none" aria-hidden="true"><use href="#check2"></use></svg>
+            </button>
+        </li>
+        <li>
+            <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="dark" aria-pressed="false">
+                <svg class="bi me-2 opacity-50" aria-hidden="true"><use href="#moon-stars-fill"></use></svg>
+                Escuro
+                <svg class="bi ms-auto d-none" aria-hidden="true"><use href="#check2"></use></svg>
+            </button>
+        </li>
+        <li>
+            <button type="button" class="dropdown-item d-flex align-items-center active" data-bs-theme-value="auto" aria-pressed="true">
+                <svg class="bi me-2 opacity-50" aria-hidden="true"><use href="#circle-half"></use></svg>
+                Automático
+                <svg class="bi ms-auto d-none" aria-hidden="true"><use href="#check2"></use></svg>
+            </button>
+        </li>
+    </ul>
+</div>
+
+<!-- SIDE BAR -->
+
+<svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+    <symbol id="home" viewBox="0 0 16 16">
+        <path d="M8 3.293l-6 6V14a1 1 0 0 0 1 1h3v-3h4v3h3a1 1 0 0 0 1-1v-4.707l-6-6z"/>
+        <path fill-rule="evenodd" d="M7.293 1.5a1 1 0 0 1 1.414 0l6.647 6.647a.5.5 0 0 1-.708.708L8 2.207 1.354 8.854a.5.5 0 1 1-.708-.708L7.293 1.5z"/>
+    </symbol>
+    <symbol id="heart" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/>
+    </symbol>
+
+    <symbol id="puzzle" viewBox="0 0 16 16">
+        <path d="M3.112 3.645A1.5 1.5 0 0 1 4.605 2H7a.5.5 0 0 1 .5.5v.382c0 .696-.497 1.182-.872 1.469a.5.5 0 0 0-.115.118l-.012.025L6.5 4.5v.003l.003.01q.005.015.036.053a.9.9 0 0 0 .27.194C7.09 4.9 7.51 5 8 5c.492 0 .912-.1 1.19-.24a.9.9 0 0 0 .271-.194.2.2 0 0 0 .036-.054l.003-.01v-.008l-.012-.025a.5.5 0 0 0-.115-.118c-.375-.287-.872-.773-.872-1.469V2.5A.5.5 0 0 1 9 2h2.395a1.5 1.5 0 0 1 1.493 1.645L12.645 6.5h.237c.195 0 .42-.147.675-.48.21-.274.528-.52.943-.52.568 0 .947.447 1.154.862C15.877 6.807 16 7.387 16 8s-.123 1.193-.346 1.638c-.207.415-.586.862-1.154.862-.415 0-.733-.246-.943-.52-.255-.333-.48-.48-.675-.48h-.237l.243 2.855A1.5 1.5 0 0 1 11.395 14H9a.5.5 0 0 1-.5-.5v-.382c0-.696.497-1.182.872-1.469a.5.5 0 0 0 .115-.118l.012-.025.001-.006v-.003l-.003-.01a.2.2 0 0 0-.036-.053.9.9 0 0 0-.27-.194C8.91 11.1 8.49 11 8 11s-.912.1-1.19.24a.9.9 0 0 0-.271.194.2.2 0 0 0-.036.054l-.003.01v.002l.001.006.012.025c.016.027.05.068.115.118.375.287.872.773.872 1.469v.382a.5.5 0 0 1-.5.5H4.605a1.5 1.5 0 0 1-1.493-1.645L3.356 9.5h-.238c-.195 0-.42.147-.675.48-.21.274-.528.52-.943.52-.568 0-.947-.447-1.154-.862C.123 9.193 0 8.613 0 8s.123-1.193.346-1.638C.553 5.947.932 5.5 1.5 5.5c.415 0 .733.246.943.52.255.333.48.48.675.48h.238z"/>
+    </symbol>
+    <symbol id="pessoa" viewBox="0 0 16 16">
+        <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
+
+    </symbol>
+</svg>
+
+<button class="btn btn-primary d-md-none m-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSidebar" aria-controls="offcanvasSidebar">&#9776;</button>
+
+
+
+<!-- Menu mobile -->
+<div class="offcanvas offcanvas-top d-md-none" tabindex="-1" id="offcanvasSidebar" aria-labelledby="offcanvasSidebarLabel">
+    <div class="offcanvas-header justify-content-between align-items-center px-3 pt-3 pb-0 border-bottom-0">
+        <span class="fs-3 fw-semibold mb-1">Olá...</span>
+        <button type="button" class="btn-close ms-2" data-bs-dismiss="offcanvas" aria-label="Fechar"></button>
+    </div>
+    <div class="offcanvas-body pt-2 px-3" id="offcanvasContent"></div>
+</div>
+
+
+<main class="d-flex flex-nowrap">
+    <h1 class="visually-hidden">Menu lateral</h1>
+
+    <div class="d-none d-md-block">
+        <div class="flex-shrink-0 p-3 menu-lateral h-100" style="width: 280px;">
+            <a class="d-flex flex-column align-items-start pb-3 mb-3 link-body-emphasis text-decoration-none border-bottom">
+                <div class="logo-container">
+                    <img src="../../../PROJETO/assets/logo/Acalento_logo_claro.svg" alt="Logo Acalento Claro" class=" logo logo-tema-claro">
+                    <img src="../../../PROJETO/assets/logo/acalento-logo.svg" alt="Logo Acalento Escuro" class="logo logo-tema-escuro"></div>
+                <span class="fs-3 fw-semibold saudacao mt-5">Olá...</span>
+            </a>
+
+            <ul class="list-unstyled ps-0 ">
+
+
+                <li class="mb-1">
+                    <button class="btn btn-toggle  d-inline-flex align-items-center rounded border-0 collapsed"
+                            data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="false">
+                        <svg class="bi me-2" width="20" height="20" aria-hidden="true">
+                            <use xlink:href="#home" />
+                        </svg>
+                        Página Inicial
+                    </button>
+                    <div class="collapse" id="home-collapse">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Overview</a></li>
+                            <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Updates</a></li>
+                            <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Reports</a></li>
+                        </ul>
+                    </div>
+                </li>
+
+                <li class="mb-1">
+                    <button class="btn btn-toggle  d-inline-flex align-items-center rounded border-0 collapsed"
+                            data-bs-toggle="collapse" data-bs-target="#pessoa-collapse" aria-expanded="false">
+                        <svg class="bi me-2" width="20" height="20" aria-hidden="true">
+                            <use xlink:href="#pessoa" />
+                        </svg>
+                        Minha Conta
+                    </button>
+                    <div class="collapse" id="pessoa-collapse">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Overview</a></li>
+                            <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Updates</a></li>
+                            <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Reports</a></li>
+                        </ul>
+                    </div>
+                </li>
+
+
+
+
+                <li class="mb-1">
+                    <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+                            data-bs-toggle="collapse" data-bs-target="#eventos-collapse" aria-expanded="false">
+                        <svg class="bi me-2" width="20" height="20" aria-hidden="true">
+                            <use xlink:href="#puzzle" />
+                        </svg>
+                        Eventos
+                    </button>
+                    <div class="collapse" id="eventos-collapse">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Participar</a></li>
+                            <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Inscrições</a></li>
+                            <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Eventos Passados</a></li>
+                        </ul>
+                    </div>
+                </li>
+
+
+                <li class="mb-1">
+                    <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#doacoes-collapse" aria-expanded="false">
+                        <svg class="bi me-2" width="20" height="20" aria-hidden="true">
+                            <use xlink:href="#heart" />
+                        </svg>
+                        Doações
+                    </button>
+                    <div class="collapse" id="doacoes-collapse">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Doar</a></li>
+                            <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Doações Realizadas</a></li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+
+    <div class="b-example-vr"></div>
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const originalMenu = document.querySelector(".menu-lateral");
+            const offcanvasContent = document.getElementById("offcanvasContent");
+
+            if (originalMenu && offcanvasContent) {
+                offcanvasContent.innerHTML = originalMenu.innerHTML;
+            }
+        });
+
+
+    </script>
+
+</main>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+
+
+</html>

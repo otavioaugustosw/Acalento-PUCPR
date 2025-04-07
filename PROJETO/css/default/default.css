@@ -93,22 +93,22 @@ p {
     border: 1px transparent solid;
 }
 
-.azul {
+.btn-primary {
     background-color: #033240;
     color: #FFFEF2;
 }
 
-.azul:hover {
+.btn-primary:hover {
     background-color: var(--secondary-blue);
     color: var(--primary-blue);
 }
 
-.azul-claro {
+.btn-secondary {
     background-color: #CBDEE4;
     color: #033240;
 }
 
-.azul-claro:hover {
+.btn-secondary:hover {
     background-color: #033240;
     color: #FFFEF2;
 }

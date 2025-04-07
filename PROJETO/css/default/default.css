@@ -34,7 +34,6 @@ p {
     color: var(--primary-blue);
 }
 
-
 :root {
     /*AZUL PADRÃO*/
     --primary-blue: #033240;
@@ -86,7 +85,7 @@ p {
 
 .btn {
     font-family: var(--text-font), serif;
-    font-size: 0.8vw;
+    /*font-size: 0.8vw;*/
     align-self: center;
     padding: 5px 20px !important;
     border-radius: var(--default-radius);

@@ -4,17 +4,18 @@ USE acalento;
 CREATE TABLE IF NOT EXISTS endereco(
     id INT AUTO_INCREMENT PRIMARY KEY,
     rua VARCHAR(50),
-    numero SMALLINT, # Pra economizar armazenamento (bibi que ensinou)
+    numero SMALLINT, # Pra economizar armazenamento (abimael que ensinou)
     bairro VARCHAR(50),
     cidade VARCHAR(50),
-    estado VARCHAR(50)
+    estado VARCHAR(50),
+    cep VARCHAR(9)
 );
 
 CREATE TABLE IF NOT EXISTS usuario (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_endereco INT NOT NULL,
     email VARCHAR(50),
-    senha VARCHAR(256), # É recomendado pela documentação PHP (caso o giu pergunte)
+    senha VARCHAR(256), # É recomendado pela documentação PHP
     nome VARCHAR(50),
     cpf VARCHAR(11),
     cnpj VARCHAR(14),
@@ -22,7 +23,7 @@ CREATE TABLE IF NOT EXISTS usuario (
     nascimento DATE,
     eh_doador BOOL,
     eh_patrocinador BOOL,
-    eh_adm BOOL,
+    eh_voluntario BOOL,
     FOREIGN KEY (id_endereco) REFERENCES endereco(id)
 );
 
@@ -75,7 +76,8 @@ CREATE TABLE IF NOT EXISTS evento(
     lotacao_max SMALLINT,
     data DATE,
     hora TIME,
-    link_imagem VARCHAR(256)
+    link_imagem VARCHAR(256),
+    FOREIGN KEY (id_assentamento) REFERENCES assentamento(id)
 );
 
 CREATE TABLE IF NOT EXISTS usuario_participa_evento(
@@ -87,28 +89,38 @@ CREATE TABLE IF NOT EXISTS usuario_participa_evento(
     FOREIGN KEY(id_usuario) REFERENCES usuario(id)
 );
 
-CREATE TABLE IF NOT EXISTS doacao(
+CREATE TABLE IF NOT EXISTS campanha_doacao(
     id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(50),
     data date,
     evento_destino INT,
-    tipo ENUM('Alimentício', 'Brinquedo', 'Limpeza', 'Outros') NOT NULL,
     FOREIGN KEY(evento_destino) REFERENCES evento(id)
+);
+
+CREATE TABLE IF NOT EXISTS opcao_item (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(50)
 );
 
 CREATE TABLE IF NOT EXISTS item(
     id INT AUTO_INCREMENT PRIMARY KEY,
-    id_doacao INT,
-    nome VARCHAR(50),
+    id_campanha_doacao INT,
+    id_opcao INT,
+    id_usuario INT,
     quantidade SMALLINT,
     unidade_medida VARCHAR(3),
     valor DOUBLE,
-    FOREIGN KEY(id_doacao) REFERENCES doacao(id)
+    tipo ENUM('Alimentício', 'Brinquedo', 'Limpeza', 'Outros') NOT NULL,
+    data date,
+    FOREIGN KEY(id_campanha_doacao) REFERENCES campanha_doacao(id),
+    FOREIGN KEY (id_opcao) REFERENCES opcao_item(id),
+    FOREIGN KEY (id_usuario) REFERENCES usuario(id)
 );
 
 CREATE TABLE IF NOT EXISTS usuario_gerencia_doacao(
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_doacao INT,
     id_usuario INT,
-    FOREIGN KEY(id_doacao) REFERENCES doacao(id),
+    FOREIGN KEY(id_doacao) REFERENCES campanha_doacao(id),
     FOREIGN KEY(id_usuario) REFERENCES usuario(id)
 );

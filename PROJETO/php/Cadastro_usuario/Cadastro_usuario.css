@@ -1,0 +1,21 @@
+.form-container {
+    background-color: #fff8d6;
+    border: 2px solid #0b0f1c;
+    border-radius: 15px;
+    padding: 2rem 2.5rem;
+    max-width: 700px;
+    margin: 3rem auto;
+    box-shadow: 0 0 20px rgba(0,0,0,0.08);
+}
+
+.display-container{
+    background-color: #fff8d6;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+
+}
+
+input {
+    color: #FFFCD8;
+}

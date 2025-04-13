@@ -1,0 +1,93 @@
+* {
+    --alinhamento-texto: left;
+    font-size: 1vw;
+}
+
+a{
+     text-decoration: none;
+     color: inherit;
+}
+
+
+html, body {
+    background-color: var(--tertiary-background);
+}
+
+header {
+    padding-top: 10px;
+    position: relative;
+}
+
+header .logo {
+    display: flex;
+    width: 16vw;
+    max-width: 240px;
+}
+
+header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h1 {
+    width: 110px;
+    font-weight: 500;
+    font-size: 2vw;
+    font-family: var(--title-font), serif;
+    line-height: 35px;
+    align-self: center;
+    color: var(--primary-blue);
+    margin-left: 20px;
+}
+
+header img {
+    width: 6vw;
+}
+
+header nav ul li {
+    display: inline-block;
+    position: relative;
+    margin-right: 2vw;
+    font-family: var(--text-font), serif;
+    font-weight: 600;
+    padding-left: 2vw;
+}
+
+header nav ul li a::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--primary-blue);
+}
+
+header nav ul li:first-child a::before {
+    content: '';
+}
+
+header .line {
+    width: 1px;
+    height: 50px;
+    background-color: var(--primary-background);
+}
+
+header .login {
+    display: flex;
+    right: 0;
+}
+
+header .login .btn, header .login img{
+    margin-right: 1vw;
+}
+
+header .login .btn:last-child {
+    margin-right: 0;
+}
+
+header .login img {
+    width: 1.5vw;
+    margin: 0;
+    max-width: 32px;
+}

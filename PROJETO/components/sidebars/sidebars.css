@@ -1,12 +1,12 @@
-:root {
-    --primary-bg: #033240;
-    --primary-text: #FFFEF2;
+aside .sidebar {
+    height: 100vh;
+
 }
 
 /* MENU LATERAL */
 .menu-lateral {
-    background-color: var(--primary-bg);
-    color: var(--primary-text);
+    background-color: var(--primary-blue);
+    color: var(--tertiary-background);
 }
 
 .logo {
@@ -29,7 +29,7 @@
 .menu-lateral .btn-toggle,
 .menu-lateral .link-body-emphasis,
 .menu-lateral .saudacao {
-    color: var(--primary-text) !important;
+    color: var(--tertiary-background) !important;
 }
 
 .menu-lateral .btn-toggle:hover,
@@ -37,21 +37,19 @@
 .menu-lateral .btn-toggle-nav a:hover,
 .menu-lateral .btn-toggle-nav a:focus {
     background-color: rgba(255, 255, 255, 0.05); /* fundo bem levinho */
-    color: var(--primary-text) !important;
+    color: var(--tertiary-background) !important;
 }
 
-
-
 [data-bs-theme="dark"] .menu-lateral {
-    background-color: var(--primary-text) !important;
-    color: var(--primary-bg) !important;
+    background-color: var(--tertiary-background) !important;
+    color: var(--primary-blue) !important;
 }
 
 [data-bs-theme="dark"] .menu-lateral .btn,
 [data-bs-theme="dark"] .menu-lateral .btn-toggle,
 [data-bs-theme="dark"] .menu-lateral .link-body-emphasis,
 [data-bs-theme="dark"] .menu-lateral .saudacao {
-    color: var(--primary-bg) !important;
+    color: var(--primary-blue) !important;
 }
 
 [data-bs-theme="dark"] .menu-lateral .btn-toggle:hover,
@@ -59,17 +57,22 @@
 [data-bs-theme="dark"] .menu-lateral .btn-toggle-nav a:hover,
 [data-bs-theme="dark"] .menu-lateral .btn-toggle-nav a:focus {
     background-color: rgba(0, 0, 0, 0.05); /* levinho */
-    color: var(--primary-bg) !important;
+    color: var(--primary-blue) !important;
 }
 
 
 
 /* Mobile*/
+
+.offcanvas {
+    max-height: 100vh;
+    height: auto !important;
+}
 .offcanvas-body {
-    overflow-y: auto;
-    max-height: calc(100vh - 56px);
-    padding-bottom: 1rem;
-    background-color: var(--primary-bg);
+    overflow-y: auto !important;
+    max-height: 100vh;
+    padding-bottom: 2rem;
+    background-color: var(--primary-blue);
 }
 
 .offcanvas .btn-toggle {
@@ -78,7 +81,6 @@
     justify-content: flex-start;
     color: inherit;
 }
-
 
 .offcanvas-body a,
 .offcanvas-body button {
@@ -110,21 +112,19 @@
     }
 
     .offcanvas-header {
-        background-color: var(--primary-bg);
-        color: var(--primary-text) !important;
+        background-color: var(--primary-blue);
+        color: var(--tertiary-background) !important;
     }
 
     .offcanvas-body {
-        color: var(--primary-text);
+        color: var(--tertiary-background);
     }
 
     .offcanvas-body a,
     .offcanvas-body button {
-        color: var(--primary-text) !important;
+        color: var(--tertiary-background) !important;
     }
 }
-
-
 
 /* Tema escuro */
 
@@ -155,8 +155,6 @@
     text-decoration: underline;
 }
 
-
-
 /* Botão x */
 [data-bs-theme="light"] .offcanvas-header .btn-close {
     filter: invert(1) brightness(0.9);
@@ -169,23 +167,6 @@
 }
 
 /* BOOTSTRAP PADRÃO */
-
-body {
-    min-height: 100vh;
-    min-height: -webkit-fill-available;
-}
-
-html {
-    height: -webkit-fill-available;
-}
-
-main {
-    height: 100vh;
-    height: -webkit-fill-available;
-    max-height: 100vh;
-    overflow-x: auto;
-    overflow-y: hidden;
-}
 
 .dropdown-toggle { outline: 0; }
 
@@ -255,7 +236,6 @@ main {
 .b-example-vr {
     flex-shrink: 0;
     width: 1.5rem;
-    height: 100vh;
 }
 
 .bi {

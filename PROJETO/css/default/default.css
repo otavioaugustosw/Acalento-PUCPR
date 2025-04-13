@@ -20,7 +20,6 @@
 
 html, body {
     background-color: var(--secondary-yellow);
-    margin: 3vh 2vw 3vh 2vw;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -100,6 +99,7 @@ p {
 .btn-primary:hover {
     background-color: var(--secondary-blue);
     color: var(--primary-blue);
+    border: none;
 }
 
 .btn-secondary {
@@ -110,6 +110,7 @@ p {
 .btn-secondary:hover {
     background-color: #033240;
     color: #FFFEF2;
+    border: none;
 }
 
 .btn-danger:hover {

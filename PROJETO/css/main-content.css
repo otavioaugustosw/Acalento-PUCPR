@@ -1,0 +1,42 @@
+
+.main-content {
+    min-height: 100vh;
+    overflow-y: auto;
+    flex: 1;
+}
+
+main {
+    min-height: 100vh;
+}
+
+.main-content h2 {
+    margin-top: 5vh;
+    margin-bottom: 5vh;
+}
+
+.table {
+    --bs-table-bg: transparent !important;
+    --bs-table-striped-bg: transparent !important;
+    --bs-table-hover-bg: transparent !important;
+}
+
+/* Tabela amarela - versão blindada */
+.table.table-amarela {
+    background-color: var(--secondary-yellow) !important; /* Amarelo claro */
+}
+
+
+.table.table-amarela tbody tr:hover {
+    background-color: var(--secondary-blue) !important; /* Amarelo hover */
+}
+
+.table.table-amarela td,
+.table.table-amarela th {
+    border-color: var(--primary-blue) !important; /* Borda amarela */
+}
+
+@media (min-width: 768px) {
+    .main-content {
+        margin-left: 250px;
+    }
+}

@@ -3,7 +3,7 @@
 }
 
 .amarelo {
-    background-color: var(--secondary-yellow);
+    background-color: var(--secondary-yellow) !important;
 }
 
 .imagem-horizontal {
@@ -60,17 +60,24 @@
     z-index: 1;
 }
 
-h5 {
+.card h5 {
     font-size: 2rem;
-    margin-top: 2.5vh;
+    margin-top: 1vh;
 }
- p {
+.card p {
      font-size: 0.9rem;
      margin-bottom: 0.5vh;
  }
 
-button {
+.card button {
     margin-top: 15px !important;
     font-size: 0.8rem !important;
+
  }
 
+
+.card a {
+    margin-top: 15px !important;
+    font-size: 0.8rem !important;
+
+}

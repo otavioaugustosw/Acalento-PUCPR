@@ -1,0 +1,15 @@
+{
+  "name": "acalento/projeto",
+  "description": "description",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "otavioaugusto",
+      "email": "email@example.com"
+    }
+  ],
+  "require": {
+    "vlucas/phpdotenv": "^5.6"
+  }
+}

@@ -1,13 +1,13 @@
 @font-face {
     font-family: 'Poppins';
-    src: url('../../assets/fontes/Poppins.ttf') format('truetype');
+    src: url('../assets/fontes/Poppins.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
     font-family: 'PlayfairDisplay';
-    src: url('../../assets/fontes/PlayfairDisplay.ttf') format('truetype');
+    src: url('../assets/fontes/PlayfairDisplay.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
@@ -19,8 +19,8 @@
 }
 
 html, body {
-    background-color: var(--secondary-yellow);
-    margin: 3vh 2vw 3vh 2vw;
+    background-color: var(--secondary-yellow) !important;
+    /*margin: 3vh 2vw 3vh 2vw;*/
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -32,6 +32,10 @@ h1, h2, h3, h4, h5, h6 {
 p {
     font-family: var(--text-font), sans-serif;
     color: var(--primary-blue);
+}
+
+.addScroll {
+    overflow-y: scroll;
 }
 
 :root {
@@ -100,6 +104,12 @@ p {
 .btn-primary:hover {
     background-color: var(--secondary-blue);
     color: var(--primary-blue);
+    border: none;
+}
+
+.btn-primary:active  {
+    background-color: var(--secondary-blue) !important;
+    color: var(--primary-blue) !important;
 }
 
 .btn-secondary {
@@ -107,16 +117,35 @@ p {
     color: #033240;
 }
 
+.btn-secondary:active  {
+    background-color: #033240 !important;
+    color: #FFFEF2 !important;
+}
+
 .btn-secondary:hover {
     background-color: #033240;
     color: #FFFEF2;
+    border: none;
+}
+
+.btn-danger {
+    color: var(--secondary-red) !important;
+    background-color: var(--primary-red) !important;
+    border: none;
 }
 
 .btn-danger:hover {
-    color: var(--primary-red);
-    background-color: var(--secondary-red);
+    color: var(--primary-red) !important;
+    background-color: var(--secondary-red) !important;
     border: none;
 }
+
+.btn-danger:active {
+    color: var(--primary-red) !important;
+    background-color: var(--secondary-red) !important;
+    border: none;
+}
+
 .largura-completa {
     width: 100%;
 }

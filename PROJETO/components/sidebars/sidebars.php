@@ -4,8 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/default/default.css">
-    <link href="components/forms/form-style.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/default.css">
+    <link href="css/form-style.css" rel="stylesheet">
     <link rel="stylesheet" href="css/sidebars.css">
     <title>Title</title>
 </head>
@@ -42,20 +42,20 @@
         <!-- sidebar navigation -->
         <ul class="sidebar-nav p-0 list-unstyled">
             <li class="sidebar-item mb-1">
-                <button class="btn btn-toggle  d-inline-flex align-items-center rounded border-0 collapsed"
+                <a  href="index.html" class="btn btn-toggle  d-inline-flex align-items-center rounded border-0 collapsed"
                         data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="false">
                     <svg class="bi me-2" width="20" height="20" aria-hidden="true">
-                        <use xlink:href="#home"/>
+                        <use xlink:href="#pessoa"/>
                     </svg>
                     Página Inicial
-                </button>
+                </a>
             </li>
 
             <li class="mb-1">
                 <button class="btn btn-toggle  d-inline-flex align-items-center rounded border-0 collapsed"
                         data-bs-toggle="collapse" data-bs-target="#pessoa-collapse" aria-expanded="false">
                     <svg class="bi me-2" width="20" height="20" aria-hidden="true">
-                        <use xlink:href="#pessoa"/>
+                        <use xlink:href="#home"/>
                     </svg>
                     Minha Conta
                 </button>
@@ -71,9 +71,13 @@
                 </button>
                 <div class="collapse" id="eventos-collapse">
                     <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                        <li><a href="../../php/pages/createEvent.php" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Cadastrar evento</a></li>
+                        <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Participe de eventos</a></li>
+                        <li><a href=php/pages/createEvent.php" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Cadastrar evento</a></li>
                         <li><a href="../../php/pages/editEvent.php" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Editar evento</a></li>
                         <li><a href="../../php/pages/viewEvent.php" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Visualizar</a></li>
+                                        <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Inscrever-se</a></li>
+                                        <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Eventos inscritos</a></li>
+                                        <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Confirmar presença</a></li>
                     </ul>
                 </div>
             </li>
@@ -87,10 +91,13 @@
                 </button>
                 <div class="collapse" id="doacoes-collapse">
                     <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                                        <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Faça a sua primeira doação</a></li>
                         <li><a href="../../php/pages/createDonation.php" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Cadastrar campanha</a></li>
                         <li><a href="../../php/pages/viewCampaign.php" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Editar campanha</a></li>
                         <li><a href="../../php/pages/createItem.php" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Cadastrar item</a></li>
                         <li><a href="../../php/pages/viewAllDonation.php" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Visualizar doações</a></li>
+                                        <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Nova doação</a></li>
+                                        <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Suas doações</a></li>
                     </ul>
                 </div>
             </li>
@@ -146,9 +153,7 @@
 <!--        </button>-->
 <!--        <div class="collapse" id="eventos-collapse">-->
 <!--            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">-->
-<!--                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Inscrever-se</a></li>-->
-<!--                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Eventos inscritos</a></li>-->
-<!--                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Confirmar presença</a></li>-->
+
 <!--            </ul>-->
 <!--        </div>-->
 <!--    </li>-->
@@ -268,8 +273,7 @@
 <!--        </button>-->
 <!--        <div class="collapse" id="doacoes-collapse">-->
 <!--            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">-->
-<!--                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Faça uma nova doação</a></li>-->
-<!--                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Suas doações</a></li>-->
+
 <!--            </ul>-->
 <!--        </div>-->
 <!--    </li>-->

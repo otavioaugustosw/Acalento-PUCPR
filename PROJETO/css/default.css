@@ -20,7 +20,7 @@
 
 html, body {
     background-color: var(--secondary-yellow) !important;
-    /*margin: 3vh 2vw 3vh 2vw;*/
+    margin: 3vh 2vw 3vh 2vw;
 }
 
 h1, h2, h3, h4, h5, h6 {

@@ -9,10 +9,9 @@ $auth = new AuthService($sql);
 if(isset($_POST['email'], $_POST['password'])) {
     $result = $auth->authenticateUser($_POST['email'], $_POST['password']);
     if ($result['status']) {
-        header('Location: index.php?page=2');
+        header('Location: index.php?common=4');
         exit;
     } else {?>
-        <!-- Flexbox container for aligning the toasts -->
         <div class="toast-container position-absolute p-3 top-0 start-50 translate-middle-x">
             <div class="toast text-bg-danger border-0 show" id="toastRuim">
                 <div class="d-flex">
@@ -43,7 +42,7 @@ if(isset($_POST['email'], $_POST['password'])) {
 <body class="d-flex justify-content-center align-items-center vh-100">
 <div class="card shadow-lg p-4">
     <h2 class="mb-4 text-center">Entrar</h2>
-    <form action="/Acalento/projeto/index.php?page=1" method="POST">
+    <form action="/Acalento/projeto/index.php?common=2" method="POST">
         <div class="mb-3">
             <label for="email" class="form-label">E-mail</label>
             <input type="email" class="form-control" name="email" id="email" required placeholder="seu@email.com">

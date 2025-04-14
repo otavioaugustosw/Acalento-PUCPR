@@ -26,9 +26,9 @@
         <div class="d-flex align-items-center">
             <?php if (isset($_SESSION['USER_NAME'])): ?>
                 <span class="me-3 fw-bold text-primary"><?=$_SESSION['USER_NAME']?></span>
-                <a href="/Acalento/projeto/index.php?page=3" class="btn btn-danger">Sair</a>
+                <a href="/Acalento/projeto/index.php?common=3" class="btn btn-danger">Sair</a>
             <?php else: ?>
-                <a href="index.php?page=1" class="btn btn-primary btn-outline-primary">Entrar</a>
+                <a href="index.php?common=2" class="btn btn-primary btn-outline-primary">Entrar</a>
             <?php endif; ?>
         </div>
     </div>

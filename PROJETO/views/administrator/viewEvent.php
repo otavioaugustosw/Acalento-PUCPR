@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/cards.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/cards.css">
     <link rel="stylesheet" href="css/default.css">
     <link rel="stylesheet" href="css/sidebars.css">
     <link rel="stylesheet" href="css/main-content.css">
@@ -18,12 +18,12 @@
     <!-- fim sidebar -->
     <!-- conteudo -->
     <div class="main-content">
-        <main class="px-5 row align-items-center">
+        <main class="px-5 row align-items-center addScroll">
             <div class="container-fluid">
                 <div class="mb-3">
                     <!-- aqui vai o que você quer por -->
                     <h2>Eventos</h2>
-                    <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-2 row-cols-xl-3 row-cols-xxl-4 g-4 addScroll">
+                    <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-2 row-cols-xl-3 row-cols-xxl-4 g-4">
                     <?php
                     include (ROOT . "/php/config/database_php.php");
                     $conexao = connectDatabase();

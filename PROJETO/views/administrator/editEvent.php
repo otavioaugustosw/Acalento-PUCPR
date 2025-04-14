@@ -4,17 +4,17 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../../components/cards/cards.css" rel="stylesheet">
-    <link rel="stylesheet" href="../../css/default/default.css">
-    <link rel="stylesheet" href="../../css/sidebars.css">
-    <link rel="stylesheet" href="../../css/default/main-content.css">
-    <title>Title</title>
+    <link rel="stylesheet" href="css/cards.css">
+    <link rel="stylesheet" href="css/default.css">
+    <link rel="stylesheet" href="css/sidebars.css">
+    <link rel="stylesheet" href="css/main-content.css">
+    <title>Acalento | Editar evento</title>
 </head>
 
 <body>
-<?php include("../../../PROJETO/components/sidebars/sidebar-mobile.php") ?>
+<?php include(ROOT . "/components/sidebars/sidebar-mobile.php") ?>
 <div class="d-flex flex-nowrap">
-    <?php include("../../../PROJETO/components/sidebars/sidebars.php") ?>
+    <?php include(ROOT .  "/components/sidebars/sidebars.php") ?>
     <!-- fim sidebar -->
 
     <!-- conteudo -->
@@ -26,9 +26,8 @@
                     <h2>Eventos</h2>
                     <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-2 row-cols-xl-3 row-cols-xxl-4 g-4">
                         <?php
-                        include "../teste_conexao/conexao.php";
-
-                        $conexao = conecta_db();
+                        include (ROOT . "/php/config/database_php.php");
+                        $conexao = connectDatabase();
                         error_reporting(E_ALL);
                         ini_set('display_errors', 1);
                         $query = "SELECT evento.*,
@@ -65,8 +64,8 @@
                                         <p class="card-text">lotação: <?php echo $linha->inscritos ?>/<?php echo $linha->lotacao_max; ?></p>
                                         <p class="card-text"><small class="text-body-secondary"><?php echo $linha->descricao; ?></small></p>
                                         <div class="mt-auto d-flex justify-content-between gap-2">
-                                            <a href="updateEvent.php?id=<?php echo $linha->id; ?>" class="btn btn-primary largura-50">Editar</a>
-                                            <a href="deleteEvent.php?id=<?php echo $linha->id; ?>" class="btn btn-danger largura-50" onclick="return confirm('Tem certeza que deseja deletar')">Deletar</a>
+                                            <a href="index.php?page=8&id=<?php echo $linha->id; ?>" class="btn btn-primary largura-50">Editar</a>
+                                            <a href="index.php?page=10&id=<?php echo $linha->id; ?>" class="btn btn-danger largura-50" onclick="return confirm('Tem certeza que deseja deletar')">Deletar</a>
                                         </div>
                                     </div>
                                 </div>

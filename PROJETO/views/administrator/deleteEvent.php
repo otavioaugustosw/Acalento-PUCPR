@@ -1,9 +1,9 @@
 <?php
-include "../teste_conexao/conexao.php"; // Inclui a conexão se ainda não tiver
+include (ROOT . "/php/config/database_php.php"); // Inclui a conexão se ainda não tiver
 
 if (isset($_GET['id'])) {
     $id = intval($_GET['id']); // Segurança básica
-    $obj = conecta_db();
+    $obj = connectDatabase();
 
     $query = "DELETE FROM evento WHERE id = $id";
     $resultado = $obj->query($query);

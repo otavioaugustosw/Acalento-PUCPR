@@ -1,8 +1,7 @@
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-include ('php/config/session.php');
-include(ROOT . '/php/config/database_php.php');
+include (ROOT . "/php/config/database_php.php");
 $obj = connectDatabase();
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -32,17 +31,17 @@ $eventos = $obj->query("SELECT id, nome FROM evento");
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="components/forms/form-style.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/form-style.css">
     <link rel="stylesheet" href="css/default.css">
     <link rel="stylesheet" href="css/sidebars.css">
     <link rel="stylesheet" href="css/main-content.css">
-    <title>Title</title>
+    <title>Acalento | Criar campanha de doação</title>
 </head>
 
 <body>
-<!-- deixa o body em display-flex-->
+<?php include(ROOT . "/components/sidebars/sidebar-mobile.php") ?>
 <div class="d-flex flex-nowrap">
-    <?php include("components/sidebars/sidebars.php") ?>
+    <?php include(ROOT .  "/components/sidebars/sidebars.php") ?>
     <!-- fim sidebar -->
 
     <!-- conteudo -->

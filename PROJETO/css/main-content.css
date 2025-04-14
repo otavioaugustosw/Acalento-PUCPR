@@ -37,6 +37,11 @@ main {
 
 @media (min-width: 768px) {
     .main-content {
-        margin-left: 250px;
+        margin-left: 250px !important;
+        overflow-y: auto !important ;
     }
+}
+
+.addScroll {
+    overflow-y: auto;
 }

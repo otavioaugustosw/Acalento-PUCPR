@@ -9,7 +9,7 @@ $auth = new AuthService($sql);
 if(isset($_POST['email'], $_POST['password'])) {
     $result = $auth->authenticateUser($_POST['email'], $_POST['password']);
     if ($result['status']) {
-        header('Location: index.php?common=4');
+        header('Location: index.php?common=1');
         exit;
     } else {?>
         <div class="toast-container position-absolute p-3 top-0 start-50 translate-middle-x">

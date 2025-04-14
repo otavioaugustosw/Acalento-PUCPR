@@ -2,12 +2,7 @@
 define('ROOT', dirname(__FILE__));
 require (ROOT . '/php/config/bootstrap_php.php');
 include 'php/config/session.php';
-include 'php/config/router.php';
-
-const PAGE_ERROR = [
-    1=> "Não possui acesso administrador",
-    2=> "Página não existente",
-];
+include (ROOT . '/php/handlers/router.php');
 
 if (isset($_GET['common'])) {
     routeToComonn($_GET['common']);

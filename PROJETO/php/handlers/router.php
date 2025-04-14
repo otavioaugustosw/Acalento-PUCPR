@@ -1,4 +1,6 @@
 <?php
+include (ROOT . '/php/handlers/error_handler.php');
+
 function routeToComonn($pageNum)
 {
     switch ($pageNum) {
@@ -16,7 +18,7 @@ function routeToComonn($pageNum)
             include 'views/common/home.php';
             break;
         default:
-            header('location: index.php?common=1&error=2');
+            header('location: index.php?common=4&error=2');
     }
 }
 
@@ -33,14 +35,14 @@ function routeToVoluntary($pageNum)
             include 'views/voluntary/registerParticipation.php';
             break;
         default:
-            header('location: index.php?common=1&error=2');
+            header('location: index.php?common=4&error=2');
     }
 }
 
 function routeToAdministrator($pageNum)
 {
     if (!$_SESSION['USER_IS_ADMINISTRATOR']) {
-        header('location: index.php?common=1&error=13');
+        header('location: index.php?common=4&error=13');
     }
     switch ($pageNum) {
         case 1:
@@ -74,7 +76,7 @@ function routeToAdministrator($pageNum)
             include 'views/administrator/viewEvent.php';
             break;
         default:
-            header('location: index.php?common=1&error=2');
+            header('location: index.php?common=4&error=2');
     }
 }
 
@@ -84,22 +86,6 @@ function routeToDonator($pageNum)
         case 1:
             break;
         default:
-            header('location: index.php?common=1&error=2');
+            header('location: index.php?common=4&error=2');
     }
-}
-
-function showError($pageNum)
-{
-    ?>
-    <div class="toast-container position-absolute p-3 top-0 start-50 translate-middle-x">
-        <div class="toast text-bg-danger border-0 show" id="toastRuim">
-            <div class="d-flex">
-                <div class="toast-body">
-                    <?= isset(PAGE_ERROR[$pageNum]) ? PAGE_ERROR[$pageNum] : "Acão inexistente" ?>
-                </div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Fechar"></button>
-            </div>
-        </div>
-    </div>
-    <?php
 }

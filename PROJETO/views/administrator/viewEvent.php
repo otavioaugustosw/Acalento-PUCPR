@@ -1,3 +1,9 @@
+<?php
+if(isset($_GET['error'])) {
+    showError($_GET['error']);
+}
+
+?>
 <!doctype html>
 <html lang="en">
 <head>

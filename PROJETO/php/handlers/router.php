@@ -17,6 +17,25 @@ function routeToComonn($pageNum)
             showError($_GET['error']);
             include 'views/common/home.php';
             break;
+            // tem que tirar daqui nao precisa de login para os dois
+        case 5:
+            include 'views/common/registerUser.php';
+            break;
+        case 6:
+            include 'views/common/registerAddress.php';
+            break;
+        case 7:
+            include 'views/common/viewUser.php';
+            break;
+        case 8:
+            include 'views/common/editUser.php';
+            break;
+        case 9:
+            include 'views/common/deleteUser.php';
+            break;
+        case 10:
+            include 'views/common/editPassword.php';
+            break;
         default:
             header('location: index.php?common=4&error=2');
     }

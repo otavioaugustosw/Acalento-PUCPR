@@ -2,6 +2,7 @@
 const PAGE_ERROR = [
     1=> "Não possui acesso administrador",
     2=> "Página não existente",
+    3=> "novo erro...",
 ];
 
 const PAGE_SUCCESS = [

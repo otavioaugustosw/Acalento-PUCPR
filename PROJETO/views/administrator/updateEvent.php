@@ -2,13 +2,14 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 include (ROOT . "/php/config/database_php.php");
+include(ROOT . '/php/handlers/formValidator.php');
 $obj = connectDatabase();
+$id = (int)$_GET['id'];
 if (!isset($_GET['id'])) {
     showError(9);
 }
 
 if (isset($_GET['id'])) {
-    $id = (int)$_GET['id'];
     if (isset($_POST['descricao'])) {
         $query =
             "UPDATE evento 

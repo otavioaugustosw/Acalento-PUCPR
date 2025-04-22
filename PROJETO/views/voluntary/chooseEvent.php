@@ -39,7 +39,8 @@
                                      (SELECT COUNT(*) FROM usuario_participa_evento WHERE id_evento = evento.id) AS inscritos
                               FROM evento
                               LEFT JOIN assentamento ON evento.id_assentamento = assentamento.id
-                              LEFT JOIN endereco ON assentamento.id_endereco = endereco.id;";
+                              LEFT JOIN endereco ON assentamento.id_endereco = endereco.id
+                              WHERE status = 0";
                         $resultado = $conexao->query($query);
 
                         // buscar eventos que o usuario está inscrito
@@ -98,12 +99,10 @@
                                                         </div>
                                                     </div>
                                                 <?php } elseif ($linha->inscritos >= $linha->lotacao_max) { ?>
-                                                    <form action="index.php?voluntary=3" method="POST">
-                                                        <input type="hidden" name="id_evento" value="<?= $linha->id ?>">
-                                                        <button type="button" class="btn btn-secondary largura-completa">
-                                                            Evento lotado
-                                                        </button>
-                                                    </form>
+                                                    <input type="hidden" name="id_evento" value="<?= $linha->id ?>">
+                                                    <button type="button" class="btn btn-secondary largura-completa">
+                                                        Evento lotado
+                                                    </button>
                                                 <?php } else { ?>
                                                     <form action="index.php?voluntary=3" method="POST">
                                                         <input type="hidden" name="id_evento" value="<?= $linha->id ?>">

@@ -35,16 +35,16 @@ $resultTotal = $conexao->query($sqlTotalInscritos);
 $total = $resultTotal->fetch_object()->total;
 
 if ($total >= $evento->lotacao_max) {
-    header("Location: index.php?voluntary=2&error=13");
+    header("Location: index.php?voluntary=5&error=13");
     exit();
 }
 
 // Insere a inscrição
 $sqlInsere = "INSERT INTO usuario_participa_evento (id_usuario, id_evento) VALUES ($id_usuario, $id_evento)";
 if ($conexao->query($sqlInsere)) {
-    header("Location: index.php?voluntary=2&sucess=13");
+    header("Location: index.php?voluntary=5&success=7");
 } else {
-    header("Location: index.php?voluntary=2&error=14");
+    header("Location: index.php?voluntary=4&error=14");
 }
 exit();
 ?>

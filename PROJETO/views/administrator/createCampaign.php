@@ -15,10 +15,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $resultado = $obj->query($query);
 
     if (!$resultado) {
-        $erro = $obj->error;
-        $status = "erro";
+        showError(3);
     } else {
-        $status = "sucesso";
+        showSucess(1);
     }
 }
 
@@ -45,12 +44,12 @@ $eventos = $obj->query("SELECT id, nome FROM evento");
     <!-- fim sidebar -->
 
     <!-- conteudo -->
-    <div class="main-content">
+    <div class="main-content ">
         <main class="px-5 row align-items-center justify-content-center">
             <div class="container-fluid">
                 <div class="mb-3">
                     <!-- aqui vai o que você quer por -->
-                    <h2>Nova Campanha de Doação</h2>
+                    <h4>Nova Campanha de Doação</h4>
                     <form class="row g-3" method="POST" action="">
                         <!-- para três em uma linha -->
                         <div class="col-md-6">
@@ -81,24 +80,6 @@ $eventos = $obj->query("SELECT id, nome FROM evento");
         </main>
     </div>
 </div>
-<?php if (isset($status)): ?>
-    <div class="toast-container position-fixed top-0 end-0 p-3">
-        <div class="toast <?php echo $status === 'sucesso' ? 'text-bg-success' : 'text-bg-danger' ?> show" role="alert">
-            <div class="d-flex">
-                <div class="toast-body">
-                    <?php
-                    if ($status === 'sucesso') {
-                        echo "Evento salvo com sucesso!";
-                    } else {
-                        echo "Erro ao salvar evento: " . $erro;
-                    }
-                    ?>
-                </div>
-                <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast"></button>
-            </div>
-        </div>
-    </div>
-<?php endif; ?>
 </body>
 </html>
 

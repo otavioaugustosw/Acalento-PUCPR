@@ -19,10 +19,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $resultado = $obj->query($query);
 
     if (!$resultado) {
-        $erro = $obj->error;
-        $status = "erro";
+        showError(4);
     } else {
-        $status = "sucesso";
+        showSucess(2);
     }
 }
 
@@ -54,7 +53,7 @@ $assentamento = $obj->query("SELECT id, nome FROM assentamento");
             <div class="container-fluid">
                 <div class="mb-3">
                     <!-- aqui vai o que você quer por -->
-                    <h2>Evento</h2>
+                    <h4>Evento</h4>
                     <form class="row g-3" method="POST" action="">
                         <div class="col-md-6">
                             <label for="inputNome" class="form-label">Nome*</label>
@@ -102,26 +101,6 @@ $assentamento = $obj->query("SELECT id, nome FROM assentamento");
         </main>
     </div>
 </div>
-<?php if (isset($status)): ?>
-<div class="toast-container position-fixed top-0 end-0 p-3">
-    <div class="toast <?php echo $status === 'sucesso' ? 'text-bg-success' : 'text-bg-danger' ?> show" role="alert">
-        <div class="d-flex">
-            <div class="toast-body">
-                <?php
-                if ($status === 'sucesso') {
-                    echo "Evento salvo com sucesso!";
-                } else {
-                    echo "Erro ao salvar evento: " . $erro;
-                }
-                ?>
-            </div>
-            <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast"></button>
-        </div>
-    </div>
-</div>
-<?php endif; ?>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
 

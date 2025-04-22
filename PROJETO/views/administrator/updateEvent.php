@@ -4,7 +4,7 @@ ini_set('display_errors', 1);
 include (ROOT . "/php/config/database_php.php");
 $obj = connectDatabase();
 if (!isset($_GET['id'])) {
-    die("ID do evento não informado!");
+    showError(9);
 }
 
 if (isset($_GET['id'])) {
@@ -27,10 +27,9 @@ if (isset($_GET['id'])) {
         $resultado = $obj->query($query);
 
         if (!$resultado) {
-            $erro = $obj->error;
-            $status = "erro";
+            showError(8);
         } else {
-            $status = "sucesso";
+            showSucess(5);
         }
     }
 }
@@ -63,7 +62,7 @@ $assentamento = $obj->query("SELECT id, nome FROM assentamento");
             <div class="container-fluid">
                 <div class="mb-3">
                     <!-- aqui vai o que você quer por -->
-                    <h2>Evento</h2>
+                    <h4>Evento</h4>
                     <form class="row g-3" method="POST" action="">
                         <!-- para três em uma linha -->
                         <div class="col-md-6">
@@ -115,23 +114,5 @@ $assentamento = $obj->query("SELECT id, nome FROM assentamento");
         </main>
     </div>
 </div>
-<?php if (isset($status)): ?>
-    <div class="toast-container position-fixed top-0 end-0 p-3">
-        <div class="toast <?php echo $status === 'sucesso' ? 'text-bg-success' : 'text-bg-danger' ?> show" role="alert">
-            <div class="d-flex">
-                <div class="toast-body">
-                    <?php
-                    if ($status === 'sucesso') {
-                        echo "Evento salvo com sucesso!";
-                    } else {
-                        echo "Erro ao salvar evento: " . $erro;
-                    }
-                    ?>
-                </div>
-                <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast"></button>
-            </div>
-        </div>
-    </div>
-<?php endif; ?>
 </body>
 </html>

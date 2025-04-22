@@ -1,22 +1,21 @@
 <?php
-session_start();
-include '../teste_conexao/conexao.php';
-$conexao = conecta_db();
+include (ROOT . "/php/config/database_php.php");
+$conexao = connectDatabase();
 
 // Verifica se usuário está "logado"
-if (!isset($_SESSION['id_usuario'])) {
-    die("Faça login primeiro!");
+if (!isset($_SESSION['USER_ID'])) {
+    showError(11);
 }
 
 $id_evento = $_POST['id_evento'];
-$id_usuario = $_SESSION['id_usuario'];
+$id_usuario = $_SESSION['USER_ID'];
 
 // Verifica se o evento existe
 $sqlEvento = "SELECT lotacao_max FROM evento WHERE id = $id_evento";
 $resultEvento = $conexao->query($sqlEvento);
 
 if ($resultEvento->num_rows === 0) {
-    header("Location: chooseEvent.php?erro=evento_inexistente");
+    header("Location: index.php?voluntary=2");
     exit();
 }
 
@@ -27,7 +26,6 @@ $sqlVerifica = "SELECT id FROM usuario_participa_evento WHERE id_evento = $id_ev
 $resultVerifica = $conexao->query($sqlVerifica);
 
 if ($resultVerifica->num_rows > 0) {
-    header("Location: chooseEvent.php?erro=ja_inscrito");
     exit();
 }
 
@@ -37,16 +35,16 @@ $resultTotal = $conexao->query($sqlTotalInscritos);
 $total = $resultTotal->fetch_object()->total;
 
 if ($total >= $evento->lotacao_max) {
-    header("Location: chooseEvent.php?erro=evento_lotado");
+    header("Location: index.php?voluntary=2&error=13");
     exit();
 }
 
 // Insere a inscrição
 $sqlInsere = "INSERT INTO usuario_participa_evento (id_usuario, id_evento) VALUES ($id_usuario, $id_evento)";
 if ($conexao->query($sqlInsere)) {
-    header("Location: chooseEvent.php?sucesso=inscrito");
+    header("Location: index.php?voluntary=2&sucess=13");
 } else {
-    header("Location: chooseEvent.php?erro=erro_ao_inscrever");
+    header("Location: index.php?voluntary=2&error=14");
 }
 exit();
 ?>

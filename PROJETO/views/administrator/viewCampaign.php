@@ -40,12 +40,14 @@
                         ini_set('display_errors', 1);
 
                         if (!$resultado) {
-                            die("Erro na consulta: " . $conexao->error);
+                            showError(7);
                         }
 
-                        while ($linha = $resultado->fetch_object()) {
-
-                        ?>
+                        if ($resultado->num_rows <= 0) {
+                            echo '<h3>Nenhuma campanha cadastrada</h3>';
+                        } else {
+                            while ($linha = $resultado->fetch_object()) {
+                            ?>
                         <div class="col">
                             <div class="card h-100 amarelo">
                             <div class="card-body d-flex flex-column">
@@ -53,12 +55,13 @@
                                 <p class="card-text">Data: <?php echo $linha->data; ?></p>
                                 <p class="card-text">Local: <?php echo $linha->assentamento_nome; ?></p>
                                 <div class="mt-auto d-flex justify-content-between">
-                                    <a href="index.php?page=6&id=<?php echo $linha->id; ?>" class="btn btn-primary largura-completa">Visualizar doações</a>
+                                    <a href="index.php?adm=10&id=<?php echo $linha->id; ?>" class="btn btn-primary largura-completa">Visualizar doações</a>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <?php
+                            }
                     }
                     ?>
                 </div>

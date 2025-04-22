@@ -4,7 +4,7 @@ include (ROOT . "/php/config/database_php.php");
 // Pega o ID da campanha da URL (com verificação básica)
 $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 if ($id <= 0) {
-    die("Campanha inválida!");
+    showError(10);
 }
 $conexao = connectDatabase();
 error_reporting(E_ALL);
@@ -31,21 +31,10 @@ ini_set('display_errors', 1);
 
     <!-- conteudo -->
     <div class="main-content">
-        <main class="px-5 row align-items-center">
+        <main class="px-5 row">
             <div class="container-fluid">
                 <div class="mb-3">
                     <h2>Itens da Campanha</h2>
-                    <table class="table table-hover table-amarela">
-                        <thead>
-                        <tr>
-                            <th scope="col">Item</th>
-                            <th scope="col">Quantidade</th>
-                            <th scope="col">Tipo</th>
-                            <th scope="col">Doador</th>
-                            <th scope="col">Destino</th>
-                        </tr>
-                        </thead>
-                        <tbody>
                         <?php
                         $query = "SELECT item.*,
                                 usuario.nome AS usuario_nome,
@@ -60,18 +49,33 @@ ini_set('display_errors', 1);
                         $resultado = $conexao->query($query);
 
                         if (!$resultado) {
-                            die("Erro na consulta: " . $conexao->error);
+                            showError(7);
                         }
 
-                        while ($linha = $resultado->fetch_object()) {
-                            echo '
-                            <tr>
-                                <td>'.$linha->opcao_nome.'</td>
-                                <td>'.$linha->quantidade.'</td>
-                                <td>'.$linha->tipo.'</td>
-                                <td>'.$linha->usuario_nome.'</td>
-                                <td>'.$linha->campanha_doacao_nome.'</td>
-                            </tr>';
+                        if ($resultado->num_rows <= 0) {
+                            echo '<h3 class="d-flex justify-content-center p-5">Nenhuma doação encontrada!</h3>';
+                        } else { ?>
+                            <table class="table table-hover table-amarela">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Item</th>
+                                    <th scope="col">Quantidade</th>
+                                    <th scope="col">Tipo</th>
+                                    <th scope="col">Doador</th>
+                                    <th scope="col">Destino</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                            <?php while ($linha = $resultado->fetch_object()) {
+                                echo '
+                                <tr>
+                                    <td>' . $linha->opcao_nome . '</td>
+                                    <td>' . $linha->quantidade . '</td>
+                                    <td>' . $linha->tipo . '</td>
+                                    <td>' . $linha->usuario_nome . '</td>
+                                    <td>' . $linha->campanha_doacao_nome . '</td>
+                                </tr>';
+                            }
                         }
                         ?>
                         </tbody>

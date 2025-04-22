@@ -73,12 +73,18 @@
                 </button>
                 <div class="collapse" id="eventos-collapse">
                     <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                        <?php if (!$_SESSION['USER_IS_VOLUNTARY']) { ?>
                         <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Participe de eventos</a></li>
+                        <?php } ?>
+                        <?php if ($_SESSION['USER_IS_ADMINISTRATOR']) { ?>
                         <li><a href="index.php?adm=2" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Cadastrar evento</a></li>
                         <li><a href="index.php?adm=5" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Editar evento</a></li>
+                        <?php } ?>
+                        <?php if ($_SESSION['USER_IS_VOLUNTARY']) { ?>
                         <li><a href="index.php?voluntary=2" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Inscrever-se</a></li>
                         <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Eventos inscritos</a></li>
                         <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Confirmar presença</a></li>
+                        <?php } ?>
                     </ul>
                 </div>
             </li>
@@ -92,13 +98,19 @@
                 </button>
                 <div class="collapse" id="doacoes-collapse">
                     <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                        <?php if (!$_SESSION['USER_IS_DONATOR']) { ?>
                         <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Faça a sua primeira doação</a></li>
+                        <?php } ?>
+                        <?php if ($_SESSION['USER_IS_ADMINISTRATOR']) { ?>
                         <li><a href="index.php?adm=1" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Cadastrar campanha</a></li>
                         <li><a href="index.php?adm=8" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Editar campanha</a></li>
                         <li><a href="index.php?adm=3" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Cadastrar item</a></li>
                         <li><a href="index.php?adm=7" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Visualizar doações</a></li>
+                        <?php } ?>
+                        <?php if ($_SESSION['USER_IS_DONATOR']) { ?>
                         <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Nova doação</a></li>
                         <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Suas doações</a></li>
+                        <?php } ?>
                     </ul>
                 </div>
             </li>

@@ -42,11 +42,11 @@ function routeToVoluntary($pageNum)
 function routeToAdministrator($pageNum)
 {
     if (!$_SESSION['USER_IS_ADMINISTRATOR']) {
-        header('location: index.php?common=4&error=13');
+        header('location: index.php?common=4&error=1');
     }
     switch ($pageNum) {
         case 1:
-            include 'views/administrator/createDonation.php';
+            include 'views/administrator/createDonationTESTE.php';
             break;
         case 2:
             include 'views/administrator/createEvent.php';

@@ -41,7 +41,7 @@ if(isset($_SESSION['USER_ID'])) {
             <li class="list-group-item"><strong>Cidade:</strong> <?=$address->cidade?></li>
             <li class="list-group-item"><strong>Estado:</strong> <?=$address->estado?></li>
         </ul>
-        <a class="btn btn-primary" href="index.php?adm=1"></a>
+        <a class="btn btn-primary" href="index.php?adm=1">IRA PARA CRIAÇÃO DE CAMPANHA TESTE</a>
     </div>
 <?php }?>
 </body>

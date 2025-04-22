@@ -1,7 +1,7 @@
 <?php
 include (ROOT . '/php/handlers/error_handler.php');
 
-function routeToComonn($pageNum)
+function routeToCommon($pageNum)
 {
     switch ($pageNum) {
         case 1:

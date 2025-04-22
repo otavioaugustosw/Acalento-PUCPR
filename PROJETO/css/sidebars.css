@@ -3,8 +3,6 @@
   --primary-text: #FFFEF2;
 }
 
-
-
 /* MENU LATERAL */
 .menu-lateral {
   background-color: var(--primary-bg);
@@ -81,7 +79,6 @@
   color: inherit;
 }
 
-
 .offcanvas-body a,
 .offcanvas-body button {
   outline: none !important;
@@ -157,8 +154,6 @@
   text-decoration: underline;
 }
 
-
-
 /* Botão x */
 [data-bs-theme="light"] .offcanvas-header .btn-close {
   filter: invert(1) brightness(0.9);
@@ -169,14 +164,6 @@
   filter: invert(0);
   opacity: 1;
 }
-
-
-
-
-
-
-
-
 
 /* BOOTSTRAP PADRÃO */
 
@@ -193,7 +180,7 @@ main {
   height: 100vh;
   height: -webkit-fill-available;
   max-height: 100vh;
-  overflow-x: auto;
+  overflow-x: hidden;
   overflow-y: hidden;
 }
 

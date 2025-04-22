@@ -46,7 +46,7 @@ function routeToAdministrator($pageNum)
     }
     switch ($pageNum) {
         case 1:
-            include 'views/administrator/createDonation.php';
+            include 'views/administrator/createCampaign.php';
             break;
         case 2:
             include 'views/administrator/createEvent.php';
@@ -64,16 +64,19 @@ function routeToAdministrator($pageNum)
             include 'views/administrator/updateEvent.php';
             break;
         case 7:
-            include 'views/administrator/viewAllDonation.php';
+            include 'views/administrator/viewDonations.php';
             break;
         case 8:
             include 'views/administrator/viewCampaign.php';
             break;
         case 9:
-            include 'views/administrator/viewDonation.php';
+            include 'views/administrator/viewAllDonation.php';
             break;
         case 10:
-            include 'views/administrator/viewEvent.php';
+            include 'views/administrator/viewCampaignDonation.php';
+            break;
+        case 11:
+            include 'views/administrator/viewStock.php';
             break;
         default:
             header('location: index.php?common=4&error=2');

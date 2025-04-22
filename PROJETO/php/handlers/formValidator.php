@@ -28,7 +28,7 @@ function isFullName($name): bool
 
 function isNumericOnly($value): bool
 {
-    return ctype_digit($value);
+    return ctype_digit((string)$value);
 }
 
 function isAlphaOnly(string $name): bool {

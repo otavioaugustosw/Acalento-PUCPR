@@ -2,10 +2,28 @@
 const PAGE_ERROR = [
     1=> "Não possui acesso administrador",
     2=> "Página não existente",
+    3=> "Não foi possível criar a campanha",
+    4=> "Não foi possível criar o evento",
+    5=> "Não foi possível salvar a doação, tente novamente",
+    6=> "Erro ao deletar o evento, tente novamente mais tarde",
+    7=> "Algo deu errado, tente novamente mais tarde",
+    8=> "Não foi possível alterar o evento, tente novamente mais tarde",
+    9=> "Nenhum evento selecionado",
+    10=> "Nenhuma campanha selecionada",
+    11=> "Usuário não logado",
+    12=> "Não foi possível cancelar a sua participação, tente de novo mais tarde",
+    13=> "Evento lotado",
+    14=> "Não foi possível realizar a inscrição, tente novamente mais tarde"
 ];
 
 const PAGE_SUCCESS = [
-    1=> "XXXXXX",
+    1=> "Campanha salva com sucesso",
+    2=> "Evento criado com sucesso",
+    3=> "Doação salva com sucesso",
+    4=> "Evento deletado com sucesso",
+    5=> "Evento alterado com sucesso",
+    6=> "Participação cancelada com sucesso",
+    7=> "Inscrição feita com sucesso",
 ];
 
 function showError($pageNum)

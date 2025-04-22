@@ -20,10 +20,10 @@
 
 html, body {
     background-color: var(--secondary-yellow) !important;
-    margin: 3vh 2vw 3vh 2vw;
+    min-height: 100vh;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1, h2, h4, h5, h6 {
     font-family: var(--title-font), Serif, serif;
     color: var(--primary-blue);
     font-weight: 600;
@@ -66,10 +66,10 @@ p {
     --acessibility-tertiary: #ffffff;
 
     /*BORDA PADRÃO*/
-    --default-border: solid 1px var(--primary-blue) !important;
-    --error-border: solid 1px var(--primary-red) !important;
-    --acessibility-border: solid 1px var(--acessibility-primary) !important;
-    --secondary-border: solid 1px var(--primary-background) !important;
+    --default-border: solid 1px var(--primary-blue);
+    --error-border: solid 1px var(--primary-red);
+    --acessibility-border: solid 1px var(--acessibility-primary);
+    --secondary-border: solid 1px var(--primary-background);
     --default-radius: 12px;
 
     /*SOMBRA PADRÃO*/
@@ -93,18 +93,18 @@ p {
     align-self: center;
     padding: 5px 20px !important;
     border-radius: var(--default-radius);
-    border: 1px transparent solid;
+    border: none !important;
+
 }
 
 .btn-primary {
-    background-color: #033240;
-    color: #FFFEF2;
+    background-color: var(--primary-blue);
+    color: var(--tertiary-background);
 }
 
 .btn-primary:hover {
     background-color: var(--secondary-blue);
     color: var(--primary-blue);
-    border: none;
 }
 
 .btn-primary:active  {
@@ -113,37 +113,33 @@ p {
 }
 
 .btn-secondary {
-    background-color: #CBDEE4;
-    color: #033240;
+    background-color: var(--secondary-blue);
+    color: var(--primary-blue);
 }
 
 .btn-secondary:active  {
-    background-color: #033240 !important;
-    color: #FFFEF2 !important;
+    background-color: var(--primary-blue) !important;
+    color: var(--secondary-blue);
 }
 
 .btn-secondary:hover {
-    background-color: #033240;
-    color: #FFFEF2;
-    border: none;
+    background-color: var(--primary-blue) !important;
+    color: var(--secondary-blue);
 }
 
 .btn-danger {
     color: var(--secondary-red) !important;
     background-color: var(--primary-red) !important;
-    border: none;
 }
 
 .btn-danger:hover {
     color: var(--primary-red) !important;
     background-color: var(--secondary-red) !important;
-    border: none;
 }
 
 .btn-danger:active {
     color: var(--primary-red) !important;
     background-color: var(--secondary-red) !important;
-    border: none;
 }
 
 .largura-completa {
@@ -153,3 +149,4 @@ p {
 .largura-50 {
     width: 49%;
 }
+

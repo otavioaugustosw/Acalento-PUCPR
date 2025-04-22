@@ -9,13 +9,10 @@ if (isset($_GET['id'])) {
     $resultado = $obj->query($query);
 
     if ($resultado) {
-        // Redireciona para a página de listagem após deletar
-        header("Location: editEvent.php?mensagem=deletado");
+        header("Location: index.php?adm=5&success=4");
         exit;
     } else {
-        echo "Erro ao deletar: " . $obj->error;
+        showError(6);
     }
-} else {
-    echo "ID do evento não foi fornecido!";
 }
 ?>

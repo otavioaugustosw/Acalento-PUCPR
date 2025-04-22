@@ -1,32 +1,28 @@
 <?php
-session_start();
-include '../teste_conexao/conexao.php';
-$conexao = conecta_db();
+include (ROOT . "/php/config/database_php.php");
+$conexao = connectDatabase();
 
 // Verifica se o usuário está logado
-if (!isset($_SESSION['id_usuario'])) {
-    die("Faça login primeiro!");
+if (!isset($_SESSION['USER_ID'])) {
+    showError(11);
 }
 
 $id_evento = $_POST['id_evento'];
-$id_usuario = $_SESSION['id_usuario'];
+$id_usuario = $_SESSION['USER_ID'];
 
 // Verifica se o usuário realmente está inscrito
 $sqlVerifica = "SELECT id FROM usuario_participa_evento WHERE id_evento = $id_evento AND id_usuario = $id_usuario";
 $resultVerifica = $conexao->query($sqlVerifica);
 
 if ($resultVerifica->num_rows === 0) {
-    // Não está inscrito, não tem o que cancelar
-    header("Location: chooseEvent.php?erro=erro_ao_cancelar");
     exit();
 }
 
 // Cancela a inscrição
 $sqlDelete = "DELETE FROM usuario_participa_evento WHERE id_evento = $id_evento AND id_usuario = $id_usuario";
 if ($conexao->query($sqlDelete)) {
-    header("Location: chooseEvent.php?sucesso=cancelado");
+    header("Location: index.php?voluntary=2&success=6");
 } else {
-    header("Location: chooseEvent.php?erro=erro_ao_cancelar");
+    header("Location: index.php?voluntary=2&error=12");
 }
-exit();
 ?>

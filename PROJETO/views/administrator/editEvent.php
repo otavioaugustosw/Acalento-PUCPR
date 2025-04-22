@@ -19,7 +19,7 @@
 
     <!-- conteudo -->
     <div class="main-content">
-        <main class="px-5 row align-items-center">
+        <main class="px-5 row align-items-center addScroll">
             <div class="container-fluid">
                 <div class="mb-3">
                     <!-- aqui vai o que você quer por -->
@@ -44,33 +44,56 @@
                         ini_set('display_errors', 1);
 
                         if (!$resultado) {
-                            die("Erro na consulta: " . $conexao->error);
+                            showError(7);
                         }
 
-                        while ($linha = $resultado->fetch_object()) {
-                            $data_formatada = date("d/m/Y", strtotime($linha->data));
-                            $hora_formatada = date("H:i", strtotime($linha->hora));
-                            ?>
-                            <div class="col">
-                                <div class="card h-100 amarelo mx-auto">
-                                    <figure class="imagem-vertical degrade-vertical">
-                                        <img src="<?php echo $linha->link_imagem; ?>" class="card-img-top" alt="Imagem do evento">
-                                    </figure>
-                                    <div class="card-body d-flex flex-column">
-                                        <h5 class="card-title"><?php echo $linha->nome; ?></h5>
-                                        <p class="card-text">Data: <?php echo $data_formatada ?> às <?php echo $hora_formatada; ?></p>
-                                        <p class="card-text">local: <?php echo $linha->assentamento_nome; ?></p>
-                                        <p class="card-text"><?php echo $linha->rua;?>, <?php echo $linha->numero; ?> - <?php echo $linha->bairro; ?></p>
-                                        <p class="card-text">lotação: <?php echo $linha->inscritos ?>/<?php echo $linha->lotacao_max; ?></p>
-                                        <p class="card-text"><small class="text-body-secondary"><?php echo $linha->descricao; ?></small></p>
-                                        <div class="mt-auto d-flex justify-content-between gap-2">
-                                            <a href="index.php?page=8&id=<?php echo $linha->id; ?>" class="btn btn-primary largura-50">Editar</a>
-                                            <a href="index.php?page=10&id=<?php echo $linha->id; ?>" class="btn btn-danger largura-50" onclick="return confirm('Tem certeza que deseja deletar')">Deletar</a>
+                        if ($resultado->num_rows <= 0) {
+                            echo '<h3>Nenhum evento encontrado</h3>';
+                        } else {
+                            while ($linha = $resultado->fetch_object()) {
+                                $data_formatada = date("d/m/Y", strtotime($linha->data));
+                                $hora_formatada = date("H:i", strtotime($linha->hora));
+                                ?>
+                                <div class="col">
+                                    <div class="card h-100 amarelo mx-auto">
+                                        <figure class="imagem-vertical degrade-vertical">
+                                            <img src="<?php echo $linha->link_imagem; ?>" class="card-img-top" alt="Imagem do evento">
+                                        </figure>
+                                        <div class="card-body d-flex flex-column">
+                                            <h5 class="card-title"><?php echo $linha->nome; ?></h5>
+                                            <p class="card-text">Data: <?php echo $data_formatada ?> às <?php echo $hora_formatada; ?></p>
+                                            <p class="card-text">local: <?php echo $linha->assentamento_nome; ?></p>
+                                            <p class="card-text"><?php echo $linha->rua;?>, <?php echo $linha->numero; ?> - <?php echo $linha->bairro; ?></p>
+                                            <p class="card-text">lotação: <?php echo $linha->inscritos ?>/<?php echo $linha->lotacao_max; ?></p>
+                                            <p class="card-text"><small class="text-body-secondary"><?php echo $linha->descricao; ?></small></p>
+                                            <div class="mt-auto d-flex justify-content-between gap-2">
+                                                <a href="index.php?adm=6&id=<?php echo $linha->id; ?>" class="btn btn-primary largura-50">Editar</a>
+                                                <button type="button" class="btn btn-danger largura-50" data-bs-toggle="modal" data-bs-target="#modalDeletar<?= $linha->id ?>">
+                                                    Deletar
+                                                </button>
+                                            </div>
+                                            <div class="modal fade" id="modalDeletar<?= $linha->id ?>" tabindex="-1" aria-labelledby="modalDeletarLabel<?= $linha->id ?>" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content amarelo">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="modalDeletarLabel<?= $linha->id ?>">Confirmar exclusão</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            Tem certeza que deseja deletar esse evento?
+                                                        </div>
+                                                        <div class="modal-footer d-flex">
+                                                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancelar</button>
+                                                            <a href="index.php?adm=4&id=<?= $linha->id ?>" class="btn btn-danger">Sim, deletar</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <?php
+                                <?php
+                            }
                         }
                         ?>
                     </div>

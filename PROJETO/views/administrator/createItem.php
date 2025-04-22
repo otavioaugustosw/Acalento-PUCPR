@@ -5,25 +5,28 @@ include (ROOT . "/php/config/database_php.php");
 $obj = connectDatabase();
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $idCampanha = isset($_POST['id_campanha_doacao']) && $_POST['destino'] === 'campanha' ? $_POST['id_campanha_doacao'] : "NULL";
+    $idEstoque = isset($_POST['id_estoque']) && $_POST['destino'] === 'estoque' ? $_POST['id_estoque'] : "NULL";
+
     $query = "
-        INSERT INTO item(id_campanha_doacao, id_opcao, id_usuario, quantidade, unidade_medida, valor, tipo, data) 
-        VALUES (
-            '". $_POST['id_campanha_doacao'] ."',
-            '". $_POST['id_opcao'] ."',
-            '". $_POST['id_usuario'] ."',
-            '". $_POST['quantidade'] ."',
-            '". $_POST['unidade_medida'] ."',
-            '". $_POST['valor'] ."',
-            '". $_POST['tipo'] ."',
-            '". $_POST['data'] ."'
-        )";
+    INSERT INTO item(id_campanha_doacao, id_estoque, id_opcao, id_usuario, quantidade, unidade_medida, valor, tipo, data) 
+    VALUES (
+        $idCampanha,
+        $idEstoque,
+        '". $_POST['id_opcao'] ."',
+        '". $_POST['id_usuario'] ."',
+        '". $_POST['quantidade'] ."',
+        '". $_POST['unidade_medida'] ."',
+        '". $_POST['valor'] ."',
+        '". $_POST['tipo'] ."',
+        '". $_POST['data'] ."'
+    )";
     $resultado = $obj->query($query);
 
     if (!$resultado) {
-        $erro = $obj->error;
-        $status = "erro";
+        showError(5);
     } else {
-        $status = "sucesso";
+        showSucess(3);
     }
 }
 ?>
@@ -53,7 +56,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <div class="container-fluid">
                 <div class="mb-3">
                     <!-- aqui vai o que você quer por -->
-                    <h2>Cadastrar item</h2>
+                    <h4>Cadastrar item</h4>
                     <form class="row g-3" method="POST" action="">
                         <div class="col-md-4">
                             <label for="inputDoador" class="form-label">Doador*</label>
@@ -111,15 +114,31 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                             </select>
                         </div>
 
-                        <div class="col-md-12">
-                            <label for="inputEvento" class="form-label">Destino*</label>
-                            <select name="id_campanha_doacao" id="inputEvento" class="form-select" required>
-                                <option value="">Selecione o evento</option>
+                        <div class="col-md-2">
+                            <label class="form-label">Destino do item*</label>
+                            <select id="selectDestino" name="destino" class="form-select" required onchange="mostrarDestino()">
+                                <option value="">Selecione</option>
+                                <option value="campanha">Campanha</option>
+                                <option value="estoque">Estoque</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-10" id="campoCampanha" style="display: none;">
+                            <label class="form-label">Campanha</label>
+                            <select name="id_campanha_doacao" class="form-select">
+                                <option value="">Selecione a campanha</option>
                                 <?php
-                                    $campanha_doacao = $obj->query("SELECT id, nome FROM campanha_doacao");
-                                    while ($a = $campanha_doacao->fetch_object()) { ?>
-                                    <option value="<?php echo $a->id;?>"><?php echo $a->nome; ?></option>
+                                $campanhas = $obj->query("SELECT id, nome FROM campanha_doacao");
+                                while ($c = $campanhas->fetch_object()) { ?>
+                                    <option value="<?php echo $c->id; ?>"><?php echo $c->nome; ?></option>
                                 <?php } ?>
+                            </select>
+                        </div>
+
+                        <div class="col-md-10" id="campoEstoque" style="display: none;">
+                            <label class="form-label">Estoque</label>
+                            <select name="id_estoque" class="form-select">
+                                <option value="1">Estoque geral</option>
                             </select>
                         </div>
 
@@ -133,23 +152,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         </main>
     </div>
 </div>
-<?php if (isset($status)): ?>
-    <div class="toast-container position-fixed top-0 end-0 p-3">
-        <div class="toast <?php echo $status === 'sucesso' ? 'text-bg-success' : 'text-bg-danger' ?> show" role="alert">
-            <div class="d-flex">
-                <div class="toast-body">
-                    <?php
-                    if ($status === 'sucesso') {
-                        echo "Item salvo com sucesso!";
-                    } else {
-                        echo "Erro ao salvar item: " . $erro;
-                    }
-                    ?>
-                </div>
-                <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast"></button>
-            </div>
-        </div>
-    </div>
-<?php endif; ?>
+
+<script>
+    function mostrarDestino() {
+        const tipo = document.getElementById('selectDestino').value;
+        document.getElementById('campoCampanha').style.display = tipo === 'campanha' ? 'block' : 'none';
+        document.getElementById('campoEstoque').style.display = tipo === 'estoque' ? 'block' : 'none';
+    }
+</script>
+
 </body>
 </html>

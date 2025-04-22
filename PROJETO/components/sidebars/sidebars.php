@@ -36,8 +36,8 @@
 
 <h1 class="visually-hidden">Menu lateral</h1>
 <aside id="sidebar" class="sidebar position-fixed top-0 start-0 bottom-0 d-none d-md-block" style="width: 250px !important;">
-    <div class="flex-shrink-0 p-3 menu-lateral h-100" style="width: 280px;">
-        <a class="d-flex flex-column align-items-start pb-3 mb-3 link-body-emphasis text-decoration-none border-bottom">
+    <div class="d-flex flex-column flex-shrink-0 p-3 menu-lateral h-100" style="width: 280px;">
+        <a class="align-items-start pb-3 mb-3 link-body-emphasis text-decoration-none border-bottom">
             <div class="logo-container">
                 <img src="assets/logo/Acalento_logo_claro.svg" alt="Logo Acalento Claro" class=" logo logo-tema-claro">
             </div>
@@ -103,7 +103,7 @@
                         <?php } ?>
                         <?php if ($_SESSION['USER_IS_ADMINISTRATOR']) { ?>
                         <li><a href="index.php?adm=1" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Cadastrar campanha</a></li>
-                        <li><a href="index.php?adm=8" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Editar campanha</a></li>
+                        <li><a href="index.php?adm=8" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Visualizar campanhas</a></li>
                         <li><a href="index.php?adm=3" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Cadastrar item</a></li>
                         <li><a href="index.php?adm=7" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Visualizar doações</a></li>
                         <?php } ?>
@@ -114,17 +114,16 @@
                     </ul>
                 </div>
             </li>
-
-            <li class="sidebar-item mb-1">
-                <a  href="index.php?common=3" class="btn btn-toggle  d-inline-flex align-items-center rounded border-0 collapsed">
-                    <svg class="bi me-2" width="20" height="20" aria-hidden="true">
-                        <use xlink:href="#doorOpen"/>
-                    </svg>
-                    Log Off
-                </a>
-            </li>
         </ul>
         <!-- fim da navegão -->
+        <div class="sidebar-footer border-top d-flex mt-auto py-2">
+            <a  href="index.php?common=3" class="btn btn-toggle  d-inline-flex align-items-center rounded border-0 collapsed">
+                <svg class="bi me-2" width="20" height="20" aria-hidden="true">
+                    <use xlink:href="#doorOpen"/>
+                </svg>
+                Sair
+            </a>
+        </div>
     </div>
     <div class="b-example-vr"></div>
 </aside>

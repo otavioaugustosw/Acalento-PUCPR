@@ -1,5 +1,11 @@
 <?php
 include (ROOT . "/php/config/database_php.php");
+
+// Pega o ID da campanha da URL (com verificação básica)
+$id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+if ($id <= 0) {
+    showError(10);
+}
 $conexao = connectDatabase();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
@@ -15,7 +21,7 @@ ini_set('display_errors', 1);
     <link rel="stylesheet" href="css/default.css">
     <link rel="stylesheet" href="css/sidebars.css">
     <link rel="stylesheet" href="css/main-content.css">
-    <title>Acalento | Todas as Doações</title>
+    <title>Acalento | Doações</title>
 </head>
 
 <body>
@@ -27,7 +33,8 @@ ini_set('display_errors', 1);
     <div class="main-content">
         <main class="px-5 row">
             <div class="container-fluid">
-                    <h2>Doações</h2>
+                <div class="mb-3">
+                    <h2>Itens da Campanha</h2>
                         <?php
                         $query = "SELECT item.*,
                                 usuario.nome AS usuario_nome,
@@ -36,7 +43,8 @@ ini_set('display_errors', 1);
                                 FROM item
                                 LEFT JOIN usuario ON item.id_usuario = usuario.id
                                 LEFT JOIN opcao_item ON item.id_opcao = opcao_item.id
-                                LEFT JOIN campanha_doacao ON item.id_campanha_doacao = campanha_doacao.id;";
+                                LEFT JOIN campanha_doacao ON item.id_campanha_doacao = campanha_doacao.id
+                                WHERE item.id_campanha_doacao = $id";
 
                         $resultado = $conexao->query($query);
 
@@ -45,7 +53,7 @@ ini_set('display_errors', 1);
                         }
 
                         if ($resultado->num_rows <= 0) {
-                            echo '<h3 class="d-flex justify-content-center p-5">Nenhuma doação encontrada.</h3>';
+                            echo '<h3 class="d-flex justify-content-center p-5">Nenhuma doação encontrada!</h3>';
                         } else { ?>
                             <table class="table table-hover table-amarela">
                                 <thead>
@@ -58,19 +66,17 @@ ini_set('display_errors', 1);
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <?php
-                                    while ($linha = $resultado->fetch_object()) {
-                                        $destino = $linha->campanha_doacao_nome ? $linha->campanha_doacao_nome : 'Estoque';
-                                        echo '
-                                        <tr>
-                                            <td>' . $linha->opcao_nome . '</td>
-                                            <td>' . $linha->quantidade . '</td>
-                                            <td>' . $linha->tipo . '</td>
-                                            <td>' . $linha->usuario_nome . '</td>
-                                            <td>' . $destino . '</td>
-                                        </tr>';
-                                    }
-                                }
+                            <?php while ($linha = $resultado->fetch_object()) {
+                                echo '
+                                <tr>
+                                    <td>' . $linha->opcao_nome . '</td>
+                                    <td>' . $linha->quantidade . '</td>
+                                    <td>' . $linha->tipo . '</td>
+                                    <td>' . $linha->usuario_nome . '</td>
+                                    <td>' . $linha->campanha_doacao_nome . '</td>
+                                </tr>';
+                            }
+                        }
                         ?>
                         </tbody>
                     </table>
@@ -81,4 +87,3 @@ ini_set('display_errors', 1);
 </div>
 </body>
 </html>
-

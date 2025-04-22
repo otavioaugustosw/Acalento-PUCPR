@@ -6,26 +6,22 @@ $obj = connectDatabase();
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $query = "
-        INSERT INTO evento(id_assentamento, nome, descricao, lotacao_max, data, hora, link_imagem) 
+        INSERT INTO campanha_doacao(nome, data, evento_destino) 
         VALUES (
-            '". $_POST['id_assentamento']."',
             '". $_POST['nome'] ."',
-            '". $_POST['descricao'] ."',
-            '". $_POST['lotacao'] ."',
             '". $_POST['data'] ."',
-            '". $_POST['hora'] ."',
-            '". $_POST['imagem'] ."'
+            '". $_POST['evento_destino'] ."'
         )";
     $resultado = $obj->query($query);
 
     if (!$resultado) {
-        showError(4);
+        showError(3);
     } else {
-        showSucess(2);
+        showSucess(1);
     }
 }
 
-$assentamento = $obj->query("SELECT id, nome FROM assentamento");
+$eventos = $obj->query("SELECT id, nome FROM evento");
 ?>
 
 <!doctype html>
@@ -38,7 +34,7 @@ $assentamento = $obj->query("SELECT id, nome FROM assentamento");
     <link rel="stylesheet" href="css/default.css">
     <link rel="stylesheet" href="css/sidebars.css">
     <link rel="stylesheet" href="css/main-content.css">
-    <title>Acalento | Criar evento</title>
+    <title>Acalento | Criar campanha de doação</title>
 </head>
 
 <body>
@@ -48,47 +44,30 @@ $assentamento = $obj->query("SELECT id, nome FROM assentamento");
     <!-- fim sidebar -->
 
     <!-- conteudo -->
-    <div class="main-content">
+    <div class="main-content ">
         <main class="px-5 row align-items-center justify-content-center">
             <div class="container-fluid">
                 <div class="mb-3">
                     <!-- aqui vai o que você quer por -->
-                    <h4>Evento</h4>
+                    <h4>Nova Campanha de Doação</h4>
                     <form class="row g-3" method="POST" action="">
+                        <!-- para três em uma linha -->
                         <div class="col-md-6">
                             <label for="inputNome" class="form-label">Nome*</label>
                             <input type="text" class="form-control" id="inputNome" name="nome" required>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-6">
                             <label for="inputData" class="form-label">Data*</label>
                             <input type="date" class="form-control" id="inputData" placeholder="Data" name="data" required>
                         </div>
-                        <div class="col-md-3">
-                            <label for="inputTime" class="form-label">Horário*</label>
-                            <input type="time" class="form-control" id="inputTime" placeholder="Hora" name="hora" required>
-                        </div>
-
-                        <div class="col-md-4">
-                            <label for="inputAssentamento" class="form-label">Local*</label>
-                            <select name="id_assentamento" id="inputAssentamento" class="form-select" required>
-                                <option value="">Selecione um assentamento</option>
-                                <?php while ($a = $assentamento->fetch_object()) { ?>
-                                <option value="<?php echo $a->id;?>"><?php echo $a->nome; ?></option>
+                        <div class="col-md-12">
+                            <label for="inputEvento" class="form-label">Destino*</label>
+                            <select name="evento_destino" id="inputEvento" class="form-select" required>
+                                <option value="">Selecione o evento</option>
+                                <?php while ($a = $eventos->fetch_object()) { ?>
+                                    <option value="<?php echo $a->id;?>"><?php echo $a->nome; ?></option>
                                 <?php } ?>
                             </select>
-                        </div>
-                        <div class="col-md-4">
-                            <label for="inputLotacao" class="form-label">Lotação máxima*</label>
-                            <input type="number" class="form-control" id="inputLotacao" name="lotacao" required>
-                        </div>
-                        <div class="col-md-4">
-                            <label for="inputImagem" class="form-label">Insira imagem*</label>
-                            <input type="text" class="form-control" id="inputImagem" name="imagem" required>
-                        </div>
-
-                        <div class="col-12">
-                            <label for="inputDescricao" class="form-label">Descrição*</label>
-                            <textarea type="text" class="form-control" id="inputDescricao" name="descricao" rows="5" required></textarea>
                         </div>
 
                         <div class="col-12">

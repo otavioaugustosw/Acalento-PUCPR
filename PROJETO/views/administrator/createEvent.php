@@ -2,30 +2,10 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 include (ROOT . "/php/config/database_php.php");
+include(ROOT . '/php/handlers/formValidator.php');
 $obj = connectDatabase();
-
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $query = "
-        INSERT INTO evento(id_assentamento, nome, descricao, lotacao_max, data, hora, link_imagem) 
-        VALUES (
-            '". $_POST['id_assentamento']."',
-            '". $_POST['nome'] ."',
-            '". $_POST['descricao'] ."',
-            '". $_POST['lotacao'] ."',
-            '". $_POST['data'] ."',
-            '". $_POST['hora'] ."',
-            '". $_POST['imagem'] ."'
-        )";
-    $resultado = $obj->query($query);
-
-    if (!$resultado) {
-        showError(4);
-    } else {
-        showSucess(2);
-    }
-}
-
 $assentamento = $obj->query("SELECT id, nome FROM assentamento");
+
 ?>
 
 <!doctype html>
@@ -57,38 +37,59 @@ $assentamento = $obj->query("SELECT id, nome FROM assentamento");
                     <form class="row g-3" method="POST" action="">
                         <div class="col-md-6">
                             <label for="inputNome" class="form-label">Nome*</label>
-                            <input type="text" class="form-control" id="inputNome" name="nome" required>
+                            <input type="text" class="form-control" id="inputNome" name="nome">
+                            <div id="validacaoNome" class="invalid-feedback">
+                                Digite um nome de evento válido.
+                            </div>
                         </div>
                         <div class="col-md-3">
                             <label for="inputData" class="form-label">Data*</label>
-                            <input type="date" class="form-control" id="inputData" placeholder="Data" name="data" required>
+                            <input type="date" class="form-control" id="inputData" placeholder="Data" name="data">
+                            <div id="validacaoData" class="invalid-feedback">
+                                Digite uma data.
+                            </div>
                         </div>
                         <div class="col-md-3">
                             <label for="inputTime" class="form-label">Horário*</label>
-                            <input type="time" class="form-control" id="inputTime" placeholder="Hora" name="hora" required>
+                            <input type="time" class="form-control" id="inputTime" placeholder="Hora" name="hora">
+                            <div id="validacaoHorario" class="invalid-feedback">
+                                Digite um horário.
+                            </div>
                         </div>
 
                         <div class="col-md-4">
                             <label for="inputAssentamento" class="form-label">Local*</label>
-                            <select name="id_assentamento" id="inputAssentamento" class="form-select" required>
+                            <select name="id_assentamento" id="inputAssentamento" class="form-select">
                                 <option value="">Selecione um assentamento</option>
                                 <?php while ($a = $assentamento->fetch_object()) { ?>
                                 <option value="<?php echo $a->id;?>"><?php echo $a->nome; ?></option>
                                 <?php } ?>
                             </select>
+                            <div id="validacaoAssentamento" class="invalid-feedback">
+                                Selecione um assentamento.
+                            </div>
                         </div>
                         <div class="col-md-4">
                             <label for="inputLotacao" class="form-label">Lotação máxima*</label>
-                            <input type="number" class="form-control" id="inputLotacao" name="lotacao" required>
+                            <input type="text" class="form-control" id="inputLotacao" name="lotacao">
+                            <div id="validacaoLotacaoMax" class="invalid-feedback">
+                                Digite uma lotação máxima válida.
+                            </div>
                         </div>
                         <div class="col-md-4">
                             <label for="inputImagem" class="form-label">Insira imagem*</label>
-                            <input type="text" class="form-control" id="inputImagem" name="imagem" required>
+                            <input type="text" class="form-control" id="inputImagem" name="imagem">
+                            <div id="validacaoImagem" class="invalid-feedback">
+                                Digite um link válido.
+                            </div>
                         </div>
 
                         <div class="col-12">
                             <label for="inputDescricao" class="form-label">Descrição*</label>
-                            <textarea type="text" class="form-control" id="inputDescricao" name="descricao" rows="5" required></textarea>
+                            <textarea type="text" class="form-control" id="inputDescricao" name="descricao" rows="5"></textarea>
+                            <div id="validacaoDescricao" class="invalid-feedback">
+                                Digite uma descricao válida.
+                            </div>
                         </div>
 
                         <div class="col-12">
@@ -103,5 +104,60 @@ $assentamento = $obj->query("SELECT id, nome FROM assentamento");
 </div>
 </body>
 </html>
+<?php
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    submitInformation($obj);
+}
+
+function submitInformation($sql) {
+
+    if (!isAlphaOnly($_POST['nome']) || !hasMaxLength($_POST['nome'], 50)) {
+        displayValidation('inputNome', false);
+        return;
+    }
+
+    if (!isDateValid($_POST['data'])) {
+        displayValidation('inputData', false);
+        return;
+    }
+
+    if (!isTimeValid($_POST['hora'])) {
+        displayValidation('inputHora', false);
+        return;
+    }
+
+    if (!isNumericOnly($_POST['id_assentamento'])) {
+        displayValidation('inputAssentamento', false);
+        return;
+    }
+
+    if (!isNumericOnly($_POST['lotacao'])) {
+        displayValidation('inputLotacao', false);
+        return;
+    }
+
+    if (!hasMaxLength($_POST['imagem'], 256)) {
+        displayValidation('inputImagem', false);
+        return;
+    }
+
+    if (!isAlphaOnly($_POST['descricao']) || !hasMaxLength($_POST['descricao'], 100)) {
+        displayValidation('inputDescricao', false);
+        return;
+    }
 
 
+    try {
+        $query = "
+        INSERT INTO evento(id_assentamento, nome, descricao, lotacao_max, data, hora, link_imagem)
+        VALUES ( ?, ?, ?, ?, ?, ?, ?)";
+        $stmt = $sql->prepare($query);
+        $stmt->bind_param("ississs", $_POST['id_assentamento'], $_POST['nome'], $_POST['descricao'], $_POST['lotacao'], $_POST['data'], $_POST['hora'], $_POST['imagem']);
+        $stmt->execute(); // executa query
+        showSucess(2);
+    } catch (mysqli_sql_exception $E) {
+        showError(4);
+        exit();
+    }
+
+}

@@ -31,9 +31,9 @@ function isNumericOnly($value): bool
     return ctype_digit((string)$value);
 }
 
-function isAlphaOnly(string $name): bool {
-    $name = preg_replace('/\s+/', ' ', trim($name));
-    return preg_match('/^[A-Za-zÀ-ÖØ-öø-ÿ]+$/u', $name);
+function isAlphaOnly(string $word): bool {
+    $word = preg_replace('/\s+/', ' ', trim($word));
+    return preg_match('/^[A-Za-zÀ-ÖØ-öø-ÿ ]+$/u', $word);
 }
 
 function hasMinLength($value, $min): bool
@@ -89,4 +89,3 @@ function isTimeValid($time) {
     $t = DateTime::createFromFormat('H:i:s', $time);
     return $t && $t->format('H:i:s') === $time;
 }
-

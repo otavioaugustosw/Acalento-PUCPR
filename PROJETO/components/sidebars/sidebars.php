@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="css/default.css">
     <link href="css/form-style.css" rel="stylesheet">
     <link rel="stylesheet" href="css/sidebars.css">
-    <title>Title</title>
+    <title>sidebar</title>
 </head>
 <body>
 
@@ -52,13 +52,13 @@
             </li>
 
             <li class="mb-1">
-                <button class="btn btn-toggle  d-inline-flex align-items-center rounded border-0 collapsed"
+                <a href="index.php?common=7" class="btn btn-toggle  d-inline-flex align-items-center rounded border-0 collapsed"
                         data-bs-toggle="collapse" data-bs-target="#pessoa-collapse" aria-expanded="false">
                     <svg class="bi me-2" width="20" height="20" aria-hidden="true">
                         <use xlink:href="#home"/>
                     </svg>
                     Minha Conta
-                </button>
+                </a>
             </li>
 
             <li class="sidebar-item mb-1">
@@ -72,12 +72,11 @@
                 <div class="collapse" id="eventos-collapse">
                     <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                         <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Participe de eventos</a></li>
-                        <li><a href=php/pages/createEvent.php" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Cadastrar evento</a></li>
-                        <li><a href="../../php/pages/editEvent.php" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Editar evento</a></li>
-                        <li><a href="../../php/pages/viewEvent.php" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Visualizar</a></li>
-                                        <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Inscrever-se</a></li>
-                                        <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Eventos inscritos</a></li>
-                                        <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Confirmar presença</a></li>
+                        <li><a href="index.php?adm=2" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Cadastrar evento</a></li>
+                        <li><a href="index.php?adm=5" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Editar evento</a></li>
+                        <li><a href="index.php?voluntary=2" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Inscrever-se</a></li>
+                        <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Eventos inscritos</a></li>
+                        <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Confirmar presença</a></li>
                     </ul>
                 </div>
             </li>
@@ -91,13 +90,13 @@
                 </button>
                 <div class="collapse" id="doacoes-collapse">
                     <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                                        <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Faça a sua primeira doação</a></li>
-                        <li><a href="../../php/pages/createDonation.php" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Cadastrar campanha</a></li>
-                        <li><a href="../../php/pages/viewCampaign.php" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Editar campanha</a></li>
-                        <li><a href="../../php/pages/createItem.php" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Cadastrar item</a></li>
-                        <li><a href="../../php/pages/viewAllDonation.php" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Visualizar doações</a></li>
-                                        <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Nova doação</a></li>
-                                        <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Suas doações</a></li>
+                        <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Faça a sua primeira doação</a></li>
+                        <li><a href="index.php?adm=1" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Cadastrar campanha</a></li>
+                        <li><a href="index.php?adm=8" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Editar campanha</a></li>
+                        <li><a href="index.php?adm=3" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Cadastrar item</a></li>
+                        <li><a href="index.php?adm=7" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Visualizar doações</a></li>
+                        <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Nova doação</a></li>
+                        <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Suas doações</a></li>
                     </ul>
                 </div>
             </li>

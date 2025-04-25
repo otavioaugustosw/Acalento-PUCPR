@@ -51,6 +51,14 @@ function routeToVoluntary($pageNum)
         case 3:
             include 'views/voluntary/registerParticipation.php';
             break;
+        case 4:
+            showError($_GET['error']);
+            include 'views/voluntary/chooseEvent.php';
+            break;
+        case 5:
+            showSucess($_GET['success']);
+            include 'views/voluntary/chooseEvent.php';
+            break;
         default:
             header('location: index.php?common=4&error=2');
     }
@@ -97,6 +105,14 @@ function routeToAdministrator($pageNum)
             break;
         case 12:
             include 'views/administrator/registerAdm.php';
+            break;
+        case 13:
+            showError($_GET['error']);
+            include 'views/administrator/editEvent.php';
+            break;
+        case 14:
+            showSucess($_GET['success']);
+            include 'views/administrator/editEvent.php';
             break;
         default:
             header('location: index.php?common=4&error=2');

@@ -5,14 +5,16 @@ if (isset($_GET['id'])) {
     $id = intval($_GET['id']); // Segurança básica
     $obj = connectDatabase();
 
-    $query = "DELETE FROM evento WHERE id = $id";
+    $query = "UPDATE evento 
+              SET status=1 
+              WHERE id = $id";
     $resultado = $obj->query($query);
 
     if ($resultado) {
-        header("Location: index.php?adm=5&success=4");
+        header("Location: index.php?adm=13&success=4");
         exit;
     } else {
-        showError(6);
+        header("Location: index.php?adm=12&error=6");
     }
 }
 ?>

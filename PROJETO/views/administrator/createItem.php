@@ -2,33 +2,8 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 include (ROOT . "/php/config/database_php.php");
+include(ROOT . '/php/handlers/formValidator.php');
 $obj = connectDatabase();
-
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $idCampanha = isset($_POST['id_campanha_doacao']) && $_POST['destino'] === 'campanha' ? $_POST['id_campanha_doacao'] : "NULL";
-    $idEstoque = isset($_POST['id_estoque']) && $_POST['destino'] === 'estoque' ? $_POST['id_estoque'] : "NULL";
-
-    $query = "
-    INSERT INTO item(id_campanha_doacao, id_estoque, id_opcao, id_usuario, quantidade, unidade_medida, valor, tipo, data) 
-    VALUES (
-        $idCampanha,
-        $idEstoque,
-        '". $_POST['id_opcao'] ."',
-        '". $_POST['id_usuario'] ."',
-        '". $_POST['quantidade'] ."',
-        '". $_POST['unidade_medida'] ."',
-        '". $_POST['valor'] ."',
-        '". $_POST['tipo'] ."',
-        '". $_POST['data'] ."'
-    )";
-    $resultado = $obj->query($query);
-
-    if (!$resultado) {
-        showError(5);
-    } else {
-        showSucess(3);
-    }
-}
 ?>
 
 <!doctype html>
@@ -60,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     <form class="row g-3" method="POST" action="">
                         <div class="col-md-4">
                             <label for="inputDoador" class="form-label">Doador*</label>
-                            <select name="id_usuario" id="inputDoador" class="form-select" required>
+                            <select name="id_usuario" id="inputDoador" class="form-select">
                                 <option value="">Selecione o doador</option>
                                 <?php $doador = $obj->query("SELECT id, nome FROM usuario");
                                 while ($a = $doador->fetch_object()) { ?>
@@ -68,39 +43,57 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                 <?php } ?>
                                 <option value="0">Doador não cadastrado</option>
                             </select>
+                            <div id="validacaoUsuario" class="invalid-feedback">
+                                Escolha um doador.
+                            </div>
                         </div>
 
                         <div class="col-md-4">
                             <label for="inputData" class="form-label">Data*</label>
-                            <input type="date" class="form-control" id="inputData" placeholder="Data" name="data" required>
+                            <input type="date" class="form-control" id="inputData" placeholder="Data" name="data">
+                            <div id="validacaoData" class="invalid-feedback">
+                                Escolha uma data.
+                            </div>
                         </div>
 
                         <div class="col-md-4">
                             <label for="inputItem" class="form-label">Item*</label>
-                            <select name="id_opcao" id="inputItem" class="form-select" required>
+                            <select name="id_opcao" id="inputItem" class="form-select">
                                 <option value="">Selecione o item</option>
                                 <?php $item = $obj->query("SELECT id, nome FROM opcao_item");
                                 while ($a = $item->fetch_object()) { ?>
                                     <option value="<?php echo $a->id;?>"><?php echo $a->nome; ?></option>
                                 <?php } ?>
                             </select>
+                            <div id="validacaoItem" class="invalid-feedback">
+                                Escolha um item
+                            </div>
                         </div>
 
                         <div class="col-md-3">
                             <label for="inputQuantidade" class="form-label">Quantidade</label>
                             <input type="number" class="form-control" id="inputQuantidade" name="quantidade">
+                            <div id="validacaoQuantidade" class="invalid-feedback">
+                                Digite uma quantidade válida.
+                            </div>
                         </div>
                         <div class="col-md-3">
                             <label for="inputUnidadeMedida" class="form-label">Unidade de Medida</label>
                             <input type="text" class="form-control" id="inputUnidadeMedida" name="unidade_medida">
+                            <div id="validacaoUnidadeMedida" class="invalid-feedback">
+                                Digite uma unidade de medida válida.
+                            </div>
                         </div>
                         <div class="col-md-3">
                             <label for="inputValor" class="form-label">Valor</label>
-                            <input type="number" class="form-control" id="inputValor" step="0.01" name="valor" placeholder="R$00.00">
+                            <input type="number" class="form-control" id="inputValor" name="valor" placeholder="R$00.00">
+                            <div id="validacaoValor" class="invalid-feedback">
+                                Digite um valor válido.
+                            </div>
                         </div>
                         <div class="col-md-3">
                             <label for="inputTipo" class="form-label">Tipo*</label>
-                            <select id="inputItem" name="tipo" required class="form-select">
+                            <select id="inputItem" name="tipo" class="form-select">
                                 <option value="">Selecione o tipo</option>
                                 <?php
                                 // Valores fixos do ENUM (os mesmos definidos na tabela)
@@ -112,11 +105,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                     </option>
                                 <?php } ?>
                             </select>
+                            <div id="validacaoTipo" class="invalid-feedback">
+                                Selecione um tipo de item.
+                            </div>
                         </div>
 
                         <div class="col-md-2">
                             <label class="form-label">Destino do item*</label>
-                            <select id="selectDestino" name="destino" class="form-select" required onchange="mostrarDestino()">
+                            <select id="selectDestino" name="destino" class="form-select" onchange="mostrarDestino()">
                                 <option value="">Selecione</option>
                                 <option value="campanha">Campanha</option>
                                 <option value="estoque">Estoque</option>
@@ -125,7 +121,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
                         <div class="col-md-10" id="campoCampanha" style="display: none;">
                             <label class="form-label">Campanha</label>
-                            <select name="id_campanha_doacao" class="form-select">
+                            <select id=inputCampanha name="id_campanha_doacao" class="form-select">
                                 <option value="">Selecione a campanha</option>
                                 <?php
                                 $campanhas = $obj->query("SELECT id, nome FROM campanha_doacao");
@@ -133,11 +129,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                     <option value="<?php echo $c->id; ?>"><?php echo $c->nome; ?></option>
                                 <?php } ?>
                             </select>
+
                         </div>
 
                         <div class="col-md-10" id="campoEstoque" style="display: none;">
                             <label class="form-label">Estoque</label>
-                            <select name="id_estoque" class="form-select">
+                            <select id=inputEstoque name="id_estoque" class="form-select">
                                 <option value="1">Estoque geral</option>
                             </select>
                         </div>
@@ -160,6 +157,77 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         document.getElementById('campoEstoque').style.display = tipo === 'estoque' ? 'block' : 'none';
     }
 </script>
-
 </body>
 </html>
+<?php
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    submitInformation($obj);
+}
+
+function submitInformation($sql)
+{
+
+    $idCampanha = ($_POST['destino'] === 'campanha') ? (int) $_POST['id_campanha_doacao'] : null;
+    $idEstoque = ($_POST['destino'] === 'estoque') ? (int) $_POST['id_estoque'] : null;
+    $quantidade = ($_POST['quantidade'] !== '') ? (int) $_POST['quantidade'] : null;
+    $unidadeMedida = ($_POST['unidade_medida'] !== '') ? $_POST['unidade_medida'] : null;
+    $valor = ($_POST['valor'] !== '') ? (float) $_POST['valor'] : null;
+
+    if ($idEstoque !== null && !isNumericOnly($idEstoque)) {
+        displayValidation('inputEstoque', false);
+        return;
+    }
+
+    if ($idCampanha !== null && !isNumericOnly($idCampanha)) {
+        displayValidation('inputCampanha', false);
+        return;
+    }
+
+    if (!isNumericOnly($_POST['id_opcao'])) {
+        displayValidation('inputItem', false);
+        return;
+    }
+
+    if (!isNumericOnly($_POST['id_usuario'])) {
+        displayValidation('inputDoador', false);
+        return;
+    }
+
+    if ($quantidade !== null && !isNumericOnly($quantidade)) {
+        displayValidation('inputQuantidade', false);
+        return;
+    }
+
+    if ($unidadeMedida !== null && (!isAlphaOnly($unidadeMedida) || !hasMaxLength($unidadeMedida, 3))) {
+        displayValidation('inputUnidadeMedida', false);
+        return;
+    }
+
+    if ($valor !== null && !is_numeric($valor)) {
+        displayValidation('inputValor', false);
+        return;
+    }
+
+    if (!isAlphaOnly($_POST['tipo'])) {
+        displayValidation('inputTipo', false);
+        return;
+    }
+
+    if (!isDateValid($_POST['data'])) {
+        displayValidation('inputData', false);
+        return;
+    }
+
+    try {
+        $query = "
+        INSERT INTO item(id_campanha_doacao, id_estoque, id_opcao, id_usuario, quantidade, unidade_medida, valor, tipo, data) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $stmt = $sql->prepare($query);
+        $stmt->bind_param("iiiiisdss", $idCampanha, $idEstoque, $_POST['id_opcao'], $_POST['id_usuario'], $quantidade, $unidadeMedida, $valor, $_POST['tipo'], $_POST['data']);
+        $stmt->execute();
+        showSucess(3);
+
+    } catch (mysqli_sql_exception $e) {
+        showError(5);
+    }
+}

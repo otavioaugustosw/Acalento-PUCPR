@@ -103,7 +103,6 @@ function submitInformation($sql)
             displayValidation('inputEvento', false);
             return;
         }
-
     try { // tenta executar a query
         $query = "
         INSERT INTO campanha_doacao(nome, data, evento_destino)

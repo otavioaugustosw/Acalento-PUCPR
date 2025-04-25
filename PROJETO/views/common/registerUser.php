@@ -1,59 +1,9 @@
 <?php
-global $obj;
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
 include (ROOT . "/php/config/database_php.php");
 include (ROOT . "/php/auth_services/AuthService.php");
-$conexao = connectDatabase();
-
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-
-    //Diferentes tipos de usuário
-    $tipos = $_POST['tipo_usuario'] ?? [];
-    $eh_doador = in_array('pj', $tipos) ? 1 : 0;
-    $eh_doador = in_array('pf', $tipos) ? 1 : 0;
-    $eh_voluntario = in_array('voluntario', $tipos) ? 1 : 0;
-    $eh_adm = 0;
-
-    //Pega os dados
-    $email = $_POST['email'];
-    $senha= AuthService::generatePasswordHash('senha');
-    $nome = $_POST['nome'];
-    $cpf = isset($_POST['cpf']) ? preg_replace('/\D/', '', $_POST['cpf']) : null;
-    $cnpj = isset($_POST['cnpj']) ? preg_replace('/\D/', '', $_POST['cnpj']) : null;
-    $telefone = isset($_POST['telefone']) ? preg_replace('/\D/', '', $_POST['telefone']) : null;
-    $nascimento = $_POST['nascimento'];
-
-    $query = "
-    INSERT INTO usuario(email, senha, nome, cpf, cnpj, telefone, nascimento, 
-        eh_doador, eh_voluntario
-    ) VALUES (
-        '$email',
-        '$senha',
-        '$nome',
-        " . ($cpf ? "'$cpf'" : "NULL") . ",
-        " . ($cnpj ? "'$cnpj'" : "NULL") . ",
-        '$telefone',
-        '$nascimento',
-        '$eh_doador',
-        '$eh_voluntario'
-    )
-";
-
-    $resultado = $obj->query($query);
-
-    if (!$resultado) {
-        echo "<span class='alert alert-danger'>Não funcionou! Erro: " . $obj->error . "</span>";
-    } else {
-        // Pega o ID do usuário recém-criado
-        $id_usuario = $obj->insert_id;
-        // Redireciona com o ID do usuário
-        header('Location: register_address.php?id_usuario=' . $id_usuario);
-        exit();
-        }
-}
+include (ROOT . "/php/handlers/formValidator.php");
+$obj = connectDatabase();
 ?>
-
 <!doctype html>
 <html lang="en">
 <head>
@@ -61,126 +11,238 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-
-    <link rel="stylesheet" href="css/login.css">
-    <link rel="stylesheet" href="css/header.css">
-    <link rel="stylesheet" href="css/form-style.css">
+    <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/default.css">
+    <link rel="stylesheet" href="css/form-style.css">
     <link rel="stylesheet" href="css/main-content.css">
-
     <title>Cadastro de usuário</title>
-
 </head>
 <body>
 
-<header>
-    <div class="container">
-        <div class="logo">
-            <img src="assets/logo/acalento-logo.svg" alt="logo acalento">
-            <h1>Projeto Acalento</h1>
-        </div>
-        <nav>
-            <ul>
-                <li><a href="#">nossa missão</a></li>
-                <li><a href="#">blog acalento</a></li>
-                <li><a href="#">nos apoie!</a></li>
-                <li><a href="#">portal transparência</a></li>
-                <a href="" class=" btn btn-primary m-3">Cadastre-se</a>
-                <a href="" class=" btn btn-secondary">Login</a>
-            </ul>
-        </nav>
-    </div>
-</header>
-
+<?php include ROOT . "/views/common/header.php"; ?>
 
 <main class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-8 col-lg-6">
             <div class="card shadow-lg p-4">
                 <h2 class="form-title">Informações pessoais</h2>
-
-    <form method="POST" action="views/common/registerAddress.php">
+    <form method="POST" action="index.php?common=5">
         <!-- Nome -->
         <div class="mb-3">
             <label for="nome" class="form-label">Nome completo *</label>
-            <input type="text" class="form-control border-dark-subtle" id="nome" name="nome" required maxlength="50">
-        </div>
-        <!-- Tipo de usuario check -->
-        <div class="mb-3">
-            <label class="form-label">Tipo de usuário*:</label>
-
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="pf" id="pf" name="tipo_usuario[]">
-                <label class="form-check-label" for="pf">Doador PF</label>
-            </div>
-
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="pj" id="pj" name="tipo_usuario[]">
-                <label class="form-check-label" for="pj">Doador PJ</label>
-            </div>
-
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="voluntario" id="voluntario" name="tipo_usuario[]">
-                <label class="form-check-label" for="voluntario">Voluntário</label>
-            </div>
+            <input type="text" class="form-control " id="nome" name="nome" maxlength="50" value="<?= $_POST['nome'] ?? ''?>">
         </div>
 
-        <!-- CPF | CNPJ -->
+        <div class="mb-3" id="cpf-field">
+            <label for="cpf" class="form-label">CPF*</label>
+            <input type="text" class="form-control " id="cpf" name="cpf" maxlength="14" value="<?= $_POST['cpf'] ?? ''?>">
+        </div>
+        <!-- CPF -->
         <div class="row">
-            <div class="col-md-6 mb-3 d-none" id="cpf-field">
-                <label for="cpf" class="form-label">CPF*</label>
-                <input type="text" class="form-control border-dark-subtle" id="cpf" name="cpf" maxlength="14">
-            </div>
-
-            <div class="col-md-6 mb-3 d-none" id="cnpj-field">
-                <label for="cnpj" class="form-label">CNPJ*</label>
-                <input type="text" class="form-control border-dark-subtle" id="cnpj" name="cnpj" maxlength="18">
-            </div>
-
 
             <div class="col-md-6 mb-3">
                 <label for="nascimento" class="form-label">Data de nascimento *</label>
-                <input type="date" class="form-control border-dark-subtle" id="nascimento" name="nascimento" required>
+                <input type="date" class="form-control " id="nascimento" name="nascimento" value="<?= $_POST['nascimento'] ?? ''?>">
             </div>
 
             <div class="col-md-6 mb-3">
                 <label for="telefone" class="form-label">Telefone *</label>
-                <input type="text" class="form-control border-dark-subtle" id="telefone" name="telefone" required maxlength="15">
+                <input type="text" class="form-control" id="telefone" name="telefone"  maxlength="15" value="<?= $_POST['telefone'] ?? ''?>">
             </div>
         </div>
 
         <!-- Email -->
         <div class="mb-3">
             <label for="email" class="form-label">E-mail *</label>
-            <input type="email" class="form-control border-dark-subtle" id="email" name="email" required maxlength="50">
+            <input type="email" class="form-control" id="email" name="email" maxlength="50" value="<?= $_POST['email'] ?? ''?>">
         </div>
 
         <!-- Senha -->
         <div class="mb-3">
             <label for="senha" class="form-label">Senha *</label>
-            <input type="password" class="form-control border-dark-subtle" id="senha" name="senha" required maxlength="256">
+            <input type="password" class="form-control " id="senha" name="senha" maxlength="256">
         </div>
 
         <!-- Confirmar Senha -->
         <div class="mb-3">
             <label for="confirmarSenha" class="form-label">Confirmar Senha *</label>
-            <input type="password" class="form-control border-dark-subtle" id="confirmarSenha" name="confirmarSenha" required maxlength="256">
+            <input type="password" class="form-control " id="confirmarSenha" name="confirmarSenha" maxlength="256">
+        </div>
+        <!-- CEP -->
+        <div class="mb-3 mt-2">
+            <label for="cep" class="form-label">CEP *</label>
+            <input type="text" class="form-control" id="cep" name="cep" maxlength="9" pattern="\d{5}-\d{3}" value="<?= $_POST['cep'] ?? '' ?>">
         </div>
 
-        <button type="submit" class="btn btn-primary">Continuar</button>
+        <!-- rua -->
+        <div class="mb-3">
+            <label for="rua" class="form-label">Logradouro *</label>
+            <input type="text" class="form-control " id="rua" name="rua" maxlength="50" value="<?= $_POST['rua'] ?? '' ?>">
+        </div>
 
+        <!-- bairro -->
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="bairro" class="form-label">Bairro *</label>
+                <input type="text" class="form-control " id="bairro" name="bairro" maxlength="50" value="<?= $_POST['bairro'] ?? '' ?>">
+            </div>
+
+            <!-- Número -->
+            <div class="col-md-6 mb-3">
+                <label for="numero" class="form-label">Número *</label>
+                <input type="number" class="form-control " id="numero" name="numero" maxlength="6" value="<?= $_POST['numero'] ?? ''?>">
+            </div>
+        </div>
+
+        <!-- Cidade -->
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="cidade" class="form-label">Cidade *</label>
+                <input type="text" class="form-control " id="cidade" name="cidade" maxlength="50" value="<?= $_POST['cidade'] ?? '' ?>">
+            </div>
+
+            <!-- Estado-->
+            <div class="col-md-6 mb-3">
+                <label for="estado" class="form-label">Estado *</label>
+                <input type="text" class="form-control " id="estado" name="estado" maxlength="50" value="<?= $_POST['estado'] ?? '' ?>">
+            </div>
+        </div>
+        <div class="d-flex justify-content-center">
+            <button type="submit" class="btn btn-primary">Finalizar Cadastro</button>
+        </div>
     </form>
             </div>
         </div>
     </div>
 </main>
-
 </div>
-
 </body>
-
 <script src="assets/js/confirmation.js" defer></script>
-
-
 </html>
+
+<?php
+
+function validateAddress($sql) {
+    if (!isNumericOnly(preg_replace('/\D/', '', $_POST['cep'])) || !hasMaxLength(preg_replace('/\D/', '', $_POST['cep']), 8)) {
+        displayValidation('cep' , false);
+        return false;
+    }
+
+    if (!isAlphaOnly($_POST['rua']) || !hasMaxLength($_POST['rua'], 50)) {
+        displayValidation('rua', false);
+        return false;
+    }
+
+    if (!isNumericOnly($_POST['numero']) || !hasMaxLength($_POST['numero'], 50)) {
+        displayValidation('numero', false);
+        return false;
+    }
+
+    if (!isAlphaOnly($_POST['bairro']) || !hasMaxLength($_POST['bairro'], 50)) {
+        displayValidation('bairro', false);
+        return false;
+    }
+
+    if (!isAlphaOnly($_POST['cidade']) || !hasMaxLength($_POST['cidade'], 50)) {
+        displayValidation('cidade', false);
+        return false;
+    }
+
+    if (!isAlphaOnly($_POST['estado']) || !hasMaxLength($_POST['estado'], 50)) {
+        displayValidation('estado', false);
+        return false;
+    }
+    return true;
+}
+
+function validateUser($sql)
+{
+    if (!isFullName($_POST['nome']) || !hasMaxLength($_POST['nome'], 50)) {
+        displayValidation('nome', false);
+        return false;
+    }
+
+    if (!isCPFValid($_POST['cpf'])) {
+        displayValidation('cpf' , false);
+        return false;
+    }
+
+    if (!isNumericOnly(preg_replace('/\D/', '', $_POST['telefone']))) {
+        displayValidation('telefone', false);
+        return false;
+    }
+
+    if (!isValidEmail($_POST['email'])) {
+        displayValidation('email', false);
+        return false;
+    }
+
+
+    if (!isDateValid($_POST['nascimento'])) {
+        displayValidation('nascimento', false);
+        return false;
+    }
+
+    if (!hasMinLength($_POST['senha'], 8) || !($_POST['senha'] === $_POST['confirmarSenha']) ) {
+        displayValidation('senha', false);
+        displayValidation('confirmarSenha', false);
+        return false;
+    }
+
+    return true;
+}
+
+function submitUser($sql)
+{
+    $cep = preg_replace('/\D/', '', $_POST['cep']);
+    $rua = $_POST['rua'];
+    $numero = $_POST['numero'];
+    $bairro = $_POST['bairro'];
+    $cidade = $_POST['cidade'];
+    $estado = $_POST['estado'];
+
+    try {
+        // cria o novo endereço
+        $query = "INSERT INTO endereco (cep, rua, numero, bairro, cidade, estado) 
+                VALUES (?, ?, ?, ?, ?, ?)";
+        $stmt = $sql->prepare($query);
+        $stmt->bind_param("ssisss", $cep, $rua, $numero, $bairro, $cidade, $estado);
+        $stmt->execute();
+    } catch (Exception $e) {
+        showError(15);
+        exit();
+    }
+
+    $id_endereco = $sql->insert_id;
+    $email = $_POST['email'];
+    $senha = AuthService::generatePasswordHash($_POST['senha']);
+    $nome = $_POST['nome'];
+    $cpf = preg_replace('/\D/', '', $_POST['cpf']);
+    $telefone = preg_replace('/\D/', '', $_POST['telefone']);
+    $nascimento = $_POST['nascimento'];
+
+    try {
+        // cria o novo endereço
+        $query = "INSERT INTO usuario(id_endereco, email, senha, nome, cpf, telefone, nascimento)
+                VALUES (?, ?, ?, ?, ?, ?, ?)";
+        $stmt = $sql->prepare($query);
+        $stmt->bind_param("issssss", $id_endereco, $email, $senha, $nome, $cpf, $telefone, $nascimento);
+        $stmt->execute();
+    } catch (Exception $e) {
+        showError(15);
+        exit();
+    }
+
+}
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    if (validateUser($obj) && validateAddress($obj)) {
+        submitUser($obj);
+        ?>
+        <script>
+            window.location.href = "index.php?common=2"
+        </script>
+        <?php
+    }
+}
+?>

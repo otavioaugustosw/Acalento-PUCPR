@@ -1,18 +1,17 @@
 <?php
-
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
 include (ROOT . "/php/config/database_php.php");
+
 $conexao = connectDatabase();;
 
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['inativar'])) {
-    $query = "UPDATE usuario SET inativado = 1 WHERE id = $id_usuario";
+    $query = "UPDATE usuario SET status = 1 WHERE id = " . $_SESSION['USER_ID'];
     $resultado = $conexao->query($query);
 
     if ($resultado) {
-        echo "<div class='alert alert-success'>Usuário inativado com sucesso!</div>";
+        header("Location: index.php?common=7&success=1");
     } else {
-        echo "<div class='alert alert-danger'>Erro ao inativar usuário: " . $conexao->error . "</div>";
+        showError(1);
+        header("Location: index.php?common=7&error=1");
     }
 }
 ?>

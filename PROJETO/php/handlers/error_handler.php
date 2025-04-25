@@ -14,7 +14,9 @@ const PAGE_ERROR = [
     12=> "Não foi possível cancelar a sua participação, tente de novo mais tarde",
     13=> "Evento lotado",
     14=> "Não foi possível realizar a inscrição, tente novamente mais tarde"
+
 ];
+
 
 const PAGE_SUCCESS = [
     1=> "Campanha salva com sucesso",
@@ -24,6 +26,10 @@ const PAGE_SUCCESS = [
     5=> "Evento alterado com sucesso",
     6=> "Participação cancelada com sucesso",
     7=> "Inscrição feita com sucesso",
+    8=> "Evento deletado com sucesso",
+
+    9=> "Usuário cadastrado com sucesso",
+    10=> "Senha alterada com sucesso"
 ];
 
 function showError($pageNum)

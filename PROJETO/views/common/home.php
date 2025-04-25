@@ -6,7 +6,6 @@ function checkMark($value): string
 {
     return $value ? '✅ Sim' : '❌ Não';
 }
-include 'header.php';
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -22,6 +21,7 @@ include 'header.php';
 </head>
 <body class="justify-content-center align-items-center vh-100">
 <?php
+include 'header.php';
 if(isset($_SESSION['USER_ID'])) {
     $query = "SELECT * FROM endereco WHERE id = ?";
     $stmt = $sql->prepare($query);

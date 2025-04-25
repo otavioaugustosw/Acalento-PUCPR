@@ -1,36 +1,15 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
 include (ROOT . "/php/config/database_php.php");
 include (ROOT . "/php/auth_services/AuthService.php");
-
-$conexao = connectDatabase();
+include (ROOT . "/php/handlers/formValidator.php");
+$obj = connectDatabase();
 
 $id_usuario = $_SESSION['USER_ID'] ?? null;
 
 if (!$id_usuario) {
     die("<div class='alert alert-danger'>Usuário não autenticado</div>");
 }
-
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $senha = $_POST['senha'] ?? '';
-    $confirmar = $_POST['confirmar'] ?? '';
-
-    if ($senha !== $confirmar) {
-        echo "<div class='alert alert-warning'>As senhas não estão iguais!</div>";
-    } else {
-        $senha_hash = AuthService::generatePasswordHash($senha);
-        $query = "UPDATE usuario SET senha = '$senha_hash' WHERE id = $id_usuario";
-        if ($conexao->query($query)) {
-            echo "<div class='alert alert-success'>Senha atualizada com sucesso!</div>";
-        } else {
-            echo "<div class='alert alert-danger'>Erro ao atualizar senha: " . $conexao->error . "</div>";
-        }
-    }
-    header("index.php?common=7");
-}
 ?>
-
 <!doctype html>
 <html lang="en">
 <head>
@@ -58,11 +37,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <form method="POST">
                 <div class="mb-3">
                     <label class="form-label">Nova Senha*</label>
-                    <input type="password" name="senha" class="form-control border-dark-subtle" required>
+                    <input type="password" name="senha" id="senha" class="form-control border-dark-subtle" required>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Confirmar Nova Senha*</label>
-                    <input type="password" name="confirmar" class="form-control border-dark-subtle" required>
+                    <input type="password" name="confirmarSenha" id="confirmarSenha" class="form-control border-dark-subtle" required>
                 </div>
                 <div class="d-grid mt-4">
                     <button type="submit" class="btn btn-primary">Atualizar Senha</button>
@@ -76,3 +55,22 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+<?php
+
+if (!hasMinLength($_POST['senha'], 8) || !($_POST['senha'] === $_POST['confirmarSenha']) ) {
+    displayValidation('senha', false);
+    displayValidation('confirmarSenha', false);
+    showError(20);
+    return false;
+} else {
+    $senha = AuthService::generatePasswordHash($_POST['senha']);
+    $query = "UPDATE usuario SET senha = '$senha' WHERE id = $id_usuario";
+    if ($obj->query($query)) {
+        showSucess(10);
+    } else {
+        echo "<div class='alert alert-danger'>Erro ao atualizar senha: " . $obj->error . "</div>";
+    }
+}
+header("index.php?common=7");
+
+?>

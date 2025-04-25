@@ -5,10 +5,10 @@ document.querySelector("form").addEventListener("submit", function (e) {
     const senha = document.getElementById("senha").value;
     const confirmar = document.getElementById("confirmarSenha").value;
 
-    if (senha !== confirmar) {
-        e.preventDefault();
-        alert("As senhas não estão iguais!");
-    }
+    // if (senha !== confirmar) {
+    //     e.preventDefault();
+    //     alert("As senhas não estão iguais!");
+    // }
 });
 
 // CPF máscara
@@ -19,19 +19,6 @@ if (cpfInput) {
         value = value.replace(/(\d{3})(\d)/, '$1.$2');
         value = value.replace(/(\d{3})(\d)/, '$1.$2');
         value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
-        e.target.value = value;
-    });
-}
-
-// CNPJ máscara
-const cnpjInput = document.getElementById('cnpj');
-if (cnpjInput) {
-    cnpjInput.addEventListener('input', function (e) {
-        let value = e.target.value.replace(/\D/g, '');
-        value = value.replace(/^(\d{2})(\d)/, '$1.$2');
-        value = value.replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3');
-        value = value.replace(/\.(\d{3})(\d)/, '.$1/$2');
-        value = value.replace(/(\d{4})(\d{1,2})$/, '$1-$2');
         e.target.value = value;
     });
 }
@@ -47,79 +34,9 @@ if (telefoneInput) {
     });
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Seleção dos elementos
-    const pfCheckbox = document.getElementById('pf');
-    const pjCheckbox = document.getElementById('pj');
-    const voluntarioCheckbox = document.getElementById('voluntario');
-    const adminCheckbox = document.getElementById('admin');
-
-    const cpfField = document.getElementById('cpf-field');
-    const cnpjField = document.getElementById('cnpj-field');
-
-    // Máscaras para CPF e CNPJ (opcional)
-    const cpfInput = document.getElementById('cpf');
-    const cnpjInput = document.getElementById('cnpj');
-
-    // Função para atualizar os campos
-    function atualizarCampos() {
-        // Garante que PF e PJ não fiquem marcados juntos
-        if (pfCheckbox.checked && pjCheckbox.checked) {
-            if (event.target === pfCheckbox) {
-                pjCheckbox.checked = false;
-            } else {
-                pfCheckbox.checked = false;
-            }
-        }
-
-        // Mostrar CPF se PF, Voluntário ou Admin estiverem marcados
-        const mostrarCPF = pfCheckbox.checked || voluntarioCheckbox.checked || adminCheckbox.checked;
-
-        // Mostrar CNPJ apenas se PJ estiver marcado
-        const mostrarCNPJ = pjCheckbox.checked;
-
-        // Aplica as classes para mostrar/esconder os campos
-        cpfField.classList.toggle('d-none', !mostrarCPF);
-        cnpjField.classList.toggle('d-none', !mostrarCNPJ);
-
-        // Adiciona/remove o atributo required conforme necessário
-        cpfInput.required = mostrarCPF;
-        cnpjInput.required = mostrarCNPJ;
-    }
-
-    // Adiciona os event listeners
-    [pfCheckbox, pjCheckbox, voluntarioCheckbox, adminCheckbox].forEach(checkbox => {
-        checkbox.addEventListener('change', atualizarCampos);
-    });
-
-    // Máscaras para CPF e CNPJ (opcional)
-    if (cpfInput) {
-        cpfInput.addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            value = value.replace(/(\d{3})(\d)/, '$1.$2');
-            value = value.replace(/(\d{3})(\d)/, '$1.$2');
-            value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
-            e.target.value = value;
-        });
-    }
-
-    if (cnpjInput) {
-        cnpjInput.addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            value = value.replace(/^(\d{2})(\d)/, '$1.$2');
-            value = value.replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3');
-            value = value.replace(/\.(\d{3})(\d)/, '.$1/$2');
-            value = value.replace(/(\d{4})(\d)/, '$1-$2');
-            e.target.value = value;
-        });
-    }
-
-    // Executa uma vez no carregamento para configurar o estado inicial
-    atualizarCampos();
-});
 //PARA ENDERECO
 
-// confirmacao.js
+
 function aplicarMascaraCEP() {
     const cepInput = document.getElementById('cep');
 

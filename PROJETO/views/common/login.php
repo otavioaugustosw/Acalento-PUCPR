@@ -14,13 +14,15 @@ $auth = new AuthService($sql);
     <title>Login</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <link href="css/default.css" rel="stylesheet">
-    <link href="css/form-style.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/default.css">
+    <link rel="stylesheet" href="css/form-style.css">
+    <link rel="stylesheet" href="css/main-content.css">
 </head>
 <body class="d-flex justify-content-center align-items-center vh-100">
 <div class="card shadow-lg p-4">
     <h2 class="mb-4 text-center">Entrar</h2>
-    <form action="/Acalento/projeto/index.php?common=2" method="POST">
+    <form action="index.php?common=2" method="POST">
         <div class="mb-3">
             <label for="email" class="form-label">E-mail</label>
             <input type="email" class="form-control" name="email" id="email" required placeholder="seu@email.com">

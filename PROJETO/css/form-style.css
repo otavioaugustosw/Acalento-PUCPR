@@ -1,4 +1,4 @@
-.form-control, .form-select{
+.form-control, .form-select, input{
     padding: 10px;
     margin: 5px 0;
     border: var(--default-border);
@@ -7,7 +7,7 @@
 }
 
 
-.form-control:not([type="date"], [type="time"]), .form-select {
+.form-control:not([type="date"], [type="time"]), .form-label {
     color: var(--primary-blue) !important;
 }
 

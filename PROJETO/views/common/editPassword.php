@@ -20,6 +20,7 @@ if (!$id_usuario) {
     <link rel="stylesheet" href="css/default.css">
     <link rel="stylesheet" href="css/sidebars.css">
     <link rel="stylesheet" href="css/main-content.css">
+    <title>Alterar senha</title>
 </head>
 
 
@@ -56,21 +57,22 @@ if (!$id_usuario) {
 </body>
 </html>
 <?php
-
-if (!hasMinLength($_POST['senha'], 8) || !($_POST['senha'] === $_POST['confirmarSenha']) ) {
-    displayValidation('senha', false);
-    displayValidation('confirmarSenha', false);
-    showError(20);
-    return false;
-} else {
-    $senha = AuthService::generatePasswordHash($_POST['senha']);
-    $query = "UPDATE usuario SET senha = '$senha' WHERE id = $id_usuario";
-    if ($obj->query($query)) {
-        showSucess(10);
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!hasMinLength($_POST['senha'], 8) || ($_POST['senha'] !== $_POST['confirmarSenha']) ) {
+        displayValidation('senha', false);
+        displayValidation('confirmarSenha', false);
+        showError(17);
+        return false;
     } else {
-        echo "<div class='alert alert-danger'>Erro ao atualizar senha: " . $obj->error . "</div>";
+        $senha = AuthService::generatePasswordHash($_POST['senha']);
+        $query = "UPDATE usuario SET senha = '$senha' WHERE id = $id_usuario";
+        if ($obj->query($query)) {
+            showSucess(10);
+            header("Location: index.php?common=7");
+            exit;
+        } else {
+            echo "<div class='alert alert-danger'>Erro ao atualizar senha: " . $obj->error . "</div>";
+        }
     }
 }
-header("index.php?common=7");
-
 ?>

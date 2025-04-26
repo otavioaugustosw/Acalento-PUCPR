@@ -51,85 +51,94 @@ if (!$dados) {
                 <div class="mb-4">
                     <h5 class="mb-3">Informações Pessoais</h5>
 
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Nome Completo</label>
-                        <input type="text" class="form-control border-dark-subtle" name="nome"
-                               value="<?= htmlspecialchars($dados->nome ?? '') ?>" required>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Nome Completo</label>
+                            <input type="text" class="form-control" name="nome"
+                                   value="<?= $dados->nome ?? '' ?>">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" name="email"
+                                   value="<?= $dados->email ?? '' ?>">
+                        </div>
                     </div>
 
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Email</label>
-                        <input type="email" class="form-control border-dark-subtle" name="email"
-                               value="<?= htmlspecialchars($dados->email ?? '') ?>" required>
-                    </div>
-                </div>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">CPF</label>
+                            <input type="text" class="form-control" name="cpf"
+                                   value="<?= $dados->cpf ?? '' ?>">
+                        </div>
 
-                <div class="row">
-                    <div class="col-md-4 mb-3">
-                        <label class="form-label">CPF</label>
-                        <input type="text" class="form-control border-dark-subtle" name="cpf"
-                               value="<?= htmlspecialchars($dados->cpf ?? '') ?>">
-                    </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Telefone</label>
+                            <input type="text" class="form-control" name="telefone"
+                                   value="<?= $dados->telefone ?? '' ?>">
+                        </div>
 
-                    <div class="col-md-4 mb-3">
-                        <label class="form-label">Telefone</label>
-                        <input type="text" class="form-control border-dark-subtle" name="telefone"
-                               value="<?= htmlspecialchars($dados->telefone ?? '') ?>">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Data de Nascimento</label>
+                            <input type="date" class="form-control" name="nascimento"
+                                   value="<?= $dados->nascimento ?? '' ?>">
+                        </div>
                     </div>
-
-                    <div class="col-md-4 mb-3">
-                        <label class="form-label">Data de Nascimento</label>
-                        <input type="date" class="form-control border-dark-subtle" name="nascimento"
-                               value="<?= htmlspecialchars($dados->nascimento ?? '') ?>">
-                    </div>
-                </div>
                 </div>
 
             <!-- Endereço -->
                 <div class="mb-4">
                 <h5 class="mb-3">Endereço</h5>
 
-                <div class="row">
-                    <div class="col-md-2 mb-3">
-                        <label class="form-label">CEP</label>
-                        <input type="text" class="form-control border-dark-subtle" name="cep" id="cep"
-                               value="<?= htmlspecialchars($dados->cep ?? '') ?>" maxlength="9">
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label">CEP</label>
+                            <input type="text" class="form-control" name="cep" id="cep"
+                                   value="<?= $dados->cep ?? '' ?>" maxlength="9">
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Logradouro</label>
+                            <input type="text" class="form-control" name="rua" id="rua"
+                                   value="<?= $dados->rua ?? '' ?>" maxlength="50">
+                        </div>
+
+                        <div class="col-md-2 mb-3">
+                            <label class="form-label">Número</label>
+                            <input type="text" class="form-control" name="numero" id="numero"
+                                   value="<?= $dados->numero ?? '' ?>" maxlength="6">
+                        </div>
+
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label">Complemento </label>
+                            <input type="text" class="form-control" id="complemento" name="complemento"
+                                   maxlength="50" value="<?= $dados->complemento ?? '' ?>">
+                        </div>
                     </div>
 
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Logradouro</label>
-                        <input type="text" class="form-control border-dark-subtle" name="rua" id="rua"
-                               value="<?= htmlspecialchars($dados->rua ?? '') ?>" maxlength="50">
-                    </div>
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label">Bairro</label>
+                            <input type="text" class="form-control" name="bairro" id="bairro"
+                                   value="<?= $dados->bairro ?? '' ?>" maxlength="50">
+                        </div>
 
-                    <div class="col-md-2 mb-3">
-                        <label class="form-label">Número</label>
-                        <input type="text" class="form-control border-dark-subtle" name="numero" id="numero"
-                               value="<?= htmlspecialchars($dados->numero ?? '') ?>" maxlength="6">
-                    </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label">Cidade</label>
+                            <input type="text" class="form-control" name="cidade" id="cidade"
+                                   value="<?= $dados->cidade ?? '' ?>" maxlength="50">
+                        </div>
 
-                    <div class="col-md-2 mb-3">
-                        <label class="form-label">Bairro</label>
-                        <input type="text" class="form-control border-dark-subtle" name="bairro" id="bairro"
-                               value="<?= htmlspecialchars($dados->bairro ?? '') ?>" maxlength="50">
-                    </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label">Estado</label>
+                            <input type="text" class="form-control" name="estado" id="estado"
+                                   value="<?= $dados->estado ?? '' ?>" maxlength="50">
+                        </div>
 
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Cidade</label>
-                        <input type="text" class="form-control border-dark-subtle" name="cidade" id="cidade"
-                               value="<?= htmlspecialchars($dados->cidade ?? '') ?>" maxlength="50">
-                    </div>
-
-                    <div class="col-md-2 mb-3">
-                        <label class="form-label">Estado</label>
-                        <input type="text" class="form-control border-dark-subtle" name="estado" id="estado"
-                               value="<?= htmlspecialchars($dados->estado ?? '') ?>" maxlength="50">
-                    </div>
-
-                    <div class="col-md-4 mb-3 d-flex flex-column">
-                        <div class="invisible">Confirmar</div>
-                        <button type="submit" class="btn btn-primary mt-1 largura-50">Salvar Alterações</button>
+                        <div class="col-md-3 mb-3">
+                            <div class="invisible">Confirmar</div>
+                            <button type="submit" class="btn btn-primary mt-1">Salvar Alterações</button>
+                        </div>
                     </div>
 
                 </div>
@@ -206,6 +215,42 @@ function validateUser($sql)
     return true;
 }
 
+function verifyUserExistence($sql, $email, $cpf)
+{
+    try {
+        // Verifica se já existe cadastro com o Email
+        $query = "SELECT email FROM usuario WHERE email = ?";
+        $stmt = $sql->prepare($query);
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $resultEmail = $stmt->get_result();
+
+        if ($resultEmail->num_rows > 0) {
+            showError(16);
+            exit();
+        }
+
+        // Verifica se já existe cadastro com o CPF
+        $query = "SELECT cpf FROM usuario WHERE cpf = ?";
+        $stmt = $sql->prepare($query);
+        $stmt->bind_param("s", $cpf);
+        $stmt->execute();
+        $resultCpf = $stmt->get_result();
+
+        if ($resultCpf->num_rows > 0) {
+            showError(19);
+            exit();
+        }
+
+        // Não encontrou nem email nem cpf já cadastrados
+        return false;
+
+    } catch (Exception $e) {
+        showError(15);
+        exit();
+    }
+}
+
 function submitUser($sql, $id_usuario, $id_endereco)
 {
     $cep = preg_replace('/\D/', '', $_POST['cep']);
@@ -214,13 +259,14 @@ function submitUser($sql, $id_usuario, $id_endereco)
     $bairro = $_POST['bairro'];
     $cidade = $_POST['cidade'];
     $estado = $_POST['estado'];
+    $complemento = $_POST['complemento'];
 
     try {
         // cria o novo endereço
         $query = "UPDATE endereco
-        SET cep = ?, rua = ?, numero = ?, bairro = ?, cidade = ?, estado = ? WHERE id = ?";
+        SET cep = ?, rua = ?, numero = ?, bairro = ?, cidade = ?, estado = ?, complemento = ? WHERE id = ?";
         $stmt = $sql->prepare($query);
-        $stmt->bind_param("ssisssi", $cep, $rua, $numero, $bairro, $cidade, $estado, $id_endereco);
+        $stmt->bind_param("ssissssi", $cep, $rua, $numero, $bairro, $cidade, $estado, $complemento, $id_endereco);
         $stmt->execute();
     } catch (Exception $e) {
         showError(15);
@@ -246,13 +292,17 @@ function submitUser($sql, $id_usuario, $id_endereco)
 }
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    showError(1);
     if (validateUser($obj) && validateAddress($obj)) {
-        submitUser($obj, $id_usuario, $id_endereco);
-        ?>
-        <script>
-            window.location.href = "index.php?common=7"
-        </script>
-        <?php
+        $cpf = preg_replace('/\D/', '', $_POST['cpf']);
+        $email = $_POST['email'];
+        if (!verifyUserExistence($obj, $email, $cpf)) {
+            submitUser($obj, $id_usuario, $id_endereco);
+            ?>
+            <script>
+                window.location.href = "index.php?common=6";
+            </script>
+            <?php
+        }
     }
 }
+?>

@@ -13,7 +13,12 @@ const PAGE_ERROR = [
     11=> "Usuário não logado",
     12=> "Não foi possível cancelar a sua participação, tente de novo mais tarde",
     13=> "Evento lotado",
-    14=> "Não foi possível realizar a inscrição, tente novamente mais tarde"
+    14=> "Não foi possível realizar a inscrição, tente novamente mais tarde",
+    15=> "Não foi possível realizar o cadastro, tente novamente mais tarde",
+    16=> "O e-mail já foi utilizado em outro cadastro",
+    17=> "As senhas não estão iguais",
+    18=> "Não foi possível atualizar as ediçes, tente novamente mais tarde",
+    19=> "O CPF já foi utilizado em outro cadastro"
 
 ];
 

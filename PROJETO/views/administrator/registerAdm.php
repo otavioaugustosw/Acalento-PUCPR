@@ -4,155 +4,160 @@ include (ROOT . "/php/auth_services/AuthService.php");
 include (ROOT . "/php/handlers/formValidator.php");
 $obj = connectDatabase();
 ?>
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <link rel="stylesheet" href="css/default.css">
-    <link rel="stylesheet" href="css/sidebars.css">
-    <link rel="stylesheet" href="css/form-style.css">
-    <link rel="stylesheet" href="css/main-content.css">
-    <title>Cadastro do administrador</title>
-</head>
-<body>
+    <!doctype html>
+    <html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        <link rel="stylesheet" href="css/default.css">
+        <link rel="stylesheet" href="css/sidebars.css">
+        <link rel="stylesheet" href="css/form-style.css">
+        <link rel="stylesheet" href="css/main-content.css">
+        <title>Cadastro do administrador</title>
+    </head>
+    <body>
 
-<?php include(ROOT . "/components/sidebars/sidebar-mobile.php") ?>
-<div class="d-flex flex-nowrap">
-    <?php include(ROOT .  "/components/sidebars/sidebars.php") ?>
-</div>
-<div class="flex-grow-1 p-4 main-content">
-    <main class="container-fluid align-content-center">
-        <h2 class="form-title">Informações de cadastro</h2>
-        <form method="POST" action="index.php?adm=12">
+    <?php include(ROOT . "/components/sidebars/sidebar-mobile.php") ?>
+    <div class="d-flex flex-nowrap">
+        <?php include(ROOT .  "/components/sidebars/sidebars.php") ?>
+    </div>
+    <div class="flex-grow-1 p-4 main-content">
+        <main class="container-fluid align-content-center">
+            <h2 class="form-title">Informações de cadastro</h2>
+            <form method="POST" action="index.php?adm=12">
 
-            <div class="row">
-                <!-- Nome -->
-                <div class="col-md-6 mb-3">
-                    <label for="nome" class="form-label">Nome completo *</label>
-                    <input type="text" class="form-control " id="nome" name="nome" maxlength="50" value="<?= $_POST['nome'] ?? ''?>">
+                <div class="row">
+                    <!-- Nome -->
+                    <div class="col-md-6 mb-3">
+                        <label for="nome" class="form-label">Nome completo *</label>
+                        <input type="text" class="form-control " id="nome" name="nome" maxlength="50" value="<?= $_POST['nome'] ?? ''?>">
+                    </div>
+                    <!-- Email -->
+                    <div class="col-md-6 mb-3">
+                        <label for="email" class="form-label">E-mail *</label>
+                        <input type="email" class="form-control" id="email" name="email" maxlength="50" value="<?= $_POST['email'] ?? ''?>">
+                    </div>
                 </div>
-                <!-- Email -->
-                <div class="col-md-6 mb-3">
-                    <label for="email" class="form-label">E-mail *</label>
-                    <input type="email" class="form-control" id="email" name="email" maxlength="50" value="<?= $_POST['email'] ?? ''?>">
-                </div>
-            </div>
 
-                    <div class="row">
-                        <!-- Tipo de Usuário, porque o adms só são criados por adms, mas estes podem cadastrar pessoas comuns -->
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Tipo de usuário *</label>
-                            <div class="row">
-                                <div class="col-auto">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="tipo_usuario" id="tipo_comum" value="0" <?= (isset($_POST['tipo_usuario']) && $_POST['tipo_usuario'] == '0') ? 'checked' : '' ?>>
-                                        <label class="form-check-label" for="tipo_comum">Comum</label>
-                                    </div>
+                <div class="row">
+                    <!-- Tipo de Usuário, porque o adms só são criados por adms, mas estes podem cadastrar pessoas comuns -->
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Tipo de usuário *</label>
+                        <div class="row">
+                            <div class="col-auto">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="tipo_usuario" id="tipo_comum" value="0" <?= (isset($_POST['tipo_usuario']) && $_POST['tipo_usuario'] == '0') ? 'checked' : '' ?>>
+                                    <label class="form-check-label" for="tipo_comum">Comum</label>
                                 </div>
-                                <div class="col-auto">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="tipo_usuario" id="tipo_admin" value="1" <?= (isset($_POST['tipo_usuario']) && $_POST['tipo_usuario'] == '1') ? 'checked' : '' ?>>
-                                        <label class="form-check-label" for="tipo_admin">Administrador</label>
-                                    </div>
+                            </div>
+                            <div class="col-auto">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="tipo_usuario" id="tipo_admin" value="1" <?= (isset($_POST['tipo_usuario']) && $_POST['tipo_usuario'] == '1') ? 'checked' : '' ?>>
+                                    <label class="form-check-label" for="tipo_admin">Administrador</label>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-            <div class="row">
-                <!-- Data de nascimento -->
-                <div class="col-md-4 mb-3">
-                    <label for="nascimento" class="form-label">Data de nascimento *</label>
-                    <input type="date" class="form-control " id="nascimento" name="nascimento" value="<?= $_POST['nascimento'] ?? ''?>">
-                </div>
-                <!-- Telefone -->
-                <div class="col-md-4 mb-3">
-                    <label for="telefone" class="form-label">Telefone *</label>
-                    <input type="text" class="form-control" id="telefone" name="telefone"  maxlength="15" value="<?= $_POST['telefone'] ?? ''?>">
-                </div>
-                <!-- CPF -->
-                <div class="col-md-4 mb-3" id="cpf-field">
-                    <label for="cpf" class="form-label">CPF*</label>
-                    <input type="text" class="form-control " id="cpf" name="cpf" maxlength="14" value="<?= $_POST['cpf'] ?? ''?>">
-                </div>
-            </div>
-
-
-            <div class="row">
-                <!-- Senha -->
-                <div class="col-md-6 mb-3">
-                    <label for="senha" class="form-label">Senha *</label>
-                    <input type="password" class="form-control " id="senha" name="senha" maxlength="256">
                 </div>
 
-                <!-- Confirmar Senha -->
-                <div class="col-md-6 mb-3">
-                    <label for="confirmarSenha" class="form-label">Confirmar Senha *</label>
-                    <input type="password" class="form-control " id="confirmarSenha" name="confirmarSenha" maxlength="256">
+                <div class="row">
+                    <!-- Data de nascimento -->
+                    <div class="col-md-4 mb-3">
+                        <label for="nascimento" class="form-label">Data de nascimento *</label>
+                        <input type="date" class="form-control " id="nascimento" name="nascimento" value="<?= $_POST['nascimento'] ?? ''?>">
+                    </div>
+                    <!-- Telefone -->
+                    <div class="col-md-4 mb-3">
+                        <label for="telefone" class="form-label">Telefone *</label>
+                        <input type="text" class="form-control" id="telefone" name="telefone"  maxlength="15" value="<?= $_POST['telefone'] ?? ''?>">
+                    </div>
+                    <!-- CPF -->
+                    <div class="col-md-4 mb-3" id="cpf-field">
+                        <label for="cpf" class="form-label">CPF*</label>
+                        <input type="text" class="form-control " id="cpf" name="cpf" maxlength="14" value="<?= $_POST['cpf'] ?? ''?>">
+                    </div>
                 </div>
-            </div>
 
-            <div class="row">
-                <!-- CEP -->
-                <div class="col-md-6 mb-3">
-                    <label for="cep" class="form-label">CEP *</label>
-                    <input type="text" class="form-control" id="cep" name="cep" maxlength="9" pattern="\d{5}-\d{3}" value="<?= $_POST['cep'] ?? '' ?>">
+
+                <div class="row">
+                    <!-- Senha -->
+                    <div class="col-md-6 mb-3">
+                        <label for="senha" class="form-label">Senha *</label>
+                        <input type="password" class="form-control " id="senha" name="senha" maxlength="256">
+                    </div>
+
+                    <!-- Confirmar Senha -->
+                    <div class="col-md-6 mb-3">
+                        <label for="confirmarSenha" class="form-label">Confirmar Senha *</label>
+                        <input type="password" class="form-control " id="confirmarSenha" name="confirmarSenha" maxlength="256">
+                    </div>
                 </div>
 
-                <!-- rua -->
-                <div class="col-md-6 mb-3">
-                    <label for="rua" class="form-label">Logradouro *</label>
-                    <input type="text" class="form-control " id="rua" name="rua" maxlength="50" value="<?= $_POST['rua'] ?? '' ?>">
+                <div class="row">
+                    <!-- CEP -->
+                    <div class="col-md-6 mb-3">
+                        <label for="cep" class="form-label">CEP *</label>
+                        <input type="text" class="form-control" id="cep" name="cep" maxlength="9" pattern="\d{5}-\d{3}" value="<?= $_POST['cep'] ?? '' ?>">
+                    </div>
+
+                    <!-- rua -->
+                    <div class="col-md-6 mb-3">
+                        <label for="rua" class="form-label">Logradouro *</label>
+                        <input type="text" class="form-control " id="rua" name="rua" maxlength="50" value="<?= $_POST['rua'] ?? '' ?>">
+                    </div>
                 </div>
-            </div>
 
                 <!-- bairro -->
                 <div class="row">
                     <!-- bairro -->
-                    <div class="col-md-6 mb-3">
+                    <div class="col-md-4 mb-3">
                         <label for="bairro" class="form-label">Bairro *</label>
                         <input type="text" class="form-control " id="bairro" name="bairro" maxlength="50" value="<?= $_POST['bairro'] ?? '' ?>">
                     </div>
 
                     <!-- Número -->
-                    <div class="col-md-6 mb-3">
+                    <div class="col-md-4 mb-3">
                         <label for="numero" class="form-label">Número *</label>
                         <input type="number" class="form-control " id="numero" name="numero" maxlength="6" value="<?= $_POST['numero'] ?? ''?>">
+                    </div>
+                    <!-- Complemento -->
+                    <div class="col-md-4 mb-3">
+                        <label for="complemento" class="form-label">Complemento </label>
+                        <input type="text" class="form-control " id="complemento" name="complemento" maxlength="50" value="<?= $_POST['complemento'] ?? ''?>">
                     </div>
                 </div>
 
 
 
-            <div class="row">
-                <!-- Cidade -->
-                <div class="col-md-6 mb-3">
-                    <label for="cidade" class="form-label">Cidade *</label>
-                    <input type="text" class="form-control " id="cidade" name="cidade" maxlength="50" value="<?= $_POST['cidade'] ?? '' ?>">
+                <div class="row">
+                    <!-- Cidade -->
+                    <div class="col-md-6 mb-3">
+                        <label for="cidade" class="form-label">Cidade *</label>
+                        <input type="text" class="form-control " id="cidade" name="cidade" maxlength="50" value="<?= $_POST['cidade'] ?? '' ?>">
+                    </div>
+
+                    <!-- Estado-->
+                    <div class="col-md-6 mb-3">
+                        <label for="estado" class="form-label">Estado *</label>
+                        <input type="text" class="form-control " id="estado" name="estado" maxlength="50" value="<?= $_POST['estado'] ?? '' ?>">
+                    </div>
                 </div>
 
-                <!-- Estado-->
-                <div class="col-md-6 mb-3">
-                    <label for="estado" class="form-label">Estado *</label>
-                    <input type="text" class="form-control " id="estado" name="estado" maxlength="50" value="<?= $_POST['estado'] ?? '' ?>">
-                </div>
-            </div>
-
-            <div class="row"></div>
+                <div class="row"></div>
 
                 <div class="d-flex justify-content-center">
-                <button type="submit" class="btn btn-primary largura-50 mt-4">Finalizar Cadastro</button>
+                    <button type="submit" class="btn btn-primary largura-50 mt-4">Finalizar Cadastro</button>
                 </div>
-            </div>
+    </div>
     </form>
     </main>
-</div>
+    </div>
 
-</body>
-<script src="assets/js/confirmation.js" defer></script>
-</html>
+    </body>
+    <script src="assets/js/confirmation.js" defer></script>
+    </html>
 
 <?php
 
@@ -226,6 +231,43 @@ function validateUser($sql)
     return true;
 }
 
+function verifyUserExistence($sql, $email, $cpf)
+{
+    try {
+        // Verifica se já existe cadastro com o Email
+        $query = "SELECT email FROM usuario WHERE email = ?";
+        $stmt = $sql->prepare($query);
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $resultEmail = $stmt->get_result();
+
+        if ($resultEmail->num_rows > 0) {
+            showError(16);
+            exit();
+        }
+
+        // Verifica se já existe cadastro com o CPF
+        $query = "SELECT cpf FROM usuario WHERE cpf = ?";
+        $stmt = $sql->prepare($query);
+        $stmt->bind_param("s", $cpf);
+        $stmt->execute();
+        $resultCpf = $stmt->get_result();
+
+        if ($resultCpf->num_rows > 0) {
+            showError(19);
+            exit();
+        }
+
+        // Não encontrou nem email nem cpf já cadastrados
+        return false;
+
+    } catch (Exception $e) {
+        showError(15);
+        exit();
+    }
+}
+
+
 function submitUser($sql)
 {
     $cep = preg_replace('/\D/', '', $_POST['cep']);
@@ -234,13 +276,14 @@ function submitUser($sql)
     $bairro = $_POST['bairro'];
     $cidade = $_POST['cidade'];
     $estado = $_POST['estado'];
+    $complemento = $_POST['complemento'];
 
     try {
         // cria o novo endereço
-        $query = "INSERT INTO endereco (cep, rua, numero, bairro, cidade, estado) 
-                VALUES (?, ?, ?, ?, ?, ?)";
+        $query = "INSERT INTO endereco (cep, rua, numero, bairro, cidade, estado, complemento) 
+                VALUES (?, ?, ?, ?, ?, ?, ?)";
         $stmt = $sql->prepare($query);
-        $stmt->bind_param("ssisss", $cep, $rua, $numero, $bairro, $cidade, $estado);
+        $stmt->bind_param("ssissss", $cep, $rua, $numero, $bairro, $cidade, $estado, $complemento);
         $stmt->execute();
     } catch (Exception $e) {
         showError(15);
@@ -271,11 +314,16 @@ function submitUser($sql)
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (validateUser($obj) && validateAddress($obj)) {
-        submitUser($obj);
-        ?>
-        <script>
-            window.location.href = "index.php?common=2"
-        </script>
-        <?php
+        $cpf = preg_replace('/\D/', '', $_POST['cpf']);
+        $email = $_POST['email'];
+        if (!verifyUserExistence($obj, $email, $cpf)) {
+            submitUser($obj);
+            ?>
+            <script>
+                window.location.href = "index.php?common=6";
+            </script>
+            <?php
+        }
     }
 }
+?>

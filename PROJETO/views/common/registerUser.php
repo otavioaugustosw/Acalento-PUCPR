@@ -82,15 +82,21 @@ $obj = connectDatabase();
 
         <!-- bairro -->
         <div class="row">
-            <div class="col-md-6 mb-3">
+            <div class="col-md-4 mb-3">
                 <label for="bairro" class="form-label">Bairro *</label>
                 <input type="text" class="form-control " id="bairro" name="bairro" maxlength="50" value="<?= $_POST['bairro'] ?? '' ?>">
             </div>
 
             <!-- Número -->
-            <div class="col-md-6 mb-3">
+            <div class="col-md-4 mb-3">
                 <label for="numero" class="form-label">Número *</label>
                 <input type="number" class="form-control " id="numero" name="numero" maxlength="6" value="<?= $_POST['numero'] ?? ''?>">
+            </div>
+
+            <!-- Complemento -->
+            <div class="col-md-4 mb-3">
+                <label for="complemento" class="form-label">Complemento </label>
+                <input type="text" class="form-control " id="complemento" name="complemento" maxlength="50" value="<?= $_POST['complemento'] ?? ''?>">
             </div>
         </div>
 
@@ -192,6 +198,43 @@ function validateUser($sql)
     return true;
 }
 
+function verifyUserExistence($sql, $email, $cpf)
+{
+    try {
+        // Verifica se já existe cadastro com o Email
+        $query = "SELECT email FROM usuario WHERE email = ?";
+        $stmt = $sql->prepare($query);
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $resultEmail = $stmt->get_result();
+
+        if ($resultEmail->num_rows > 0) {
+            showError(16);
+            exit();
+        }
+
+        // Verifica se já existe cadastro com o CPF
+        $query = "SELECT cpf FROM usuario WHERE cpf = ?";
+        $stmt = $sql->prepare($query);
+        $stmt->bind_param("s", $cpf);
+        $stmt->execute();
+        $resultCpf = $stmt->get_result();
+
+        if ($resultCpf->num_rows > 0) {
+            showError(19);
+            exit();
+        }
+
+        // Não encontrou nem email nem cpf já cadastrados
+        return false;
+
+    } catch (Exception $e) {
+        showError(15);
+        exit();
+    }
+}
+
+
 function submitUser($sql)
 {
     $cep = preg_replace('/\D/', '', $_POST['cep']);
@@ -200,13 +243,14 @@ function submitUser($sql)
     $bairro = $_POST['bairro'];
     $cidade = $_POST['cidade'];
     $estado = $_POST['estado'];
+    $complemento = $_POST['complemento'];
 
     try {
         // cria o novo endereço
-        $query = "INSERT INTO endereco (cep, rua, numero, bairro, cidade, estado) 
-                VALUES (?, ?, ?, ?, ?, ?)";
+        $query = "INSERT INTO endereco (cep, rua, numero, bairro, cidade, estado, complemento) 
+                VALUES (?, ?, ?, ?, ?, ?, ?)";
         $stmt = $sql->prepare($query);
-        $stmt->bind_param("ssisss", $cep, $rua, $numero, $bairro, $cidade, $estado);
+        $stmt->bind_param("ssissss", $cep, $rua, $numero, $bairro, $cidade, $estado, $complemento);
         $stmt->execute();
     } catch (Exception $e) {
         showError(15);
@@ -235,14 +279,19 @@ function submitUser($sql)
 
 }
 
+
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (validateUser($obj) && validateAddress($obj)) {
-        submitUser($obj);
-        ?>
-        <script>
-            window.location.href = "index.php?common=2"
-        </script>
-        <?php
+        $cpf = preg_replace('/\D/', '', $_POST['cpf']);
+        $email = $_POST['email'];
+        if (!verifyUserExistence($obj, $email, $cpf)) {
+            submitUser($obj);
+            ?>
+            <script>
+                window.location.href = "index.php?common=2";
+            </script>
+            <?php
+        }
     }
 }
 ?>

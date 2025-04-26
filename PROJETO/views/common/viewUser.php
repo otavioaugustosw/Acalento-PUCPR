@@ -69,29 +69,32 @@ if (isset($_GET['success'])) {
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Nome Completo</label>
-                            <div class="form-control"><?= htmlspecialchars($dados->nome ?? 'Não informado') ?></div>
+                            <div class="form-control"><?= $dados->nome ?? 'Não informado' ?></div>
                         </div>
 
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Email</label>
-                            <div class="form-control "><?= htmlspecialchars($dados->email ?? 'Não informado') ?></div>
+                            <div class="form-control "><?= $dados->email ?? 'Não informado' ?></div>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-md-4 mb-3">
                             <label class="form-label">CPF</label>
-                            <div class="form-control "><?= htmlspecialchars($dados->cpf ?? 'Não informado') ?></div>
+                            <div class="form-control "><?= $dados->cpf ?? 'Não informado' ?></div>
                         </div>
 
                         <div class="col-md-4 mb-3">
                             <label class="form-label">Telefone</label>
-                            <div class="form-control "><?= htmlspecialchars($dados->telefone ?? 'Não informado') ?></div>
+                            <div class="form-control "><?= $dados->telefone ?? 'Não informado' ?></div>
                         </div>
 
                         <div class="col-md-4 mb-3">
                             <label class="form-label">Data de Nascimento</label>
-                            <div class="form-control "><?= htmlspecialchars($dados->nascimento ?? 'Não informado') ?></div>
+                            <div class="form-control">
+                                <?= !empty($dados->nascimento) ? date('d/m/Y', strtotime($dados->nascimento))
+                                    : 'Não informado' ?>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -103,43 +106,49 @@ if (isset($_GET['success'])) {
                     <div class="row">
                         <div class="col-md-2 mb-3">
                             <label class="form-label">CEP</label>
-                            <div class="form-control "><?= htmlspecialchars($dados->cep ?? 'Não informado') ?></div>
+                            <div class="form-control "><?= $dados->cep ?? 'Não informado' ?></div>
                         </div>
 
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-5 mb-3">
                             <label class="form-label">Logradouro</label>
-                            <div class="form-control "><?= htmlspecialchars($dados->rua ?? 'Não informado') ?></div>
+                            <div class="form-control "><?= $dados->rua ?? 'Não informado' ?></div>
                         </div>
 
                         <div class="col-md-2 mb-3">
                             <label class="form-label">Número</label>
-                            <div class="form-control "><?= htmlspecialchars($dados->numero ?? 'Não informado') ?></div>
+                            <div class="form-control "><?= $dados->numero ?? 'Não informado' ?></div>
                         </div>
 
-                        <div class="col-md-2 mb-3">
-                            <label class="form-label">Bairro</label>
-                            <div class="form-control "><?= htmlspecialchars($dados->bairro ?? 'Não informado') ?></div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label">Complemento</label>
+                            <div class="form-control"><?= !empty($dados->complemento) ? $dados->complemento : 'Não informado' ?>
+                            </div>
                         </div>
                     </div>
 
+
                     <div class="row align-items-center">
-                        <!-- Cidade -->
-                        <div class="col-md-4 mb-3">
-                            <label class="form-label">Cidade</label>
-                            <div class="form-control "><?= htmlspecialchars($dados->cidade ?? 'Não informado') ?></div>
+
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label">Bairro</label>
+                            <div class="form-control "><?= $dados->bairro ?? 'Não informado'?></div>
                         </div>
 
-                        <!-- Estado -->
-                        <div class="col-md-4 mb-3">
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label">Cidade</label>
+                            <div class="form-control "><?= $dados->cidade ?? 'Não informado' ?></div>
+                        </div>
+
+                        <div class="col-md-2 mb-3">
                             <label class="form-label">Estado</label>
-                            <div class="form-control "><?= htmlspecialchars($dados->estado ?? 'Não informado') ?></div>
+                            <div class="form-control "><?= $dados->estado ?? 'Não informado' ?></div>
                         </div>
 
                         <!-- Botão de editar -->
                         <div class="col-md-2 mb-3 d-flex flex-column">
                             <!-- Texto invisível que mantém o espaço -->
                             <div class="invisible">Confirmar</div>
-                            <a href="index.php?common=8&id_usuario=<?= $id_usuario ?>"
+                            <a href="index.php?common=8"
                                class="btn btn-primary align-self-end w-100 h-100">Editar Dados</a>
                         </div>
 
@@ -147,7 +156,7 @@ if (isset($_GET['success'])) {
                         <div class="col-md-2 mb-3 d-flex flex-column">
                             <!-- Texto invisível que mantém o espaço -->
                             <div class="invisible">Confirmar</div>
-                            <a href="index.php?common=10&id_usuario=<?= $id_usuario ?>"
+                            <a href="index.php?common=10"
                                class="btn btn-primary align-self-end w-100 h-100">Mudar a senha</a>
                         </div>
 

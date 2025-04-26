@@ -1,10 +1,11 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+
 include (ROOT . "/php/config/database_php.php");
 include(ROOT . '/php/handlers/formValidator.php');
 $obj = connectDatabase();
-$eventos = $obj->query("SELECT id, nome FROM evento");
+
+// query para buscar os eventos no select
+$eventos = $obj->query("SELECT id, nome FROM evento WHERE status = 0");
 ?>
 
 <!doctype html>
@@ -37,14 +38,14 @@ $eventos = $obj->query("SELECT id, nome FROM evento");
                         <!-- para três em uma linha -->
                         <div class="col-md-6">
                             <label for="inputNome" class="form-label">Nome*</label>
-                            <input type="text" class="form-control" id="inputNome" name="nome">
+                            <input type="text" class="form-control" id="inputNome" name="nome" value="<?= $_POST['nome'] ?? null ?>">
                             <div id="validacaoNome" class="invalid-feedback">
                                 Escolha um nome adequado para a campanha.
                             </div>
                         </div>
                         <div class="col-md-6">
                             <label for="inputData" class="form-label">Data*</label>
-                            <input type="date" class="form-control" id="inputData" placeholder="Data" name="data">
+                            <input type="date" class="form-control" id="inputData" placeholder="Data" name="data" value="<?= $_POST['data'] ?? null ?>">
                             <div id="validacaoData" class="invalid-feedback">
                                 Escolha uma data para a campanha.
                             </div>
@@ -54,7 +55,7 @@ $eventos = $obj->query("SELECT id, nome FROM evento");
                             <select name="evento_destino" id="inputEvento" class="form-select">
                                 <option value="">Selecione o evento</option>
                                 <?php while ($a = $eventos->fetch_object()) { ?>
-                                    <option value="<?php echo $a->id;?>"><?php echo $a->nome; ?></option>
+                                    <option value="<?php echo $a->id;?>" <?= (isset($_POST['evento_destino']) && $_POST['evento_destino'] == $a->id) ? 'selected' : '' ?>><?php echo $a->nome; ?></option>
                                 <?php } ?>
                             </select>
                             <div id="validacaoEvento" class="invalid-feedback">

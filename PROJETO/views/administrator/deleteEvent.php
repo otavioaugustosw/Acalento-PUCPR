@@ -11,10 +11,10 @@ if (isset($_GET['id'])) {
     $resultado = $obj->query($query);
 
     if ($resultado) {
-        header("Location: index.php?adm=13&success=4");
+        header("Location: index.php?adm=14&success=4");
         exit;
     } else {
-        header("Location: index.php?adm=12&error=6");
+        header("Location: index.php?adm=13&error=6");
     }
 }
 ?>

@@ -39,15 +39,15 @@
 <aside id="sidebar" class="sidebar position-fixed top-0 start-0 bottom-0 d-none d-md-block" style="width: 250px !important;">
     <div class="d-flex flex-column flex-shrink-0 p-3 menu-lateral h-100" style="width: 280px;">
         <a class="align-items-start pb-3 mb-3 link-body-emphasis text-decoration-none border-bottom">
-            <div class="logo-container">
+            <div class="logo-container py-3">
                 <img src="assets/logo/Acalento_logo_claro.svg" alt="Logo Acalento Claro" class=" logo logo-tema-claro">
             </div>
-            <span class="fs-3 fw-semibold saudacao mt-5">Olá, <?= $_SESSION['USER_NAME']?></span>
+            <span class="fs-3 fw-semibold saudacao mt-5 ">Olá, <?= $_SESSION['USER_NAME']?></span>
         </a>
         <!-- sidebar navigation -->
         <ul class="sidebar-nav p-0 list-unstyled">
             <li class="sidebar-item mb-1">
-                <a  href="index.php?common=1" class="btn btn-toggle  d-inline-flex align-items-center rounded border-0 collapsed">
+                <a  href="index.php?common=6" class="btn btn-toggle  d-inline-flex align-items-center rounded border-0 collapsed">
                     <svg class="bi me-2" width="20" height="20" aria-hidden="true">
                         <use xlink:href="#home"/>
                     </svg>
@@ -110,7 +110,7 @@
                         <?php } ?>
                         <?php if ($_SESSION['USER_IS_DONATOR']) { ?>
                         <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Nova doação</a></li>
-                        <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Suas doações</a></li>
+                        <li><a href="index.php?donator=1" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Suas doações</a></li>
                         <?php } ?>
                     </ul>
                 </div>

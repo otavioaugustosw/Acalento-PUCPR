@@ -37,21 +37,21 @@ $assentamento = $obj->query("SELECT id, nome FROM assentamento");
                     <form class="row g-3" method="POST" action="">
                         <div class="col-md-6">
                             <label for="inputNome" class="form-label">Nome*</label>
-                            <input type="text" class="form-control" id="inputNome" name="nome">
+                            <input type="text" class="form-control" id="inputNome" name="nome" value="<?= $_POST['nome'] ?? null ?>">
                             <div id="validacaoNome" class="invalid-feedback">
                                 Digite um nome de evento válido.
                             </div>
                         </div>
                         <div class="col-md-3">
                             <label for="inputData" class="form-label">Data*</label>
-                            <input type="date" class="form-control" id="inputData" placeholder="Data" name="data">
+                            <input type="date" class="form-control" id="inputData" placeholder="Data" name="data" value="<?= $_POST['data'] ?? null ?>">
                             <div id="validacaoData" class="invalid-feedback">
                                 Digite uma data.
                             </div>
                         </div>
                         <div class="col-md-3">
                             <label for="inputTime" class="form-label">Horário*</label>
-                            <input type="time" class="form-control" id="inputTime" placeholder="Hora" name="hora">
+                            <input type="time" class="form-control" id="inputTime" placeholder="Hora" name="hora" value="<?= $_POST['hora'] ?? null ?>">
                             <div id="validacaoHorario" class="invalid-feedback">
                                 Digite um horário.
                             </div>
@@ -62,7 +62,7 @@ $assentamento = $obj->query("SELECT id, nome FROM assentamento");
                             <select name="id_assentamento" id="inputAssentamento" class="form-select">
                                 <option value="">Selecione um assentamento</option>
                                 <?php while ($a = $assentamento->fetch_object()) { ?>
-                                <option value="<?php echo $a->id;?>"><?php echo $a->nome; ?></option>
+                                <option value="<?php echo $a->id;?>" <?= (isset($_POST['id_assentamento']) && $_POST['id_assentamento'] == $a->id) ? 'selected' : '' ?>><?php echo $a->nome; ?></option>
                                 <?php } ?>
                             </select>
                             <div id="validacaoAssentamento" class="invalid-feedback">
@@ -71,14 +71,14 @@ $assentamento = $obj->query("SELECT id, nome FROM assentamento");
                         </div>
                         <div class="col-md-4">
                             <label for="inputLotacao" class="form-label">Lotação máxima*</label>
-                            <input type="text" class="form-control" id="inputLotacao" name="lotacao">
+                            <input type="text" class="form-control" id="inputLotacao" name="lotacao" value="<?= $_POST['lotacao'] ?? null ?>">
                             <div id="validacaoLotacaoMax" class="invalid-feedback">
                                 Digite uma lotação máxima válida.
                             </div>
                         </div>
                         <div class="col-md-4">
                             <label for="inputImagem" class="form-label">Insira imagem*</label>
-                            <input type="text" class="form-control" id="inputImagem" name="imagem">
+                            <input type="text" class="form-control" id="inputImagem" name="imagem" value="<?= $_POST['imagem'] ?? null ?>">
                             <div id="validacaoImagem" class="invalid-feedback">
                                 Digite um link válido.
                             </div>
@@ -86,7 +86,7 @@ $assentamento = $obj->query("SELECT id, nome FROM assentamento");
 
                         <div class="col-12">
                             <label for="inputDescricao" class="form-label">Descrição*</label>
-                            <textarea type="text" class="form-control" id="inputDescricao" name="descricao" rows="5"></textarea>
+                            <textarea type="text" class="form-control" id="inputDescricao" name="descricao" rows="5"><?= $_POST['descricao'] ?? null ?></textarea>
                             <div id="validacaoDescricao" class="invalid-feedback">
                                 Digite uma descricao válida.
                             </div>
@@ -121,10 +121,10 @@ function submitInformation($sql) {
         return;
     }
 
-    if (!isTimeValid($_POST['hora'])) {
-        displayValidation('inputHora', false);
-        return;
-    }
+//    if (!isTimeValid($_POST['hora'])) {
+//        displayValidation('inputHora', false);
+//        return;
+//    }
 
     if (!isNumericOnly($_POST['id_assentamento'])) {
         displayValidation('inputAssentamento', false);

@@ -19,17 +19,20 @@
 
     <!-- conteudo -->
     <div class="main-content">
-        <main class="px-5 row align-items-center addScroll">
+        <main class="px-5 row addScroll">
             <div class="container-fluid">
                 <div class="mb-3">
                     <!-- aqui vai o que você quer por -->
                     <h2>Eventos</h2>
+                    <?php include (ROOT . "/components/filter/filter.php") ?>
                     <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-2 row-cols-xl-3 row-cols-xxl-4 g-4">
                         <?php
                         include (ROOT . "/php/config/database_php.php");
+                        include(ROOT . "/php/handlers/filter.php");
                         $conexao = connectDatabase();
                         error_reporting(E_ALL);
                         ini_set('display_errors', 1);
+                        $where = setWhere('evento');
                         $query = "SELECT evento.*,
                                      assentamento.nome AS assentamento_nome,
                                      endereco.rua,
@@ -38,7 +41,8 @@
                                      (SELECT COUNT(*) FROM usuario_participa_evento WHERE id_evento = evento.id) AS inscritos
                               FROM evento
                               LEFT JOIN assentamento ON evento.id_assentamento = assentamento.id
-                              LEFT JOIN endereco ON assentamento.id_endereco = endereco.id;";
+                              LEFT JOIN endereco ON assentamento.id_endereco = endereco.id
+                              $where;";
                         $resultado = $conexao->query($query);
                         error_reporting(E_ALL);
                         ini_set('display_errors', 1);

@@ -26,7 +26,7 @@ main {
 }
 
 .table.table-amarela {
-    background-color: var(--secondary-yellow) !important; /* Amarelo claro */
+    background-color: var(--tertiary-background) !important; /* Amarelo claro */
 }
 
 
@@ -42,6 +42,76 @@ main {
 h3 {
     color: var(--primary-background) !important;
 }
+
+.text-image {
+    margin-top:  5vh;
+    max-height: 500px;
+    overflow: hidden;
+    padding: 20px;
+}
+
+.text-image .container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.text-image img {
+    width: 50%;
+    height: 36vh;
+    min-height: 300px;
+    max-height: 500px;
+    object-fit: cover;
+    border-radius: var(--default-radius);
+    border: var(--default-border);
+}
+
+.text-image article {
+    width: 50%;
+    flex-direction: column;
+    color: var(--primary-blue);
+    text-align: var(--alinhamento-texto);
+}
+
+.text-image.right article {
+    margin-left: 5vw;
+}
+
+.text-image.left article {
+    margin-right: 5vw;
+}
+
+.text-image h2 {
+    font-family: var(--title-font), serif;
+    font-size: 35px;
+}
+
+.text-image p {
+    width: 90%;
+    font-family: var(--text-font), serif;
+    font-size: 15px;
+    line-height: 1.8em;
+    margin-bottom: 3vw;
+    margin-top: 2vw;
+}
+
+.text-image a {
+    font-family: var(--text-font), serif;
+    font-weight: 600;
+    font-size: 0.8rem;
+    color: var(--tertiary-background);
+    background-color: var(--primary-blue);
+    align-self: center;
+    padding: 10px;
+    border-radius: var(--default-radius);
+}
+
+.text-image a:hover {
+    background-color: var(--primary-background);
+    color: var(--primary-blue);
+}
+
+
 
 @media (min-width: 768px) {
     .main-content {

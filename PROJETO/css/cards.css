@@ -6,6 +6,10 @@
     background-color: var(--secondary-yellow) !important;
 }
 
+.horizontal {
+    width: 100% !important;
+}
+
 .imagem-horizontal {
     height: 100%;
 }
@@ -74,7 +78,6 @@
     font-size: 0.8rem !important;
 
  }
-
 
 .card a {
     margin-top: 15px !important;

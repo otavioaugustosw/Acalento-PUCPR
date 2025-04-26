@@ -15,9 +15,6 @@ $obj = connectDatabase();
     <link rel="stylesheet" href="css/sidebars.css">
     <link rel="stylesheet" href="css/form-style.css">
     <link rel="stylesheet" href="css/main-content.css">
-
-
-
     <title>Cadastro do administrador</title>
 </head>
 <body>

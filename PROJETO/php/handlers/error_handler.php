@@ -27,7 +27,6 @@ const PAGE_SUCCESS = [
     6=> "Participação cancelada com sucesso",
     7=> "Inscrição feita com sucesso",
     8=> "Evento deletado com sucesso",
-
     9=> "Usuário cadastrado com sucesso",
     10=> "Senha alterada com sucesso"
 ];

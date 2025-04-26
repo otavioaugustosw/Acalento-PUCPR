@@ -39,7 +39,7 @@ $obj = connectDatabase();
                                 <option value="">Selecione o doador</option>
                                 <?php $doador = $obj->query("SELECT id, nome FROM usuario");
                                 while ($a = $doador->fetch_object()) { ?>
-                                    <option value="<?php echo $a->id;?>"><?php echo $a->nome; ?></option>
+                                    <option value="<?php echo $a->id;?>" <?= (isset($_POST['id_usuario']) && $_POST['id_usuario'] == $a->id) ? 'selected' : '' ?>><?php echo $a->nome; ?></option>
                                 <?php } ?>
                                 <option value="0">Doador não cadastrado</option>
                             </select>
@@ -50,7 +50,7 @@ $obj = connectDatabase();
 
                         <div class="col-md-4">
                             <label for="inputData" class="form-label">Data*</label>
-                            <input type="date" class="form-control" id="inputData" placeholder="Data" name="data">
+                            <input type="date" class="form-control" id="inputData" placeholder="Data" name="data" value="<?= $_POST['data'] ?? null ?>">
                             <div id="validacaoData" class="invalid-feedback">
                                 Escolha uma data.
                             </div>
@@ -62,7 +62,7 @@ $obj = connectDatabase();
                                 <option value="">Selecione o item</option>
                                 <?php $item = $obj->query("SELECT id, nome FROM opcao_item");
                                 while ($a = $item->fetch_object()) { ?>
-                                    <option value="<?php echo $a->id;?>"><?php echo $a->nome; ?></option>
+                                    <option value="<?php echo $a->id;?>" <?= (isset($_POST['id_opcao']) && $_POST['id_opcao'] == $a->id) ? 'selected' : '' ?>><?php echo $a->nome; ?></option>
                                 <?php } ?>
                             </select>
                             <div id="validacaoItem" class="invalid-feedback">
@@ -72,35 +72,35 @@ $obj = connectDatabase();
 
                         <div class="col-md-3">
                             <label for="inputQuantidade" class="form-label">Quantidade</label>
-                            <input type="number" class="form-control" id="inputQuantidade" name="quantidade">
+                            <input type="number" class="form-control" id="inputQuantidade" name="quantidade" value="<?= $_POST['quantidade'] ?? null ?>">
                             <div id="validacaoQuantidade" class="invalid-feedback">
                                 Digite uma quantidade válida.
                             </div>
                         </div>
                         <div class="col-md-3">
                             <label for="inputUnidadeMedida" class="form-label">Unidade de Medida</label>
-                            <input type="text" class="form-control" id="inputUnidadeMedida" name="unidade_medida">
+                            <input type="text" class="form-control" id="inputUnidadeMedida" name="unidade_medida" value="<?= $_POST['unidade_medida'] ?? null ?>">
                             <div id="validacaoUnidadeMedida" class="invalid-feedback">
                                 Digite uma unidade de medida válida.
                             </div>
                         </div>
                         <div class="col-md-3">
                             <label for="inputValor" class="form-label">Valor</label>
-                            <input type="number" class="form-control" id="inputValor" name="valor" placeholder="R$00.00">
+                            <input type="text" class="form-control" id="inputValor" name="valor" placeholder="R$00.00" value="<?= $_POST['valor'] ?? null ?>">
                             <div id="validacaoValor" class="invalid-feedback">
                                 Digite um valor válido.
                             </div>
                         </div>
                         <div class="col-md-3">
                             <label for="inputTipo" class="form-label">Tipo*</label>
-                            <select id="inputItem" name="tipo" class="form-select">
+                            <select id="inputTipo" name="tipo" class="form-select">
                                 <option value="">Selecione o tipo</option>
                                 <?php
                                 // Valores fixos do ENUM (os mesmos definidos na tabela)
                                 $valores_enum = ['Alimentício', 'Brinquedo', 'Limpeza', 'Outros'];
 
                                 foreach ($valores_enum as $valor) { ?>
-                                    <option value="<?php echo $valor; ?>">
+                                    <option value="<?php echo $valor; ?>" <?= (($_POST['tipo'] ?? '') == $valor) ? 'selected' : '' ?>>
                                         <?php echo $valor; ?>
                                     </option>
                                 <?php } ?>
@@ -114,8 +114,8 @@ $obj = connectDatabase();
                             <label class="form-label">Destino do item*</label>
                             <select id="selectDestino" name="destino" class="form-select" onchange="mostrarDestino()">
                                 <option value="">Selecione</option>
-                                <option value="campanha">Campanha</option>
-                                <option value="estoque">Estoque</option>
+                                <option value="campanha" <?= (($_POST['destino'] ?? '') == 'campanha') ? 'selected' : '' ?>>Campanha</option>
+                                <option value="estoque" <?= (($_POST['destino'] ?? '') == 'estoque')  ? 'selected' : '' ?>>Estoque</option>
                             </select>
                         </div>
 
@@ -125,11 +125,10 @@ $obj = connectDatabase();
                                 <option value="">Selecione a campanha</option>
                                 <?php
                                 $campanhas = $obj->query("SELECT id, nome FROM campanha_doacao");
-                                while ($c = $campanhas->fetch_object()) { ?>
-                                    <option value="<?php echo $c->id; ?>"><?php echo $c->nome; ?></option>
+                                while ($a = $campanhas->fetch_object()) { ?>
+                                    <option value="<?php echo $a->id; ?> " <?= (isset($_POST['id_campanha_doacao']) && $_POST['id_campanha_doacao'] == $a->id) ? 'selected' : '' ?>><?php echo $a->nome; ?></option>
                                 <?php } ?>
                             </select>
-
                         </div>
 
                         <div class="col-md-10" id="campoEstoque" style="display: none;">
@@ -166,12 +165,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 function submitInformation($sql)
 {
+//    if (!isAlphaOnly($_POST['destino'])) {
+//        displayValidation('selectDestino', false);
+//        return;
+//    }
 
-    $idCampanha = ($_POST['destino'] === 'campanha') ? (int) $_POST['id_campanha_doacao'] : null;
-    $idEstoque = ($_POST['destino'] === 'estoque') ? (int) $_POST['id_estoque'] : null;
-    $quantidade = ($_POST['quantidade'] !== '') ? (int) $_POST['quantidade'] : null;
-    $unidadeMedida = ($_POST['unidade_medida'] !== '') ? $_POST['unidade_medida'] : null;
-    $valor = ($_POST['valor'] !== '') ? (float) $_POST['valor'] : null;
+    $idCampanha = ($_POST['destino'] === 'campanha' && isset($_POST['id_campanha_doacao'])) ? (int) $_POST['id_campanha_doacao'] : null;
+    $idEstoque  = ($_POST['destino'] === 'estoque'  && isset($_POST['id_estoque'])) ? (int) $_POST['id_estoque'] : null;
+    $quantidade = isset($_POST['quantidade']) && $_POST['quantidade'] !== '' ? (int) $_POST['quantidade'] : null;
+    $unidadeMedida = isset($_POST['unidade_medida']) && $_POST['unidade_medida'] !== '' ? $_POST['unidade_medida'] : null;
+    $valor = isset($_POST['valor']) && $_POST['valor'] !== '' ? (float) $_POST['valor'] : null;
 
     if ($idEstoque !== null && !isNumericOnly($idEstoque)) {
         displayValidation('inputEstoque', false);

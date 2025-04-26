@@ -4,9 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../../../PROJETO/components/cards/cards.css" rel="stylesheet">
     <link rel="stylesheet" href="css/default.css">
-    <link rel="stylesheet" href="css/sidebars.css">
     <link rel="stylesheet" href="css/main-content.css">
     <link rel="stylesheet" href="css/cards.css">
     <title>Acalento | Eventos</title>
@@ -20,16 +18,21 @@
 
     <!-- conteudo -->
     <div class="main-content">
-        <main class="px-5 row align-items-center addScroll">
+        <main class="px-5 row addScroll">
             <div class="container-fluid">
                 <div class="mb-3">
                     <!-- aqui vai o que você quer por -->
                     <h2>Eventos</h2>
+                    <?php include(ROOT . "/components/filter/filter.php"); ?>
                     <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-2 row-cols-xl-3 row-cols-xxl-4 g-4">
                         <?php
                         include (ROOT . "/php/config/database_php.php");
+                        include(ROOT . "/php/handlers/filter.php");
+
                         $conexao = connectDatabase();
                         $id_usuario = $_SESSION['USER_ID'];
+
+                        $where = setWhere('evento');
 
                         $query = "SELECT evento.*,
                                      assentamento.nome AS assentamento_nome,
@@ -40,7 +43,7 @@
                               FROM evento
                               LEFT JOIN assentamento ON evento.id_assentamento = assentamento.id
                               LEFT JOIN endereco ON assentamento.id_endereco = endereco.id
-                              WHERE status = 0";
+                              $where";
                         $resultado = $conexao->query($query);
 
                         // buscar eventos que o usuario está inscrito
@@ -126,5 +129,11 @@
         </main>
     </div>
 </div>
+<script>
+    function mostrarFiltroData() {
+        const tipo = document.getElementById('filtro').value;
+        document.getElementById('filtroData').style.display = tipo === 'data' ? 'block' : 'none';
+    }
+</script>
 </body>
 </html>

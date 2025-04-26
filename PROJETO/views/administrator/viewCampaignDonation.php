@@ -36,6 +36,9 @@ ini_set('display_errors', 1);
                 <div class="mb-3">
                     <h2>Itens da Campanha</h2>
                         <?php
+                        include(ROOT . "/components/filter/filter.php");
+                        include(ROOT . "/php/handlers/filter.php");
+                        $where = setWhere('item');
                         $query = "SELECT item.*,
                                 usuario.nome AS usuario_nome,
                                 opcao_item.nome AS opcao_nome,
@@ -44,7 +47,7 @@ ini_set('display_errors', 1);
                                 LEFT JOIN usuario ON item.id_usuario = usuario.id
                                 LEFT JOIN opcao_item ON item.id_opcao = opcao_item.id
                                 LEFT JOIN campanha_doacao ON item.id_campanha_doacao = campanha_doacao.id
-                                WHERE item.id_campanha_doacao = $id";
+                                $where AND item.id_campanha_doacao = $id";
 
                         $resultado = $conexao->query($query);
 
@@ -62,17 +65,20 @@ ini_set('display_errors', 1);
                                     <th scope="col">Quantidade</th>
                                     <th scope="col">Tipo</th>
                                     <th scope="col">Doador</th>
+                                    <th scope="col">Data da doação</th>
                                     <th scope="col">Destino</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                             <?php while ($linha = $resultado->fetch_object()) {
+                                $data_formatada = date("d/m/Y", strtotime($linha->data));
                                 echo '
                                 <tr>
                                     <td>' . $linha->opcao_nome . '</td>
                                     <td>' . $linha->quantidade . '</td>
                                     <td>' . $linha->tipo . '</td>
                                     <td>' . $linha->usuario_nome . '</td>
+                                    <td>' . $data_formatada . '</td>
                                     <td>' . $linha->campanha_doacao_nome . '</td>
                                 </tr>';
                             }

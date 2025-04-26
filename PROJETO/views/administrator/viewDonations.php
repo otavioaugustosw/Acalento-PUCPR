@@ -61,18 +61,21 @@ ini_set('display_errors', 1);
                                         <th scope="col">Quantidade</th>
                                         <th scope="col">Tipo</th>
                                         <th scope="col">Doador</th>
+                                        <th scope="col">Data da doação</th>
                                         <th scope="col">Destino</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                 <?php while ($linha = $resultado->fetch_object()) {
                                     $destino = $linha->campanha_doacao_nome ? $linha->campanha_doacao_nome : 'Estoque';
+                                    $data_formatada = date("d/m/Y", strtotime($linha->data));
                                     echo '
                                 <tr>
                                     <td>' . $linha->opcao_nome . '</td>
                                     <td>' . $linha->quantidade . '</td>
                                     <td>' . $linha->tipo . '</td>
                                     <td>' . $linha->usuario_nome . '</td>
+                                    <td>' . $data_formatada . '</td>
                                     <td>' . $destino . '</td>
                                 </tr>';
                                 }
@@ -113,17 +116,20 @@ ini_set('display_errors', 1);
                                         <th scope="col">Quantidade</th>
                                         <th scope="col">Tipo</th>
                                         <th scope="col">Doador</th>
+                                        <th scope="col">Data da doação</th>
                                         <th scope="col">Destino</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                 <?php while ($linha = $resultado->fetch_object()) {
+                                    $data_formatada = date("d/m/Y", strtotime($linha->data));
                                     echo '
                                 <tr>
                                     <td>'.$linha->opcao_nome.'</td>
                                     <td>'.$linha->quantidade.'</td>
                                     <td>'.$linha->tipo.'</td>
                                     <td>'.$linha->usuario_nome.'</td>
+                                    <td>'.$data_formatada.'</td>
                                     <td>Estoque</td>
                                 </tr>';
                                 }
@@ -157,13 +163,13 @@ ini_set('display_errors', 1);
                                 echo '<h3 class="d-flex justify-content-center p-4">Nenhuma campanha cadastrada</h3>';
                             } else {
                                 while ($linha = $resultado->fetch_object()) {
-
+                                    $data_formatada = date("d/m/Y", strtotime($linha->data));
                                 ?>
                             <div class="col">
                                 <div class="card h-100 amarelo">
                                     <div class="card-body d-flex flex-column">
                                         <h5 class="card-title"><?php echo $linha->nome; ?></h5>
-                                        <p class="card-text">Data: <?php echo $linha->data; ?></p>
+                                        <p class="card-text">Data: <?php echo $data_formatada; ?></p>
                                         <p class="card-text">Local: <?php echo $linha->assentamento_nome; ?></p>
                                         <div class="mt-auto d-flex justify-content-between">
                                             <a href="index.php?adm=10&id=<?php echo $linha->id; ?>" class="btn btn-primary largura-completa">Visualizar doações</a>

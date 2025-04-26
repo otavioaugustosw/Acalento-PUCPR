@@ -21,6 +21,7 @@ function routeToCommon($pageNum)
             include 'views/common/registerUser.php';
             break;
         case 6:
+            include 'views/common/homeLogin.php';
             break;
         case 7:
             include 'views/common/viewUser.php';
@@ -34,6 +35,10 @@ function routeToCommon($pageNum)
         case 10:
             include 'views/common/editPassword.php';
             break;
+        case 11:
+            include 'views/common/homeOff.php';
+            break;
+
         default:
             header('location: index.php?common=4&error=2');
     }
@@ -71,7 +76,7 @@ function routeToAdministrator($pageNum)
     }
     switch ($pageNum) {
         case 1:
-            include 'views/administrator/createDonationTESTE.php';
+            include 'views/administrator/createCampaign.php';
             break;
         case 2:
             include 'views/administrator/createEvent.php';
@@ -123,6 +128,7 @@ function routeToDonator($pageNum)
 {
     switch ($pageNum) {
         case 1:
+            include 'views/donator/viewMyDonations.php';
             break;
         default:
             header('location: index.php?common=4&error=2');

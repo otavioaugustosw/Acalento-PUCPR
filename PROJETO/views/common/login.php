@@ -1,11 +1,10 @@
 <?php
 include(ROOT .'/php/config/session.php');
 include(ROOT . '/php/config/database_php.php');
-include(ROOT . '/php/auth_services/AuthService.php');
+include(ROOT . '/php/auth_services/auth_service_php.php');
 include(ROOT . '/php/handlers/formValidator.php');
 
 $sql = connectDatabase();
-$auth = new AuthService($sql);
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -38,11 +37,11 @@ $auth = new AuthService($sql);
 </html>
 <?php
 if(isset($_POST['email'], $_POST['password'])) {
-    $result = $auth->authenticateUser($_POST['email'], $_POST['password']);
+    $result = authenticateUser($sql, $_POST['email'], $_POST['password']);
     displayValidation('email', isValidEmail($_POST['email']));
     displayValidation('password', hasContent($_POST['password']));
     if ($result['status']) {
-        header('Location: index.php?common=1');
+        header('Location: index.php?common=6');
         exit;
     } else {
        displayValidation('email', false);

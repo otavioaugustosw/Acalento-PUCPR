@@ -8,7 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['inativar'])) {
     $resultado = $conexao->query($query);
 
     if ($resultado) {
-        header("Location: index.php?common=7&success=1");
+        header("Location: index.php?common=7&success=20");
     } else {
         showError(1);
         header("Location: index.php?common=7&error=1");

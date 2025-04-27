@@ -1,6 +1,6 @@
 <?php
 include (ROOT . "/php/config/database_php.php");
-include (ROOT . "/php/auth_services/AuthService.php");
+include(ROOT . "/php/auth_services/auth_service_php.php");
 include (ROOT . "/php/handlers/formValidator.php");
 $obj = connectDatabase();
 
@@ -64,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         showError(17);
         return false;
     } else {
-        $senha = AuthService::generatePasswordHash($_POST['senha']);
+        $senha = generatePasswordHash($_POST['senha']);
         $query = "UPDATE usuario SET senha = '$senha' WHERE id = $id_usuario";
         if ($obj->query($query)) {
             showSucess(10);

@@ -18,8 +18,7 @@ const PAGE_ERROR = [
     16=> "O e-mail já foi utilizado em outro cadastro",
     17=> "As senhas não estão iguais",
     18=> "Não foi possível atualizar as ediçes, tente novamente mais tarde",
-    19=> "O CPF já foi utilizado em outro cadastro"
-
+    19=> "O CPF já foi utilizado em outro cadastro",
 ];
 
 
@@ -33,7 +32,8 @@ const PAGE_SUCCESS = [
     7=> "Inscrição feita com sucesso",
     8=> "Evento deletado com sucesso",
     9=> "Usuário cadastrado com sucesso",
-    10=> "Senha alterada com sucesso"
+    10=> "Senha alterada com sucesso",
+    20=> "Perfil inativado com sucesso"
 ];
 
 function showError($pageNum)

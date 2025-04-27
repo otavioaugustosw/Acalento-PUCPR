@@ -75,7 +75,7 @@
                 <div class="collapse" id="eventos-collapse">
                     <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                         <?php if (!$_SESSION['USER_IS_VOLUNTARY']) { ?>
-                        <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Participe de eventos</a></li>
+                        <li><a href="index.php?voluntary=2" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Participe de eventos</a></li>
                         <?php } ?>
                         <?php if ($_SESSION['USER_IS_ADMINISTRATOR']) { ?>
                         <li><a href="index.php?adm=2" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Cadastrar evento</a></li>
@@ -83,8 +83,6 @@
                         <?php } ?>
                         <?php if ($_SESSION['USER_IS_VOLUNTARY']) { ?>
                         <li><a href="index.php?voluntary=2" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Inscrever-se</a></li>
-                        <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Eventos inscritos</a></li>
-                        <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Confirmar presença</a></li>
                         <?php } ?>
                     </ul>
                 </div>
@@ -100,7 +98,7 @@
                 <div class="collapse" id="doacoes-collapse">
                     <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                         <?php if (!$_SESSION['USER_IS_DONATOR']) { ?>
-                        <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Faça a sua primeira doação</a></li>
+<!--                        <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Faça a sua primeira doação</a></li>-->
                         <?php } ?>
                         <?php if ($_SESSION['USER_IS_ADMINISTRATOR']) { ?>
                         <li><a href="index.php?adm=1" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Cadastrar campanha</a></li>
@@ -109,7 +107,6 @@
                         <li><a href="index.php?adm=7" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Visualizar doações</a></li>
                         <?php } ?>
                         <?php if ($_SESSION['USER_IS_DONATOR']) { ?>
-                        <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Nova doação</a></li>
                         <li><a href="index.php?donator=1" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Suas doações</a></li>
                         <?php } ?>
                     </ul>
@@ -142,217 +139,3 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-
-<!-- voluntário -->
-<!--<ul class="sidebar-nav p-0 list-unstyled">-->
-<!--    <li class="sidebar-item mb-1">-->
-<!--        <button class="btn btn-toggle  d-inline-flex align-items-center rounded border-0 collapsed"-->
-<!--                data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="false">-->
-<!--            <svg class="bi me-2" width="20" height="20" aria-hidden="true">-->
-<!--                <use xlink:href="#home"/>-->
-<!--            </svg>-->
-<!--            Página Inicial-->
-<!--        </button>-->
-<!--    </li>-->
-<!---->
-<!--    <li class="mb-1">-->
-<!--        <button class="btn btn-toggle  d-inline-flex align-items-center rounded border-0 collapsed"-->
-<!--                data-bs-toggle="collapse" data-bs-target="#pessoa-collapse" aria-expanded="false">-->
-<!--            <svg class="bi me-2" width="20" height="20" aria-hidden="true">-->
-<!--                <use xlink:href="#pessoa"/>-->
-<!--            </svg>-->
-<!--            Minha Conta-->
-<!--        </button>-->
-<!--    </li>-->
-<!---->
-<!--    <li class="sidebar-item mb-1">-->
-<!--        <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"-->
-<!--                data-bs-toggle="collapse" data-bs-target="#eventos-collapse" aria-expanded="false">-->
-<!--            <svg class="bi me-2" width="20" height="20" aria-hidden="true">-->
-<!--                <use xlink:href="#puzzle" >-->
-<!--            </svg>-->
-<!--            Eventos-->
-<!--        </button>-->
-<!--        <div class="collapse" id="eventos-collapse">-->
-<!--            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">-->
-
-<!--            </ul>-->
-<!--        </div>-->
-<!--    </li>-->
-<!---->
-<!--    <li class="sidebar-item mb-1">-->
-<!--        <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#doacoes-collapse" aria-expanded="false">-->
-<!--            <svg class="bi me-2" width="20" height="20" aria-hidden="true">-->
-<!--                <use xlink:href="#heart" />-->
-<!--            </svg>-->
-<!--            Doações-->
-<!--        </button>-->
-<!--        <div class="collapse" id="doacoes-collapse">-->
-<!--            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">-->
-<!--                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Faça a sua primeira doação!!!</a></li>-->
-<!--            </ul>-->
-<!--        </div>-->
-<!--    </li>-->
-<!--</ul>-->
-<!---->
-<!-- voluntário -->
-<!--<ul class="sidebar-nav p-0 list-unstyled">-->
-<!--    <li class="sidebar-item mb-1">-->
-<!--        <button class="btn btn-toggle  d-inline-flex align-items-center rounded border-0 collapsed"-->
-<!--                data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="false">-->
-<!--            <svg class="bi me-2" width="20" height="20" aria-hidden="true">-->
-<!--                <use xlink:href="#home"/>-->
-<!--            </svg>-->
-<!--            Página Inicial-->
-<!--        </button>-->
-<!--    </li>-->
-<!---->
-<!--    <li class="mb-1">-->
-<!--        <button class="btn btn-toggle  d-inline-flex align-items-center rounded border-0 collapsed"-->
-<!--                data-bs-toggle="collapse" data-bs-target="#pessoa-collapse" aria-expanded="false">-->
-<!--            <svg class="bi me-2" width="20" height="20" aria-hidden="true">-->
-<!--                <use xlink:href="#pessoa"/>-->
-<!--            </svg>-->
-<!--            Minha Conta-->
-<!--        </button>-->
-<!--    </li>-->
-<!---->
-<!--    <li class="sidebar-item mb-1">-->
-<!--        <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"-->
-<!--                data-bs-toggle="collapse" data-bs-target="#eventos-collapse" aria-expanded="false">-->
-<!--            <svg class="bi me-2" width="20" height="20" aria-hidden="true">-->
-<!--                <use xlink:href="#puzzle" >-->
-<!--            </svg>-->
-<!--            Eventos-->
-<!--        </button>-->
-<!--        <div class="collapse" id="eventos-collapse">-->
-<!--            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">-->
-<!--                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Inscrever-se</a></li>-->
-<!--                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Eventos inscritos</a></li>-->
-<!--                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Confirmar presença</a></li>-->
-<!--            </ul>-->
-<!--        </div>-->
-<!--    </li>-->
-<!---->
-<!--    <li class="sidebar-item mb-1">-->
-<!--        <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#doacoes-collapse" aria-expanded="false">-->
-<!--            <svg class="bi me-2" width="20" height="20" aria-hidden="true">-->
-<!--                <use xlink:href="#heart" />-->
-<!--            </svg>-->
-<!--            Doações-->
-<!--        </button>-->
-<!--        <div class="collapse" id="doacoes-collapse">-->
-<!--            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">-->
-<!--                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Faça a sua primeira doação!!!</a></li>-->
-<!--            </ul>-->
-<!--        </div>-->
-<!--    </li>-->
-<!--</ul>-->
-<!---->
-<!-- doador -->
-<!--<ul class="sidebar-nav p-0 list-unstyled">-->
-<!--    <li class="sidebar-item mb-1">-->
-<!--        <button class="btn btn-toggle  d-inline-flex align-items-center rounded border-0 collapsed"-->
-<!--                data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="false">-->
-<!--            <svg class="bi me-2" width="20" height="20" aria-hidden="true">-->
-<!--                <use xlink:href="#home"/>-->
-<!--            </svg>-->
-<!--            Página Inicial-->
-<!--        </button>-->
-<!--    </li>-->
-<!---->
-<!--    <li class="mb-1">-->
-<!--        <button class="btn btn-toggle  d-inline-flex align-items-center rounded border-0 collapsed"-->
-<!--                data-bs-toggle="collapse" data-bs-target="#pessoa-collapse" aria-expanded="false">-->
-<!--            <svg class="bi me-2" width="20" height="20" aria-hidden="true">-->
-<!--                <use xlink:href="#pessoa"/>-->
-<!--            </svg>-->
-<!--            Minha Conta-->
-<!--        </button>-->
-<!--    </li>-->
-<!---->
-<!--    <li class="sidebar-item mb-1">-->
-<!--        <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"-->
-<!--                data-bs-toggle="collapse" data-bs-target="#eventos-collapse" aria-expanded="false">-->
-<!--            <svg class="bi me-2" width="20" height="20" aria-hidden="true">-->
-<!--                <use xlink:href="#puzzle" >-->
-<!--            </svg>-->
-<!--            Eventos-->
-<!--        </button>-->
-<!--        <div class="collapse" id="eventos-collapse">-->
-<!--            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">-->
-<!--                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Inscrever-se</a></li>-->
-<!--            </ul>-->
-<!--        </div>-->
-<!--    </li>-->
-<!---->
-<!--    <li class="sidebar-item mb-1">-->
-<!--        <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#doacoes-collapse" aria-expanded="false">-->
-<!--            <svg class="bi me-2" width="20" height="20" aria-hidden="true">-->
-<!--                <use xlink:href="#heart"/>-->
-<!--            </svg>-->
-<!--            Doações-->
-<!--        </button>-->
-<!--        <div class="collapse" id="doacoes-collapse">-->
-<!--            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">-->
-
-<!--            </ul>-->
-<!--        </div>-->
-<!--    </li>-->
-<!--</ul>-->
-<!---->
-<!-- doador e voluntario -->
-<!--<ul class="sidebar-nav p-0 list-unstyled">-->
-<!--    <li class="sidebar-item mb-1">-->
-<!--        <button class="btn btn-toggle  d-inline-flex align-items-center rounded border-0 collapsed"-->
-<!--                data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="false">-->
-<!--            <svg class="bi me-2" width="20" height="20" aria-hidden="true">-->
-<!--                <use xlink:href="#home"/>-->
-<!--            </svg>-->
-<!--            Página Inicial-->
-<!--        </button>-->
-<!--    </li>-->
-<!---->
-<!--    <li class="mb-1">-->
-<!--        <button class="btn btn-toggle  d-inline-flex align-items-center rounded border-0 collapsed"-->
-<!--                data-bs-toggle="collapse" data-bs-target="#pessoa-collapse" aria-expanded="false">-->
-<!--            <svg class="bi me-2" width="20" height="20" aria-hidden="true">-->
-<!--                <use xlink:href="#pessoa"/>-->
-<!--            </svg>-->
-<!--            Minha Conta-->
-<!--        </button>-->
-<!--    </li>-->
-<!---->
-<!--    <li class="sidebar-item mb-1">-->
-<!--        <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"-->
-<!--                data-bs-toggle="collapse" data-bs-target="#eventos-collapse" aria-expanded="false">-->
-<!--            <svg class="bi me-2" width="20" height="20" aria-hidden="true">-->
-<!--                <use xlink:href="#puzzle" >-->
-<!--            </svg>-->
-<!--            Eventos-->
-<!--        </button>-->
-<!--        <div class="collapse" id="eventos-collapse">-->
-<!--            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">-->
-<!--                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Inscrever-se</a></li>-->
-<!--                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Eventos inscritos</a></li>-->
-<!--                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Confirmar presença</a></li>-->
-<!--            </ul>-->
-<!--        </div>-->
-<!--    </li>-->
-<!---->
-<!--    <li class="sidebar-item mb-1">-->
-<!--        <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#doacoes-collapse" aria-expanded="false">-->
-<!--            <svg class="bi me-2" width="20" height="20" aria-hidden="true">-->
-<!--                <use xlink:href="#heart" />-->
-<!--            </svg>-->
-<!--            Doações-->
-<!--        </button>-->
-<!--        <div class="collapse" id="doacoes-collapse">-->
-<!--            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">-->
-<!--                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Faça uma nova doação</a></li>-->
-<!--                <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Suas doações</a></li>-->
-<!--            </ul>-->
-<!--        </div>-->
-<!--    </li>-->
-<!--</ul>-->
-

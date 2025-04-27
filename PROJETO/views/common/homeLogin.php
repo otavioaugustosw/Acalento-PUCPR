@@ -10,10 +10,10 @@ ini_set('display_errors', 1);
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/cards.css">
     <link rel="stylesheet" href="css/default.css">
     <link rel="stylesheet" href="css/sidebars.css">
     <link rel="stylesheet" href="css/main-content.css">
+    <link rel="stylesheet" href="css/cards.css">
     <title>Acalento | Eventos</title>
 </head>
 
@@ -42,6 +42,7 @@ ini_set('display_errors', 1);
                                       FROM evento
                                       LEFT JOIN assentamento ON evento.id_assentamento = assentamento.id
                                       LEFT JOIN endereco ON assentamento.id_endereco = endereco.id
+                                      WHERE evento.data >= NOW()
                                       ORDER BY evento.id DESC
                                       LIMIT 2;";
 
@@ -67,12 +68,12 @@ ini_set('display_errors', 1);
                             <div class="card mb-3 amarelo mx-auto" >
                                 <div class="row g-0">
                                     <div class="col-md-4 degrade-horizontal">
-                                        <figure class="imagem-horizontal">
-                                            <img src="../../assets/imagens/teste2.jpg" class="img-fluid rounded-start" alt="...">
+                                        <figure class="imagem-horizontal v-20">
+                                            <img src="<?=$linha->link_imagem == "" || !isset($linha->link_imagem) ? "assets/imagens/default.jpg" : $linha->link_imagem?>" class="img-fluid rounded-start" alt="...">
                                         </figure>
                                     </div>
                                     <div class="col-md-8">
-                                        <div class="card-body d-flex flex-column h-100">
+                                        <div class="card-body d-flex flex-column">
                                             <h5 class="card-title"><?= $linha->nome ?></h5>
                                             <p class="card-text"><?= $data_formatada ?> às <?= $hora_formatada?></p>
                                             <p class="card-text"><?= $linha-> assentamento_nome?></p>
@@ -160,11 +161,11 @@ ini_set('display_errors', 1);
                                         <div class="row g-0">
                                             <div class="col-md-4 degrade-horizontal">
                                                 <figure class="imagem-horizontal">
-                                                    <img src="../../assets/imagens/teste2.jpg" class="img-fluid rounded-start" alt="...">
+                                                    <img src="<?=$linha->link_imagem == "" || !isset($linha->link_imagem) ? "assets/imagens/default.jpg" : $linha->link_imagem?>" class="img-fluid rounded-start" alt="...">
                                                 </figure>
                                             </div>
                                             <div class="col-md-8">
-                                                <div class="card-body d-flex flex-column h-100">
+                                                <div class="card-body d-flex flex-column ">
                                                     <h5 class="card-title"><?= $linha->nome ?></h5>
                                                     <p class="card-text"><?= $data_formatada ?> às <?= $hora_formatada?></p>
                                                     <p class="card-text"><?= $linha-> assentamento_nome?></p>
@@ -247,6 +248,7 @@ ini_set('display_errors', 1);
                                       FROM evento
                                       LEFT JOIN assentamento ON evento.id_assentamento = assentamento.id
                                       LEFT JOIN endereco ON assentamento.id_endereco = endereco.id
+                                       WHERE evento.data >= NOW()
                                       ORDER BY evento.id DESC
                                       LIMIT 2;";
 
@@ -273,11 +275,11 @@ ini_set('display_errors', 1);
                                         <div class="row g-0">
                                             <div class="col-md-4 degrade-horizontal">
                                                 <figure class="imagem-horizontal">
-                                                    <img src="../../assets/imagens/teste2.jpg" class="img-fluid rounded-start" alt="...">
+                                                    <img src="<?=$linha->link_imagem == "" || !isset($linha->link_imagem) ? "assets/imagens/default.jpg" : $linha->link_imagem?>" class="img-fluid rounded-start" alt="...">
                                                 </figure>
                                             </div>
                                             <div class="col-md-8">
-                                                <div class="card-body d-flex flex-column h-100">
+                                                <div class="card-body d-flex flex-column ">
                                                     <h5 class="card-title"><?= $linha->nome ?></h5>
                                                     <p class="card-text"><?= $data_formatada ?> às <?= $hora_formatada?></p>
                                                     <p class="card-text"><?= $linha-> assentamento_nome?></p>
@@ -390,8 +392,6 @@ ini_set('display_errors', 1);
                             <h2>Últimos eventos cadastrados</h2>
                             <?php
                             $conexao = connectDatabase();
-                            error_reporting(E_ALL);
-                            ini_set('display_errors', 1);
                             $query = "SELECT evento.*,
                             assentamento.nome AS assentamento_nome,
                             endereco.rua,
@@ -403,9 +403,6 @@ ini_set('display_errors', 1);
                             LEFT JOIN endereco ON assentamento.id_endereco = endereco.id
                             ORDER BY evento.id DESC
                             LIMIT 2;";
-                            $resultado = $conexao->query($query);
-                            error_reporting(E_ALL);
-                            ini_set('display_errors', 1);
 
                             if (!$resultado) {
                             showError(7);
@@ -423,11 +420,11 @@ ini_set('display_errors', 1);
                                     <div class="row g-0">
                                         <div class="col-md-4 degrade-horizontal">
                                             <figure class="imagem-horizontal">
-                                                <img src="../../assets/imagens/teste2.jpg" class="img-fluid rounded-start" alt="...">
+                                                <img src="<?=$linha->link_imagem == "" || !isset($linha->link_imagem) ? "assets/imagens/default.jpg" : $linha->link_imagem?>" class="img-fluid rounded-start" alt="...">
                                             </figure>
                                         </div>
                                         <div class="col-md-8">
-                                            <div class="card-body d-flex flex-column h-100">
+                                            <div class="card-body d-flex flex-column ">
                                                 <h5 class="card-title"><?= $linha->nome ?></h5>
                                                 <p class="card-text"><?= $data_formatada ?> às <?= $hora_formatada?></p>
                                                 <p class="card-text"><?= $linha-> assentamento_nome?></p>

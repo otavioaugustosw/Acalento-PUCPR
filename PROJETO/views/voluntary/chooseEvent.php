@@ -67,7 +67,7 @@
                                 <div class="col">
                                     <div class="card h-100 amarelo mx-auto">
                                         <figure class="imagem-vertical degrade-vertical">
-                                            <img src="<?php echo $linha->link_imagem; ?>" class="card-img-top" alt="Imagem do evento">
+                                            <img src="<?=$linha->link_imagem == "" || !isset($linha->link_imagem) ? "assets/imagens/default.jpg" : $linha->link_imagem?>" class="card-img-top" alt="Imagem do evento">
                                         </figure>
                                         <div class="card-body d-flex flex-column">
                                             <h5 class="card-title"><?php echo $linha->nome; ?></h5>

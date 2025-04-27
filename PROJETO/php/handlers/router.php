@@ -5,7 +5,7 @@ function routeToCommon($pageNum)
 {
     switch ($pageNum) {
         case 1:
-            include 'views/common/home.php';
+            include 'views/common/homeOff.php';
             break;
         case 2:
             include 'views/common/login.php';
@@ -15,7 +15,7 @@ function routeToCommon($pageNum)
             break;
         case 4:
             showError($_GET['error']);
-            include 'views/common/home.php';
+            include 'views/common/homeLogin.php';
             break;
         case 5:
             include 'views/common/registerUser.php';

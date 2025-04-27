@@ -40,6 +40,16 @@ ini_set('display_errors', 1);
                                       LEFT JOIN opcao_item ON item.id_opcao = opcao_item.id
                                       $where AND item.id_estoque IS NOT NULL";
 
+                    if (isset($_GET['all'])) {
+                        $query = "SELECT item.*,
+                                      usuario.nome AS usuario_nome,
+                                      opcao_item.nome AS opcao_nome
+                                      FROM item
+                                      LEFT JOIN usuario ON item.id_usuario = usuario.id
+                                      LEFT JOIN opcao_item ON item.id_opcao = opcao_item.id
+                                      $where AND item.id_estoque IS NOT NULL";
+                    }
+
                     $resultado = $conexao->query($query);
 
                     if (!$resultado) {

@@ -4,11 +4,6 @@
 document.querySelector("form").addEventListener("submit", function (e) {
     const senha = document.getElementById("senha").value;
     const confirmar = document.getElementById("confirmarSenha").value;
-
-    // if (senha !== confirmar) {
-    //     e.preventDefault();
-    //     alert("As senhas não estão iguais!");
-    // }
 });
 
 // CPF máscara
@@ -57,7 +52,6 @@ function aplicarMascaraCEP() {
             if (cep.length === 8) {
                 buscarEndereco(cep);
             } else if (cep.length > 0) {
-                alert('CEP incompleto! Digite 8 dígitos.');
                 cepInput.focus();
             }
         });
@@ -89,7 +83,6 @@ function buscarEndereco(cep) {
         })
         .catch(error => {
             console.error("Erro na busca:", error);
-            alert(error.message);
         })
         .finally(() => {
             cepInput.classList.remove('loading-cep');

@@ -192,10 +192,10 @@ function validateUser($sql)
         return false;
     }
 
-    if (!isCPFValid($_POST['cpf'])) {
-        displayValidation('cpf' , false);
-        return false;
-    }
+//    if (!isCPFValid($_POST['cpf'])) {
+//        displayValidation('cpf' , false);
+//        return false;
+//    }
 
     if (!isNumericOnly(preg_replace('/\D/', '', $_POST['telefone']))) {
         displayValidation('telefone', false);
@@ -219,35 +219,35 @@ function verifyUserExistence($sql, $email, $cpf)
 {
     try {
         // Verifica se já existe cadastro com o Email
-        $query = "SELECT email FROM usuario WHERE email = ?";
+        $query = "SELECT email, id FROM usuario WHERE email = ? AND id != ?";
         $stmt = $sql->prepare($query);
-        $stmt->bind_param("s", $email);
+        $stmt->bind_param("si", $email, $_SESSION['USER_ID']);
         $stmt->execute();
         $resultEmail = $stmt->get_result();
 
         if ($resultEmail->num_rows > 0) {
             showError(16);
-            exit();
+            var_dump($resultEmail);
+            return true;
         }
 
         // Verifica se já existe cadastro com o CPF
-        $query = "SELECT cpf FROM usuario WHERE cpf = ?";
+        $query = "SELECT cpf, id FROM usuario WHERE cpf = ? AND id != ?";
         $stmt = $sql->prepare($query);
-        $stmt->bind_param("s", $cpf);
+        $stmt->bind_param("si", $cpf, $_SESSION['USER_ID']);
         $stmt->execute();
         $resultCpf = $stmt->get_result();
 
         if ($resultCpf->num_rows > 0) {
             showError(19);
-            exit();
+            var_dump($resultCpf);
+            return true;
         }
-
         // Não encontrou nem email nem cpf já cadastrados
         return false;
 
     } catch (Exception $e) {
         showError(15);
-        exit();
     }
 }
 
@@ -280,7 +280,6 @@ function submitUser($sql, $id_usuario, $id_endereco)
     $nascimento = $_POST['nascimento'];
 
     try {
-
         $query = "UPDATE usuario 
         SET id_endereco = ?, email = ?, nome = ?, cpf = ?, telefone = ?, nascimento = ? WHERE id = ?";
         $stmt = $sql->prepare($query);
@@ -295,11 +294,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (validateUser($obj) && validateAddress($obj)) {
         $cpf = preg_replace('/\D/', '', $_POST['cpf']);
         $email = $_POST['email'];
-        if (!verifyUserExistence($obj, $email, $cpf)) {
+        if (verifyUserExistence($obj, $email, $cpf)) {
+        } else {
             submitUser($obj, $id_usuario, $id_endereco);
             ?>
             <script>
-                window.location.href = "index.php?common=6";
+                window.location.href = "index.php?common=7";
             </script>
             <?php
         }

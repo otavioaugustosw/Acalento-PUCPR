@@ -1,6 +1,6 @@
 <?php
 include (ROOT . "/php/config/database_php.php");
-include (ROOT . "/php/auth_services/AuthService.php");
+include(ROOT . "/php/auth_services/auth_service_php.php");
 include (ROOT . "/php/handlers/formValidator.php");
 $obj = connectDatabase();
 ?>
@@ -259,7 +259,7 @@ function submitUser($sql)
 
     $id_endereco = $sql->insert_id;
     $email = $_POST['email'];
-    $senha = AuthService::generatePasswordHash($_POST['senha']);
+    $senha = generatePasswordHash($_POST['senha']);
     $nome = $_POST['nome'];
     $cpf = preg_replace('/\D/', '', $_POST['cpf']);
     $telefone = preg_replace('/\D/', '', $_POST['telefone']);

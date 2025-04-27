@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Acalento | Início</title>
+    <link rel="stylesheet" href="css/default.css">
+    <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/header.css">
 </head>
 <body>
@@ -35,8 +37,8 @@
                 <span class="fw-bold text-primary"><?=$_SESSION['USER_NAME']?></span>
                 <a href="index.php?common=3" class="btn btn-danger">Sair</a>
             <?php else: ?>
-                <a href="index.php?common=2" class="btn btn-outline-primary">Entrar</a>
-                <a href="index.php?common=5" class="btn btn-outline-primary">Cadastrar-se</a>
+                <a href="index.php?common=2" class="btn btn-secondary">Entrar</a>
+                <a href="index.php?common=5" class="btn btn-primary">Cadastrar-se</a>
             <?php endif; ?>
         </div>
 

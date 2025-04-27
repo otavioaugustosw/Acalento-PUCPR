@@ -40,8 +40,10 @@ if ($total >= $evento->lotacao_max) {
 }
 
 // Insere a inscrição
-$sqlInsere = "INSERT INTO usuario_participa_evento (id_usuario, id_evento) VALUES ($id_usuario, $id_evento)";
-if ($conexao->query($sqlInsere)) {
+$sql_insere = "INSERT INTO usuario_participa_evento (id_usuario, id_evento) VALUES ($id_usuario, $id_evento);";
+$sql_update_voluntario = "UPDATE usuario SET eh_voluntario = 1";
+if ($conexao->query($sql_insere) && $conexao->query($sql_update_voluntario)) {
+    $_SESSION['USER_IS_VOLUNTARY'] = 1;
     header("Location: index.php?voluntary=5&success=7");
 } else {
     header("Location: index.php?voluntary=4&error=14");

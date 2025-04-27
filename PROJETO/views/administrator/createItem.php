@@ -165,11 +165,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 function submitInformation($sql)
 {
-//    if (!isAlphaOnly($_POST['destino'])) {
-//        displayValidation('selectDestino', false);
-//        return;
-//    }
-
     $idCampanha = ($_POST['destino'] === 'campanha' && isset($_POST['id_campanha_doacao'])) ? (int) $_POST['id_campanha_doacao'] : null;
     $idEstoque  = ($_POST['destino'] === 'estoque'  && isset($_POST['id_estoque'])) ? (int) $_POST['id_estoque'] : null;
     $quantidade = isset($_POST['quantidade']) && $_POST['quantidade'] !== '' ? (int) $_POST['quantidade'] : null;
@@ -232,5 +227,6 @@ function submitInformation($sql)
 
     } catch (mysqli_sql_exception $e) {
         showError(5);
+        var_dump( $e->getMessage());
     }
 }

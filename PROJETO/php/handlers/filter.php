@@ -38,7 +38,10 @@ function setWhere(string $nome): string
                     $where = "WHERE $table.data <= NOW() AND $table.status = 0";
                     break;
                 case "mes":
-                    $where = "WHERE $table.data BETWEEN 
+                    /* DATESUB: para subtrair um mês do dia de hoje (CURRENT_DATE)
+                    DATE_FORMAT: pega a data e formata ela, nessa caso formata para o primeiro dia do mês
+                    LAST_DAY: pega o último dia do mês */
+                    $where = "WHERE $table.data BETWEEN
                     DATE_FORMAT(DATE_SUB(CURRENT_DATE, INTERVAL 1 MONTH), '%Y-%m-01') AND LAST_DAY(DATE_SUB(CURRENT_DATE, INTERVAL 1 MONTH))
                     AND $table.status = 0";
                     break;

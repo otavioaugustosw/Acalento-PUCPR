@@ -1,8 +1,6 @@
 <?php
 include (ROOT . "/php/config/database_php.php");
 $conexao = connectDatabase();
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
 ?>
 
 <!doctype html>
@@ -65,6 +63,7 @@ ini_set('display_errors', 1);
                                 <tbody>
                                 <?php
                                     while ($linha = $resultado->fetch_object()) {
+                                        // se o id de campnha_doacao for null no banco de dados não ser possível puxar o seu nome, o que quer dizer que o item está no estoque
                                         $destino = $linha->campanha_doacao_nome ? $linha->campanha_doacao_nome : 'Estoque';
                                         $data_formatada = date("d/m/Y", strtotime($linha->data));
                                         echo '

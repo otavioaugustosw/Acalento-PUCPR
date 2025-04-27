@@ -1,6 +1,4 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
 include (ROOT . "/php/config/database_php.php");
 include(ROOT . '/php/handlers/formValidator.php');
 $obj = connectDatabase();
@@ -96,7 +94,7 @@ $obj = connectDatabase();
                             <select id="inputTipo" name="tipo" class="form-select">
                                 <option value="">Selecione o tipo</option>
                                 <?php
-                                // Valores fixos do ENUM (os mesmos definidos na tabela)
+                                // Valores fixos do ENUM
                                 $valores_enum = ['Alimentício', 'Brinquedo', 'Limpeza', 'Outros'];
 
                                 foreach ($valores_enum as $valor) { ?>
@@ -150,7 +148,9 @@ $obj = connectDatabase();
 </div>
 
 <script>
+
     function mostrarDestino() {
+        // pega o valor de seleção de destino e dependendo do valor uma opção fica visivel ou a outra
         const tipo = document.getElementById('selectDestino').value;
         document.getElementById('campoCampanha').style.display = tipo === 'campanha' ? 'block' : 'none';
         document.getElementById('campoEstoque').style.display = tipo === 'estoque' ? 'block' : 'none';

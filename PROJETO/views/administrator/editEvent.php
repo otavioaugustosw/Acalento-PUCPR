@@ -30,8 +30,7 @@
                         include (ROOT . "/php/config/database_php.php");
                         include(ROOT . "/php/handlers/filter.php");
                         $conexao = connectDatabase();
-                        error_reporting(E_ALL);
-                        ini_set('display_errors', 1);
+
                         $where = setWhere('evento');
                         $query = "SELECT evento.*,
                                      assentamento.nome AS assentamento_nome,
@@ -44,8 +43,6 @@
                               LEFT JOIN endereco ON assentamento.id_endereco = endereco.id
                               $where;";
                         $resultado = $conexao->query($query);
-                        error_reporting(E_ALL);
-                        ini_set('display_errors', 1);
 
                         if (!$resultado) {
                             showError(7);
@@ -55,6 +52,8 @@
                             echo '<h3>Nenhum evento encontrado</h3>';
                         } else {
                             while ($linha = $resultado->fetch_object()) {
+                                // strtotime -> converte a string para timestamp
+                                // date -> formata a data e a hora para o jeito que a gente quer mostrar
                                 $data_formatada = date("d/m/Y", strtotime($linha->data));
                                 $hora_formatada = date("H:i", strtotime($linha->hora));
                                 ?>

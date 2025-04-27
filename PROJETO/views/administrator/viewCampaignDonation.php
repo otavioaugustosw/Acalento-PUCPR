@@ -1,14 +1,12 @@
 <?php
 include (ROOT . "/php/config/database_php.php");
 
-// Pega o ID da campanha da URL (com verificação básica)
+// Pega o ID da campanha da URL
 $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 if ($id <= 0) {
     showError(10);
 }
 $conexao = connectDatabase();
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
 ?>
 
 <!doctype html>

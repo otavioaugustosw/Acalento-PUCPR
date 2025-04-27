@@ -1,7 +1,7 @@
 <?php
-
 include (ROOT . "/php/config/database_php.php");
 include(ROOT . '/php/handlers/formValidator.php');
+// conexão com o banco de dado
 $obj = connectDatabase();
 
 // query para buscar os eventos no select
@@ -38,6 +38,7 @@ $eventos = $obj->query("SELECT id, nome FROM evento WHERE status = 0");
                         <!-- para três em uma linha -->
                         <div class="col-md-6">
                             <label for="inputNome" class="form-label">Nome*</label>
+                            <!-- $_post[] ?? null -> se o valor da esquerda for verdadeiro ele é usado, caso não é usado o da direita -->
                             <input type="text" class="form-control" id="inputNome" name="nome" value="<?= $_POST['nome'] ?? null ?>">
                             <div id="validacaoNome" class="invalid-feedback">
                                 Escolha um nome adequado para a campanha.
@@ -55,6 +56,8 @@ $eventos = $obj->query("SELECT id, nome FROM evento WHERE status = 0");
                             <select name="evento_destino" id="inputEvento" class="form-select">
                                 <option value="">Selecione o evento</option>
                                 <?php while ($a = $eventos->fetch_object()) { ?>
+                                    <!-- isset($_POST['evento_destino']) && $_POST['evento_destino'] == $a->id) ? 'selected' : '' -> se a variável já foi definida e ela é igual ao id então o valor da esqueda
+                                    é o que vai ser utilizado, caso contrário é o da direita. select é um atributo que pré-seleciona uma opção de um select -->
                                     <option value="<?php echo $a->id;?>" <?= (isset($_POST['evento_destino']) && $_POST['evento_destino'] == $a->id) ? 'selected' : '' ?>><?php echo $a->nome; ?></option>
                                 <?php } ?>
                             </select>
@@ -78,6 +81,8 @@ $eventos = $obj->query("SELECT id, nome FROM evento WHERE status = 0");
 <?php
 
 // PARA INTERAGIR COM OS CAMPOS, O ENVIO DE DADOS DEVE SER APÓS O SITE TER SIDO CARREGADO
+
+// $_SERVER["REQUEST_METHOD"] é uma variável superglobal de php, ela guarda qual foi o tipo de requisição que foi feito
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     submitInformation($obj);
 }
@@ -102,15 +107,16 @@ function submitInformation($sql)
     }
 
     try { // tenta executar a query
+        // prepara a query e deixa os valores com um placeholder pra no futuro receber algo
         $query = "
         INSERT INTO campanha_doacao(nome, data, evento_destino)
-        VALUES ( ?, ?, ?) "; // interrogação equivale aonde os parametros irão serem colocados
+        VALUES ( ?, ?, ?) ";
         $stmt = $sql->prepare($query); // prepara a query para receber valores;
         $stmt->bind_param("ssi", $_POST['nome'], $_POST['data'], $_POST['evento_destino'] ); // coloca os valores nos parametros POR ORDEM
-        // SSI = STRING STRING INT ou seja NOME = STRING, DATA = STRING, EVENTO_DESTINO = INT
-        // depois coloca-se os parametro na ordem correta
+        // primeiro organizar o tipo dos parametros e depois coloca os dados em ordem
         $stmt->execute(); // executa query
         showSucess(1);
+        // mysqli_sql_exception: aviso que o php te dá caso algo dê errado com o seu banco de dados
     } catch (mysqli_sql_exception $E) { // se dar um erro fatal
         showError(3);
         exit();

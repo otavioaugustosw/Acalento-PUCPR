@@ -403,6 +403,7 @@ ini_set('display_errors', 1);
                             LEFT JOIN endereco ON assentamento.id_endereco = endereco.id
                             ORDER BY evento.id DESC
                             LIMIT 2;";
+                            $resultado = $conexao->query($query);
 
                             if (!$resultado) {
                             showError(7);

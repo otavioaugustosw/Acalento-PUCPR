@@ -1,9 +1,11 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
 include (ROOT . "/php/config/database_php.php");
 include(ROOT . '/php/handlers/formValidator.php');
+
+// conexão com o banco de dados
 $obj = connectDatabase();
+
+// busca no banco de dados por assentamentos
 $assentamento = $obj->query("SELECT id, nome FROM assentamento");
 
 ?>

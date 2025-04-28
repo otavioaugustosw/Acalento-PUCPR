@@ -1,8 +1,9 @@
 <?php
-include (ROOT . "/php/config/database_php.php"); // Inclui a conexão se ainda não tiver
+include (ROOT . "/php/config/database_php.php");
 
 if (isset($_GET['id'])) {
-    $id = intval($_GET['id']); // Segurança básica
+    // a função intval tranforma o valor em um valor inteiro, está segundo usado apenas por precaução
+    $id = intval($_GET['id']);
     $obj = connectDatabase();
 
     $query = "UPDATE evento 

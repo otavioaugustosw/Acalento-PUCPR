@@ -46,9 +46,11 @@
                               $where";
                         $resultado = $conexao->query($query);
 
-                        // buscar eventos que o usuario está inscrito
+                        // busca eventos que o usuario está inscrito
                         $inscricao = $conexao->query("SELECT id_evento FROM usuario_participa_evento WHERE id_usuario = $id_usuario");
                         $eventos_inscritos = [];
+
+                        // cada row recebe o valor de um id do evento e eventos inscritos recebe os id dos eventos que o usuário está escrito
                         while ($row = $inscricao->fetch_object()) {
                             $eventos_inscritos[] = $row->id_evento;
                         }
@@ -77,6 +79,7 @@
                                             <p class="card-text">lotação: <?php echo $linha->inscritos ?>/<?php echo $linha->lotacao_max; ?></p>
                                             <p class="card-text"><small class="text-body-secondary"><?php echo $linha->descricao; ?></small></p>
                                             <div class="mt-auto">
+                                                <!-- se o valor do id existir em eventos inscritos aparece a opção de cancelar inscrição, caso não tenha aparece a opção inscrever-se e caso esteja lotada aparece a opção evento lotado -->
                                                 <?php if (in_array($linha->id, $eventos_inscritos)) { ?>
                                                     <button type="button" class="btn btn-danger largura-completa" data-bs-toggle="modal" data-bs-target="#modalCancelar<?= $linha->id ?>">
                                                         Cancelar inscrição

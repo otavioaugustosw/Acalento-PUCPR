@@ -31,8 +31,6 @@
                         <?php
                         include (ROOT . "/php/config/database_php.php");
                         $conexao = connectDatabase();
-                        error_reporting(E_ALL);
-                        ini_set('display_errors', 1);
 
                         $where = setWhere('campanha_doacao');
                         $query = "SELECT campanha_doacao.*,
@@ -41,8 +39,6 @@
                               LEFT JOIN assentamento ON campanha_doacao.evento_destino = assentamento.id
                                 $where;";
                         $resultado = $conexao->query($query);
-                        error_reporting(E_ALL);
-                        ini_set('display_errors', 1);
 
                         if (!$resultado) {
                             showError(7);

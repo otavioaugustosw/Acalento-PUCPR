@@ -1,11 +1,10 @@
 <?php
-include (ROOT . '/php/handlers/getTable.php');
 include (ROOT . '/php/handlers/hasColumn.php');
 
 function setWhere(string $nome): string
 {
     $db    = connectDatabase();
-    $table = getTable($nome);          // ex.: "evento"   ou  "item"
+    $table = $nome; // ex.: "evento"   ou  "item"
 
     if($table === 'item' || $table === 'campanha_doacao') {
         $filtro = $_POST['filtro'] ?? 'todos';

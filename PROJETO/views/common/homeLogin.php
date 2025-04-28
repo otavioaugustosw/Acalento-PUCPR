@@ -1,8 +1,6 @@
 <?php
 include (ROOT . "/php/config/database_php.php");
 $conexao = connectDatabase();
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
 ?>
 <!doctype html>
 <html lang="en">
@@ -42,7 +40,7 @@ ini_set('display_errors', 1);
                                       FROM evento
                                       LEFT JOIN assentamento ON evento.id_assentamento = assentamento.id
                                       LEFT JOIN endereco ON assentamento.id_endereco = endereco.id
-                                      WHERE evento.data >= NOW()
+                                      WHERE evento.data >= NOW() AND evento.status = 0 
                                       ORDER BY evento.id DESC
                                       LIMIT 2;";
 
@@ -142,7 +140,7 @@ ini_set('display_errors', 1);
                                       FROM evento
                                       LEFT JOIN assentamento ON evento.id_assentamento = assentamento.id
                                       LEFT JOIN endereco ON assentamento.id_endereco = endereco.id
-                                      WHERE evento.data < NOW()
+                                      WHERE evento.data < NOW() AND evento.status = 0 
                                       LIMIT 2;";
                             $resultado = $conexao->query($query);
 
@@ -248,7 +246,7 @@ ini_set('display_errors', 1);
                                       FROM evento
                                       LEFT JOIN assentamento ON evento.id_assentamento = assentamento.id
                                       LEFT JOIN endereco ON assentamento.id_endereco = endereco.id
-                                       WHERE evento.data >= NOW()
+                                       WHERE evento.data >= NOW() AND evento.status = 0
                                       ORDER BY evento.id DESC
                                       LIMIT 2;";
 
@@ -465,7 +463,6 @@ ini_set('display_errors', 1);
                                 ?>
 
 
-                        <!-- fecha a row -->
                     </div>
                 </div>
             </div>

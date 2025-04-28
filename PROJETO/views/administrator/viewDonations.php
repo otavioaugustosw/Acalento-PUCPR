@@ -152,8 +152,6 @@ ini_set('display_errors', 1);
                             ORDER BY campanha_doacao.id DESC
                             LIMIT 4;";
                             $resultado = $conexao->query($query);
-                            error_reporting(E_ALL);
-                            ini_set('display_errors', 1);
 
                             if (!$resultado) {
                             showError(7);

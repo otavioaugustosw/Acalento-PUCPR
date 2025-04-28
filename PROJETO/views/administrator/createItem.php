@@ -223,6 +223,10 @@ function submitInformation($sql)
         $stmt = $sql->prepare($query);
         $stmt->bind_param("iiiiisdss", $idCampanha, $idEstoque, $_POST['id_opcao'], $_POST['id_usuario'], $quantidade, $unidadeMedida, $valor, $_POST['tipo'], $_POST['data']);
         $stmt->execute();
+        $query = "UPDATE usuario SET eh_doador = 1 WHERE id = ?";
+        $stmt = $sql->prepare($query);
+        $stmt->bind_param("i", $_POST['id_usuario']);
+        $stmt->execute();
         showSucess(3);
 
     } catch (mysqli_sql_exception $e) {

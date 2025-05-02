@@ -5,6 +5,7 @@ function connectDatabase(): mysqli
         $_ENV['DATABASE_SERVER'],
         $_ENV['DATABASE_USER'],
         $_ENV['DATABASE_PASSWORD'],
-        $_ENV['DATABASE_NAME']
+        $_ENV['DATABASE_NAME'],
+        $_ENV['DATABASE_PORT']
     );
 }

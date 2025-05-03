@@ -57,117 +57,53 @@ while ($row = $inscricao->fetch_object()) {
                     <?php makeFilter() ?>
                     <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-2 row-cols-xl-2 row-cols-xxl-3 g-5 main">
                         <?php
-                        include (ROOT . "/php/config/database_php.php");
-                        include(ROOT . "/php/handlers/filter.php");
-
-                        $conexao = connectDatabase();
-                        $id_usuario = $_SESSION['USER_ID'];
-
-                        $where = setWhere('evento');
-
-                        $query = "SELECT evento.*,
-                                     assentamento.nome AS assentamento_nome,
-                                     endereco.rua,
-                                     endereco.numero,
-                                     endereco.bairro,
-                                     (SELECT COUNT(*) FROM usuario_participa_evento WHERE id_evento = evento.id) AS inscritos
-                              FROM evento
-                              LEFT JOIN assentamento ON evento.id_assentamento = assentamento.id
-                              LEFT JOIN endereco ON assentamento.id_endereco = endereco.id
-                              $where";
-                        $resultado = $conexao->query($query);
-
-                        // busca eventos que o usuario está inscrito
-                        $inscricao = $conexao->query("SELECT id_evento FROM usuario_participa_evento WHERE id_usuario = $id_usuario");
-                        $eventos_inscritos = [];
-
-                        // cada row recebe o valor de um id do evento e eventos inscritos recebe os id dos eventos que o usuário está escrito
-                        while ($row = $inscricao->fetch_object()) {
-                            $eventos_inscritos[] = $row->id_evento;
-                        }
-
                         if (!$resultado) {
                             showError(7);
                         }
-
                         if ($resultado->num_rows <= 0) {
                             echo '<h3>Nenhum evento cadastrado</h3>';
                         } else {
                             while ($linha = $resultado->fetch_object()) {
                                 $data_formatada = date("d/m/Y", strtotime($linha->data));
                                 $hora_formatada = date("H:i", strtotime($linha->hora));
-                                ?>
-                                <div class="col">
-                                    <div class="card h-100 amarelo mx-auto">
-                                        <figure class="imagem-vertical degrade-vertical">
-                                            <img src="<?=$linha->link_imagem == "" || !isset($linha->link_imagem) ? "assets/imagens/default.jpg" : $linha->link_imagem?>" class="card-img-top" alt="Imagem do evento">
-                                        </figure>
-                                        <div class="card-body d-flex flex-column">
-                                            <h5 class="card-title"><?php echo $linha->nome; ?></h5>
-                                            <p class="card-text">Data: <?php echo $data_formatada; ?> às <?php echo $hora_formatada; ?></p>
-                                            <p class="card-text">local: <?php echo $linha->assentamento_nome; ?></p>
-                                            <p class="card-text"><?php echo $linha->rua;?>, <?php echo $linha->numero; ?> - <?php echo $linha->bairro; ?></p>
-                                            <p class="card-text">lotação: <?php echo $linha->inscritos ?>/<?php echo $linha->lotacao_max; ?></p>
-                                            <p class="card-text"><small class="text-body-secondary"><?php echo $linha->descricao; ?></small></p>
-                                            <div class="mt-auto">
-                                                <!-- se o valor do id existir em eventos inscritos aparece a opção de cancelar inscrição, caso não tenha aparece a opção inscrever-se e caso esteja lotada aparece a opção evento lotado -->
-                                                <?php if (in_array($linha->id, $eventos_inscritos)) { ?>
-                                                    <button type="button" class="btn btn-danger largura-completa" data-bs-toggle="modal" data-bs-target="#modalCancelar<?= $linha->id ?>">
-                                                        Cancelar inscrição
-                                                    </button>
-                                                    <div class="modal fade" id="modalCancelar<?= $linha->id ?>" tabindex="-1" aria-labelledby="cancelarLabel<?= $linha->id ?>" aria-hidden="true">
-                                                        <div class="modal-dialog">
-                                                            <div class="modal-content amarelo">
-                                                                <form action="index.php?voluntary=1" method="POST">
-                                                                    <input type="hidden" name="id_evento" value="<?= $linha->id ?>">
-                                                                    <div class="modal-header">
-                                                                        <h5 class="modal-title" id="cancelarLabel<?= $linha->id ?>">Confirmar cancelamento</h5>
-                                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-                                                                    </div>
-                                                                    <div class="modal-body">
-                                                                        Tem certeza que deseja cancelar sua inscrição neste evento?
-                                                                    </div>
-                                                                    <div class="modal-footer">
-                                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Não, voltar</button>
-                                                                        <button type="submit" class="btn btn-danger">Sim, cancelar</button>
-                                                                    </div>
-                                                                </form>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                <?php } elseif ($linha->inscritos >= $linha->lotacao_max) { ?>
-                                                    <input type="hidden" name="id_evento" value="<?= $linha->id ?>">
-                                                    <button type="button" class="btn btn-secondary largura-completa">
-                                                        Evento lotado
-                                                    </button>
-                                                <?php } else { ?>
-                                                    <form action="index.php?voluntary=3" method="POST">
-                                                        <input type="hidden" name="id_evento" value="<?= $linha->id ?>">
-                                                        <button type="submit" class="btn btn-primary largura-completa">
-                                                            Inscrever-se
-                                                        </button>
-                                                    </form>
-                                                <?php } ?>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <?php
+
+                                // aqui é onde construimos os botões que vai pro card, em uma closure
+                                $botoes = function () use ($linha, $eventos_inscritos) {
+                                    //  Se o valor do id existir em eventos inscritos aparece a opção de cancelar inscrição,
+                                    // caso não tenha aparece a opção inscrever-se e caso esteja lotada aparece a opção evento lotado
+                                    if (in_array($linha->id, $eventos_inscritos)) {
+                                        // montamos o modal
+                                        makeModal($linha->id, button_text: 'Cancelar inscrição',
+                                            modal_title: 'Cancelar inscrição',
+                                            modal_body: 'Tem certeza que deseja cancelar a inscrição?',
+                                            confirm_text: 'Sim, cancelar',
+                                            form_action: 'index.php?voluntary=1');
+                                    } else if ($linha->inscritos >= $linha->lotacao_max) {
+                                        // botão padrão <A>
+                                        makeButton("Evento Lotado", "btn btn-secondary");
+                                    } else {
+                                        // botão que envia informações
+                                        makeFormButton('index.php?voluntary=3', 'id_evento', $linha->id, 'Inscrever-se');
+                                    }
+                                };
+                                // montamos o card a nossa maneira
+                                make_vertical_card(
+                                    $linha->nome,
+                                    "$data_formatada às $hora_formatada",
+                                    $linha->assentamento_nome,
+                                    "$linha->inscritos/$linha->lotacao_max inscritos",
+                                    $linha->descricao,
+                                    $linha->link_imagem,
+                                    $botoes
+                                );
                             }
                         }
                         ?>
                     </div>
-                    <!-- aqui termina -->
                 </div>
             </div>
         </main>
     </div>
 </div>
-<script>
-    function mostrarFiltroData() {
-        const tipo = document.getElementById('filtro').value;
-        document.getElementById('filtroData').style.display = tipo === 'data' ? 'block' : 'none';
-    }
-</script>
 </body>
 </html>

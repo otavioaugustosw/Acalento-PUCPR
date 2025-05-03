@@ -1,5 +1,54 @@
 .card {
     border: 1px solid var(--primary-blue) !important;
+    border-radius: var(--default-radius);
+    width: 20rem;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.card .imagem-vertical {
+    width: 100%;
+    height: 25vh;
+}
+
+.card .imagem-vertical img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.card h5 {
+    font-size: 1.8rem;
+    font-family: var(--text-font);
+    height: 80px;
+}
+.card p {
+    font-size: 0.9rem;
+    margin-bottom: 0.5vh;
+}
+
+.card button {
+    margin-top: 15px !important;
+    font-size: 0.8rem !important;
+
+}
+
+.card a {
+    margin-top: 15px !important;
+    font-size: 0.8rem !important;
+
+}
+
+.card-body .descricao {
+    color: var(--primary-background) !important;
+}
+
+.card-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
 }
 
 .amarelo {
@@ -19,17 +68,6 @@
     height: 100%;
     object-fit: cover;
     position: absolute;
-}
-
-.card .imagem-vertical {
-    width: 100%;
-    height: 25vh;
-}
-
-.card .imagem-vertical img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
 }
 
 .degrade-horizontal {
@@ -63,25 +101,4 @@
     width: 100%;
     height: 50%;
     z-index: 1;
-}
-
-.card h5 {
-    font-size: 2rem;
-    margin-top: 1vh;
-}
-.card p {
-     font-size: 0.9rem;
-     margin-bottom: 0.5vh;
- }
-
-.card button {
-    margin-top: 15px !important;
-    font-size: 0.8rem !important;
-
- }
-
-.card a {
-    margin-top: 15px !important;
-    font-size: 0.8rem !important;
-
 }

@@ -14,17 +14,20 @@ include(ROOT .  "/components/sidebars/sidebars.php");
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/cards.css">
     <link rel="stylesheet" href="css/default.css">
-    <link rel="stylesheet" href="css/sidebars.css">
     <link rel="stylesheet" href="css/main-content.css">
+    <link rel="stylesheet" href="css/cards.css">
+    <link rel="stylesheet" href="css/form-style.css">
+    <link rel="stylesheet" href="css/sidebar.css">
     <title>Acalento | Editar evento</title>
 </head>
 
 <body>
-<?php include(ROOT . "/components/sidebars/sidebar-mobile.php") ?>
+<!-- monta a sidebar mobile -->
+<?php make_mobile_sidebar() ?>
 <div class="d-flex flex-nowrap">
-    <?php include(ROOT .  "/components/sidebars/sidebars.php") ?>
+    <!--    monta a sidebar desktop-->
+    <?php make_sidebar(); ?>
     <!-- fim sidebar -->
 
     <!-- conteudo -->
@@ -55,55 +58,33 @@ include(ROOT .  "/components/sidebars/sidebars.php");
                         if (!$resultado) {
                             showError(7);
                         }
-
                         if ($resultado->num_rows <= 0) {
-                            echo '<h3>Nenhum evento encontrado</h3>';
+                            echo '<h3>Nenhum evento cadastrado</h3>';
                         } else {
                             while ($linha = $resultado->fetch_object()) {
-                                // strtotime -> converte a string para timestamp
-                                // date -> formata a data e a hora para o jeito que a gente quer mostrar
                                 $data_formatada = date("d/m/Y", strtotime($linha->data));
                                 $hora_formatada = date("H:i", strtotime($linha->hora));
-                                ?>
-                                <div class="col">
-                                    <div class="card h-100 amarelo mx-auto">
-                                        <figure class="imagem-vertical degrade-vertical">
-                                            <img src="<?=$linha->link_imagem == "" || !isset($linha->link_imagem) ? "assets/imagens/default.jpg" : $linha->link_imagem?>" class="card-img-top" alt="Imagem do evento">
-                                        </figure>
-                                        <div class="card-body d-flex flex-column">
-                                            <h5 class="card-title"><?php echo $linha->nome; ?></h5>
-                                            <p class="card-text">Data: <?php echo $data_formatada ?> às <?php echo $hora_formatada; ?></p>
-                                            <p class="card-text">local: <?php echo $linha->assentamento_nome; ?></p>
-                                            <p class="card-text"><?php echo $linha->rua;?>, <?php echo $linha->numero; ?> - <?php echo $linha->bairro; ?></p>
-                                            <p class="card-text">lotação: <?php echo $linha->inscritos ?>/<?php echo $linha->lotacao_max; ?></p>
-                                            <p class="card-text"><small class="text-body-secondary"><?php echo $linha->descricao; ?></small></p>
-                                            <div class="mt-auto d-flex justify-content-between gap-2">
-                                                <a href="index.php?adm=6&id=<?php echo $linha->id; ?>" class="btn btn-primary largura-50">Editar</a>
-                                                <button type="button" class="btn btn-danger largura-50" data-bs-toggle="modal" data-bs-target="#modalDeletar<?= $linha->id ?>">
-                                                    Deletar
-                                                </button>
-                                            </div>
-                                            <div class="modal fade" id="modalDeletar<?= $linha->id ?>" tabindex="-1" aria-labelledby="modalDeletarLabel<?= $linha->id ?>" aria-hidden="true">
-                                                <div class="modal-dialog">
-                                                    <div class="modal-content amarelo">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="modalDeletarLabel<?= $linha->id ?>">Confirmar exclusão</h5>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            Tem certeza que deseja deletar esse evento?
-                                                        </div>
-                                                        <div class="modal-footer d-flex">
-                                                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancelar</button>
-                                                            <a href="index.php?adm=4&id=<?= $linha->id ?>" class="btn btn-danger">Sim, deletar</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <?php
+
+                                // aqui é onde construimos os botões que vai pro card, em uma closure
+                                $botoes = function () use ($linha) {
+                                    makeButton("Editar", "btn btn-primary", "index.php?adm=6&id=$linha->id");
+                                    makeModal($linha->id, button_text: 'Deletar',
+                                        modal_title: 'Confirmar exclusão',
+                                        modal_body: 'Tem certeza que deseja deletar esse evento',
+                                        cancel_text: "Cancelar",
+                                        confirm_text: 'Sim, deletar',
+                                        form_action: "index.php?adm=4&id=$linha->id");
+                                };
+                                // montamos o card a nossa maneira
+                                make_vertical_card(
+                                    $linha->nome,
+                                    "$data_formatada às $hora_formatada",
+                                    $linha->assentamento_nome,
+                                    "$linha->inscritos/$linha->lotacao_max inscritos",
+                                    $linha->descricao,
+                                    $linha->link_imagem,
+                                    $botoes
+                                );
                             }
                         }
                         ?>

@@ -3,3 +3,5 @@ PROJETO/php/config/.env
 PROJETO/css/main-content.css
 PROJETO/css/header.css
 .idea/workspace.xml
+PROJETO/.idea/sqldialects.xml
+.DS_Store

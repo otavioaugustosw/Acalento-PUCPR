@@ -146,7 +146,6 @@ ini_set('display_errors', 1);
                             <h2>Doações por campanha</h2>
                             <a class="btn btn-primary" href="index.php?adm=8">Ver as doações por campanha</a>
                         </div>
-                        <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-2 row-cols-xl-3 row-cols-xxl-4 g-4">
                             <?php
                             $query = "SELECT campanha_doacao.*,
                             assentamento.nome AS assentamento_nome
@@ -162,8 +161,10 @@ ini_set('display_errors', 1);
 
                             if ($resultado->num_rows <= 0) {
                                 echo '<h3 class="d-flex justify-content-center p-4">Nenhuma campanha cadastrada</h3>';
-                            } else {
-                                while ($linha = $resultado->fetch_object()) {
+                            } else {?>
+                        <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-2 row-cols-xl-3 row-cols-xxl-4 g-4">
+                         <?php
+                        while ($linha = $resultado->fetch_object()) {
                                     $data_formatada = date("d/m/Y", strtotime($linha->data));
                                 ?>
                             <div class="col">

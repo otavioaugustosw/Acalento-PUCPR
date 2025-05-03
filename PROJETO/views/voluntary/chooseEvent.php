@@ -1,4 +1,34 @@
+<?php
+// todos includes e queries sempre no cabeçalho do código
+include(ROOT . "/php/config/database_php.php");
+include(ROOT . "/php/handlers/filter.php");
+include(ROOT . "/components/filter/filter.php");
+include(ROOT . "/components/cards/cards.php");
+include(ROOT . "/components/modal/modal.php");
 include(ROOT .  "/components/sidebars/sidebars.php");
+
+$conexao = connectDatabase();
+$where = setWhere('evento');
+$query = "SELECT evento.*,
+         assentamento.nome AS assentamento_nome,
+         endereco.rua,
+         endereco.numero,
+         endereco.bairro,
+         (SELECT COUNT(*) FROM usuario_participa_evento WHERE id_evento = evento.id) AS inscritos
+        FROM evento
+        LEFT JOIN assentamento ON evento.id_assentamento = assentamento.id
+        LEFT JOIN endereco ON assentamento.id_endereco = endereco.id
+        $where
+  ";
+$resultado = $conexao->query($query);
+// busca eventos que o usuario está inscrito
+$inscricao = $conexao->query("SELECT id_evento FROM usuario_participa_evento WHERE id_usuario =" . $_SESSION['USER_ID']);
+$eventos_inscritos = [];
+// cada row recebe o valor de um id do evento e eventos inscritos recebe os id dos eventos que o usuário está escrito
+while ($row = $inscricao->fetch_object()) {
+    $eventos_inscritos[] = $row->id_evento;
+}
+?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -22,10 +52,10 @@ include(ROOT .  "/components/sidebars/sidebars.php");
         <main class="px-5 row addScroll">
             <div class="container-fluid">
                 <div class="mb-3">
-                    <!-- aqui vai o que você quer por -->
                     <h2>Eventos</h2>
-                    <?php include(ROOT . "/components/filter/filter.php"); ?>
-                    <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-2 row-cols-xl-3 row-cols-xxl-4 g-4">
+<!--                    monta o filtro com botão e campo de selecionar -->
+                    <?php makeFilter() ?>
+                    <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-2 row-cols-xl-2 row-cols-xxl-3 g-5 main">
                         <?php
                         include (ROOT . "/php/config/database_php.php");
                         include(ROOT . "/php/handlers/filter.php");

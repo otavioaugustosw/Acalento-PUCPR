@@ -1,3 +1,13 @@
+<?php
+include(ROOT . "/php/config/database_php.php");
+include(ROOT . "/php/handlers/filter.php");
+include(ROOT . "/components/filter/filter.php");
+include(ROOT . "/components/cards/cards.php");
+include(ROOT . "/components/modal/modal.php");
+include(ROOT .  "/components/sidebars/sidebars.php");
+
+?>
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -24,11 +34,9 @@
                 <div class="mb-3">
                     <!-- aqui vai o que você quer por -->
                     <h2>Eventos</h2>
-                    <?php include (ROOT . "/components/filter/filter.php") ?>
-                    <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-2 row-cols-xl-3 row-cols-xxl-4 g-4">
+                    <?php makeFilter();?>
+                    <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-2 row-cols-xl-2 row-cols-xxl-3 g-5 main">
                         <?php
-                        include (ROOT . "/php/config/database_php.php");
-                        include(ROOT . "/php/handlers/filter.php");
                         $conexao = connectDatabase();
 
                         $where = setWhere('evento');

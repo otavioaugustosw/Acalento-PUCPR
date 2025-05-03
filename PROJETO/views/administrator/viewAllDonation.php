@@ -32,8 +32,7 @@ $conexao = connectDatabase();
             <div class="container-fluid">
                     <h2>Doações</h2>
                         <?php
-                        include(ROOT . "/components/filter/filter.php");
-                        include(ROOT . "/php/handlers/filter.php");
+                        makeFilter();
                         $where = setWhere('item');
                         $query = "SELECT item.*,
                                 usuario.nome AS usuario_nome,

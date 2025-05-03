@@ -35,8 +35,7 @@ ini_set('display_errors', 1);
                 <div class="mb-3">
                     <h2>Estoque</h2>
                     <?php
-                    include(ROOT . "/components/filter/filter.php");
-                    include(ROOT . "/php/handlers/filter.php");
+                    makeFilter();
                     $where = setWhere('item');
                     $query = "SELECT item.*,
                                       usuario.nome AS usuario_nome,

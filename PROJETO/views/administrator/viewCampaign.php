@@ -42,22 +42,9 @@ $resultado = $conexao->query($query);
                 <div class="mb-3">
                     <!-- aqui vai o que você quer por -->
                     <h2>Campanhas</h2>
-                    <?php include(ROOT . "/components/filter/filter.php");
-                    include(ROOT . "/php/handlers/filter.php");
-                    ?>
+                    <?php makeFilter() ?>
                     <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-2 row-cols-xl-3 row-cols-xxl-4 g-4">
                         <?php
-                        include (ROOT . "/php/config/database_php.php");
-                        $conexao = connectDatabase();
-
-                        $where = setWhere('campanha_doacao');
-                        $query = "SELECT campanha_doacao.*,
-                                     assentamento.nome AS assentamento_nome
-                              FROM campanha_doacao
-                              LEFT JOIN assentamento ON campanha_doacao.evento_destino = assentamento.id
-                                $where;";
-                        $resultado = $conexao->query($query);
-
                         if (!$resultado) {
                             showError(7);
                         }

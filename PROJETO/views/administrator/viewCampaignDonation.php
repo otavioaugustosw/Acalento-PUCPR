@@ -1,5 +1,8 @@
 <?php
 include (ROOT . "/php/config/database_php.php");
+include(ROOT . "/components/filter/filter.php");
+include(ROOT . "/php/handlers/filter.php");
+include(ROOT . "/components/sidebars/sidebars.php");
 
 // Pega o ID da campanha da URL
 $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
@@ -23,10 +26,10 @@ $conexao = connectDatabase();
 </head>
 
 <body>
-<?php include(ROOT . "/components/sidebars/sidebar-mobile.php") ?>
+<?php make_mobile_sidebar() ?>
 <div class="d-flex flex-nowrap">
-    <?php include(ROOT .  "/components/sidebars/sidebars.php") ?>
-
+    <!--    monta a sidebar desktop-->
+    <?php make_sidebar(); ?>
     <!-- conteudo -->
     <div class="main-content">
         <main class="px-5 row">

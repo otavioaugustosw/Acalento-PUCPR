@@ -1,3 +1,4 @@
+include(ROOT .  "/components/sidebars/sidebars.php");
 <!doctype html>
 <html lang="en">
 <head>
@@ -7,16 +8,16 @@
     <link rel="stylesheet" href="css/default.css">
     <link rel="stylesheet" href="css/main-content.css">
     <link rel="stylesheet" href="css/cards.css">
+    <link rel="stylesheet" href="css/form-style.css">
+    <link rel="stylesheet" href="css/sidebar.css">
     <title>Acalento | Eventos</title>
 </head>
-
 <body>
-<?php include(ROOT . "/components/sidebars/sidebar-mobile.php") ?>
+<!-- monta a sidebar mobile -->
+<?php make_mobile_sidebar() ?>
 <div class="d-flex flex-nowrap">
-    <?php include(ROOT .  "/components/sidebars/sidebars.php") ?>
-    <!-- fim sidebar -->
-
-    <!-- conteudo -->
+<!--    monta a sidebar desktop-->
+    <?php make_sidebar(); ?>
     <div class="main-content">
         <main class="px-5 row addScroll">
             <div class="container-fluid">

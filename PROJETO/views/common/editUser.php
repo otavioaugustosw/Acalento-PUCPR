@@ -1,6 +1,8 @@
 <?php
 include (ROOT . "/php/config/database_php.php");
 include (ROOT . "/php/handlers/formValidator.php");
+include(ROOT . "/components/sidebars/sidebars.php");
+
 $obj = connectDatabase();
 $id_usuario = $_SESSION['USER_ID'];
 $id_endereco = $_SESSION['USER_ADDRESS_ID'];
@@ -31,14 +33,15 @@ if (!$dados) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/form-style.css">
     <link rel="stylesheet" href="css/default.css">
-    <link rel="stylesheet" href="css/sidebars.css">
+    <link rel="stylesheet" href="css/sidebar.css">
     <link rel="stylesheet" href="css/main-content.css">
     <title>Meus Dados</title>
 </head>
 <body>
-<?php include(ROOT . "/components/sidebars/sidebar-mobile.php") ?>
+<?php make_mobile_sidebar() ?>
 <div class="d-flex flex-nowrap">
-    <?php include(ROOT .  "/components/sidebars/sidebars.php") ?>
+    <!--    monta a sidebar desktop-->
+    <?php make_sidebar(); ?>
 
 
     <div class="flex-grow-1 p-4 main-content">

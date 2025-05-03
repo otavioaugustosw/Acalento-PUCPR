@@ -2,6 +2,8 @@
 include (ROOT . "/php/config/database_php.php");
 include(ROOT . "/php/auth_services/auth_service_php.php");
 include (ROOT . "/php/handlers/formValidator.php");
+include(ROOT .  "/components/sidebars/sidebars.php");
+
 $obj = connectDatabase();
 ?>
     <!doctype html>
@@ -12,17 +14,18 @@ $obj = connectDatabase();
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
         <link rel="stylesheet" href="css/default.css">
-        <link rel="stylesheet" href="css/sidebars.css">
+        <link rel="stylesheet" href="css/sidebar.css">
         <link rel="stylesheet" href="css/form-style.css">
         <link rel="stylesheet" href="css/main-content.css">
         <title>Cadastro do administrador</title>
     </head>
     <body>
 
-    <?php include(ROOT . "/components/sidebars/sidebar-mobile.php") ?>
+    <!-- monta a sidebar mobile -->
+    <?php make_mobile_sidebar() ?>
     <div class="d-flex flex-nowrap">
-        <?php include(ROOT .  "/components/sidebars/sidebars.php") ?>
-    </div>
+        <!--    monta a sidebar desktop-->
+        <?php make_sidebar(); ?>
     <div class="flex-grow-1 p-4 main-content">
         <main class="container-fluid align-content-center">
             <h2 class="form-title">Informações de cadastro</h2>

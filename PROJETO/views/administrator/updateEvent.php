@@ -1,6 +1,8 @@
 <?php
 include (ROOT . "/php/config/database_php.php");
 include(ROOT . '/php/handlers/formValidator.php');
+include(ROOT .  "/components/sidebars/sidebars.php");
+
 $obj = connectDatabase();
 $id = (int)$_GET['id'];
 if (!isset($_GET['id'])) {
@@ -44,15 +46,16 @@ $assentamento = $obj->query("SELECT id, nome FROM assentamento");
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/form-style.css">
     <link rel="stylesheet" href="css/default.css">
-    <link rel="stylesheet" href="css/sidebars.css">
+    <link rel="stylesheet" href="css/sidebar.css">
     <link rel="stylesheet" href="css/main-content.css">
     <title>Acalento | Atualizar Evento</title>
 </head>
 
 <body>
-<?php include(ROOT . "/components/sidebars/sidebar-mobile.php") ?>
+<?php make_mobile_sidebar() ?>
 <div class="d-flex flex-nowrap">
-    <?php include(ROOT .  "/components/sidebars/sidebars.php") ?>
+    <!--    monta a sidebar desktop-->
+    <?php make_sidebar(); ?>
     <!-- fim sidebar -->
 
     <!-- conteudo -->

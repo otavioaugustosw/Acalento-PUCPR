@@ -1,20 +1,38 @@
+<?php
+include(ROOT .  "/components/sidebars/sidebars.php");
+include (ROOT . "/php/config/database_php.php");
+include(ROOT . "/components/filter/filter.php");
+include(ROOT . "/php/handlers/filter.php");
+$conexao = connectDatabase();
+$where = setWhere('campanha_doacao');
+$query = "SELECT campanha_doacao.*,
+                                     assentamento.nome AS assentamento_nome
+                              FROM campanha_doacao
+                              LEFT JOIN assentamento ON campanha_doacao.evento_destino = assentamento.id
+                                $where;";
+$resultado = $conexao->query($query);
+
+?>
+
 <!doctype html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/cards.css">
     <link rel="stylesheet" href="css/default.css">
-    <link rel="stylesheet" href="css/sidebars.css">
+    <link rel="stylesheet" href="css/form-style.css">
+    <link rel="stylesheet" href="css/cards.css">
+    <link rel="stylesheet" href="css/sidebar.css">
     <link rel="stylesheet" href="css/main-content.css">
     <title>Acalento | Campanhas</title>
 </head>
 
 <body>
-<?php include(ROOT . "/components/sidebars/sidebar-mobile.php") ?>
+<?php make_mobile_sidebar() ?>
 <div class="d-flex flex-nowrap">
-    <?php include(ROOT .  "/components/sidebars/sidebars.php") ?>
+    <!--    monta a sidebar desktop-->
+    <?php make_sidebar(); ?>
     <!-- fim sidebar -->
 
     <!-- conteudo -->

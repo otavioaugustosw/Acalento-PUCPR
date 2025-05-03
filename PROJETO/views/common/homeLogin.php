@@ -1,5 +1,7 @@
 <?php
 include (ROOT . "/php/config/database_php.php");
+include(ROOT . "/components/sidebars/sidebars.php");
+
 $conexao = connectDatabase();
 ?>
 <!doctype html>
@@ -9,16 +11,17 @@ $conexao = connectDatabase();
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/default.css">
-    <link rel="stylesheet" href="css/sidebars.css">
+    <link rel="stylesheet" href="css/sidebar.css">
     <link rel="stylesheet" href="css/main-content.css">
     <link rel="stylesheet" href="css/cards.css">
     <title>Acalento | Eventos</title>
 </head>
 
 <body>
-<?php include(ROOT . "/components/sidebars/sidebar-mobile.php") ?>
+<?php make_mobile_sidebar() ?>
 <div class="d-flex flex-nowrap">
-    <?php include(ROOT .  "/components/sidebars/sidebars.php") ?>
+    <!--    monta a sidebar desktop-->
+    <?php make_sidebar(); ?>
     <!-- fim sidebar -->
     <!-- conteudo -->
     <div class="main-content flex-grow-1">

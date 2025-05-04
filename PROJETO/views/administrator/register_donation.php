@@ -83,9 +83,16 @@ load_user_session_data($conn);
                         </div>
                         <div class="col-md-3">
                             <label for="inputUnidadeMedida" class="form-label">Unidade de Medida</label>
-                            <input type="text" class="form-control" id="inputUnidadeMedida" name="unidade_medida" value="<?= $_POST['unidade_medida'] ?? null ?>">
+                            <select id="inputUnidadeMedida" name="unidade_medida" class="form-select">
+                                <option value="">Selecione a unidade de medida</option>
+                                <option value="mg" <?= (($_POST['unidade_medida'] ?? '') == 'mg') ? 'selected' : '' ?>>Miligrama</option>
+                                <option value="g" <?= (($_POST['unidade_medida'] ?? '') == 'g') ? 'selected' : '' ?>>Grama</option>
+                                <option value="kg" <?= (($_POST['unidade_medida'] ?? '') == 'kg') ? 'selected' : '' ?>>Quilograma</option>
+                                <option value="ml" <?= (($_POST['unidade_medida'] ?? '') == 'ml') ? 'selected' : '' ?>>Mililitro</option>
+                                <option value="l" <?= (($_POST['unidade_medida'] ?? '') == 'l') ? 'selected' : '' ?>>Litro</option>
+                            </select>
                             <div id="validacaoUnidadeMedida" class="invalid-feedback">
-                                Digite uma unidade de medida válida.
+                                Selecione uma unidade de medida.
                             </div>
                         </div>
                         <div class="col-md-3">
@@ -177,6 +184,8 @@ function submitInformation($conn)
     $quantidade = isset($_POST['quantidade']) && $_POST['quantidade'] !== '' ? (int) $_POST['quantidade'] : null;
     $unidadeMedida = isset($_POST['unidade_medida']) && $_POST['unidade_medida'] !== '' ? $_POST['unidade_medida'] : null;
     $valor = isset($_POST['valor']) && $_POST['valor'] !== '' ? (float) $_POST['valor'] : null;
+    $opcoes_validas_um = ['mg', 'g', 'kg', 'ml', 'l'];
+    $opcoes_validas_categoria = ['Alimentício', 'Brinquedo', 'Limpeza', 'Outros'];
 
     if ($idEstoque !== null && !isNumericOnly($idEstoque)) {
         displayValidation('inputEstoque', false);
@@ -203,7 +212,7 @@ function submitInformation($conn)
         return;
     }
 
-    if ($unidadeMedida !== null && (!isAlphaOnly($unidadeMedida) || !hasMaxLength($unidadeMedida, 3))) {
+    if ($unidadeMedida !== null && !in_array($unidadeMedida, $opcoes_validas_um) && (!isAlphaOnly($unidadeMedida) || !hasMaxLength($unidadeMedida, 3))) {
         displayValidation('inputUnidadeMedida', false);
         return;
     }
@@ -213,7 +222,7 @@ function submitInformation($conn)
         return;
     }
 
-    if (!isAlphaOnly($_POST['tipo'])) {
+    if (!in_array($opcoes_validas_categoria, $_POST['tipo']) && !isAlphaOnly($_POST['tipo'])) {
         displayValidation('inputTipo', false);
         return;
     }

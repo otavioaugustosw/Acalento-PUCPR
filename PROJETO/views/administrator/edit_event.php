@@ -39,7 +39,12 @@ $events = get_events_where($conn, setWhere('evento'));
             <div class="container-fluid">
                 <div class="mb-3">
                     <!-- aqui vai o que você quer por -->
-                    <h2>Eventos</h2>
+                    <div class="d-flex justify-content-between">
+                        <h2>Eventos</h2>
+                        <div class="my-5">
+                            <?php makeButton("Cadastrar novo evento", "btn btn-primary", "index.php?adm=2"); ?>
+                        </div>
+                    </div>
                     <?php makeFilter();?>
                     <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-2 row-cols-xl-2 row-cols-xxl-3 g-5 main">
                         <?php

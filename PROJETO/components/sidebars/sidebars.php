@@ -30,7 +30,7 @@ function make_sidebar() {?>
             <div class="logo-container py-3">
                 <img src="assets/logo/Acalento_logo_claro.svg" alt="Logo Acalento Claro" class=" logo logo-tema-claro">
             </div>
-            <span class="fs-3 fw-semibold saudacao mt-5 ">Olá, <?= $_SESSION['USER_NAME']?></span>
+            <span class="fs-3 fw-semibold saudacao mt-5 ">Olá, <?= preg_split('/[ ]/', $_SESSION['USER_NAME'])[0] ?></span>
 </a>
 <!-- sidebar navigation -->
 <ul class="sidebar-nav p-0 list-unstyled">
@@ -91,7 +91,7 @@ function make_sidebar() {?>
                 <?php if ($_SESSION['USER_IS_ADMINISTRATOR']) { ?>
                     <li><a href="index.php?adm=1" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Cadastrar campanha</a></li>
                     <li><a href="index.php?adm=8" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Visualizar campanhas</a></li>
-                    <li><a href="index.php?adm=3" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Cadastrar item</a></li>
+                    <li><a href="index.php?adm=3" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Registrar doação</a></li>
                     <li><a href="index.php?adm=7" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Visualizar doações</a></li>
                 <?php } ?>
                 <?php if ($_SESSION['USER_IS_DONATOR']) { ?>

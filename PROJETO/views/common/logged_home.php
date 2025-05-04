@@ -37,22 +37,7 @@ $table_head = ["Item", "Quantidade", "Tipo", "Doador", "Data da doação", "Dest
             <div class="container-fluid">
                 <div class="mb-3">
                     <div class="row">
-                        <?php if(!$_SESSION['USER_IS_DONATOR'] && !$_SESSION['USER_IS_ADMINISTRATOR']) { ?>
-
-                        <div class="col-md-6 px-4">
-                            <h2>Últimos eventos</h2>
-                            <?php
-                            if (!$last_events) {
-                                showError(7);
-                            }
-                            if ($last_events->num_rows <= 0) {
-                                echo '<h3>Nenhum evento cadastrado</h3>';
-                            } else {
-                                render_events_card($last_events, $subscribed_events , voluntary: true, horizontal: true);
-                            } ?>
-                        </div>
-                        <?php }
-
+                        <?php
                         if (!$_SESSION['USER_IS_ADMINISTRATOR']) { ?>
                         <div class="col-md-6 px-4">
                             <h2>Suas últimas doações</h2>

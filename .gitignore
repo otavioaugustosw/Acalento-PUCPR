@@ -5,3 +5,5 @@ PROJETO/css/header.css
 .idea/workspace.xml
 PROJETO/.idea/sqldialects.xml
 .DS_Store
+PROJETO/.idea/dataSources.xml
+PROJETO/php/config/password_generator.php

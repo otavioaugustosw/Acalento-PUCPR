@@ -1,10 +1,10 @@
 <?php
-include(ROOT .'/php/config/session.php');
+include(ROOT . '/php/config/session_php.php');
 include(ROOT . '/php/config/database_php.php');
 include(ROOT . '/php/auth_services/auth_service_php.php');
-include(ROOT . '/php/handlers/formValidator.php');
+include(ROOT . '/php/handlers/form_validator_php.php');
 
-$sql = connectDatabase();
+$conn = connectDatabase();
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -37,7 +37,7 @@ $sql = connectDatabase();
 </html>
 <?php
 if(isset($_POST['email'], $_POST['password'])) {
-    $result = authenticateUser($sql, $_POST['email'], $_POST['password']);
+    $result = authenticate_user($conn, $_POST['email'], $_POST['password']);
     displayValidation('email', isValidEmail($_POST['email']));
     displayValidation('password', hasContent($_POST['password']));
     if ($result['status']) {

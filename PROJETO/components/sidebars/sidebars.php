@@ -1,18 +1,6 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/reset.css">
-    <link rel="stylesheet" href="css/default.css">
-    <link href="css/form-style.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/sidebars.css">
-    <title>sidebar</title>
-</head>
-<body>
-
-<!-- IMAGENS -->
+<?php
+function make_sidebar() {?>
+    <!-- IMAGENS -->
 <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
     <symbol id="home" viewBox="0 0 16 16">
         <path d="M8 3.293l-6 6V14a1 1 0 0 0 1 1h3v-3h4v3h3a1 1 0 0 0 1-1v-4.707l-6-6z"/>
@@ -42,88 +30,88 @@
             <div class="logo-container py-3">
                 <img src="assets/logo/Acalento_logo_claro.svg" alt="Logo Acalento Claro" class=" logo logo-tema-claro">
             </div>
-            <span class="fs-3 fw-semibold saudacao mt-5 ">Olá, <?= $_SESSION['USER_NAME']?></span>
+            <span class="fs-3 fw-semibold saudacao mt-5 ">Olá, <?= preg_split('/[ ]/', $_SESSION['USER_NAME'])[0] ?></span>
+</a>
+<!-- sidebar navigation -->
+<ul class="sidebar-nav p-0 list-unstyled">
+    <li class="sidebar-item mb-1">
+        <a  href="index.php?common=6" class="btn btn-toggle  d-inline-flex align-items-center rounded border-0 collapsed">
+            <svg class="bi me-2" width="20" height="20" aria-hidden="true">
+                <use xlink:href="#home"/>
+            </svg>
+            Página Inicial
         </a>
-        <!-- sidebar navigation -->
-        <ul class="sidebar-nav p-0 list-unstyled">
-            <li class="sidebar-item mb-1">
-                <a  href="index.php?common=6" class="btn btn-toggle  d-inline-flex align-items-center rounded border-0 collapsed">
-                    <svg class="bi me-2" width="20" height="20" aria-hidden="true">
-                        <use xlink:href="#home"/>
-                    </svg>
-                    Página Inicial
-                </a>
-            </li>
+    </li>
 
-            <li class="sidebar-item mb-1">
-                <a  href="index.php?common=7" class="btn btn-toggle  d-inline-flex align-items-center rounded border-0 collapsed">
-                    <svg class="bi me-2" width="20" height="20" aria-hidden="true">
-                        <use xlink:href="#person"/>
-                    </svg>
-                   Minha conta
-                </a>
-            </li>
+    <li class="sidebar-item mb-1">
+        <a  href="index.php?common=7" class="btn btn-toggle  d-inline-flex align-items-center rounded border-0 collapsed">
+            <svg class="bi me-2" width="20" height="20" aria-hidden="true">
+                <use xlink:href="#person"/>
+            </svg>
+            Minha conta
+        </a>
+    </li>
 
-            <li class="sidebar-item mb-1">
-                <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
-                        data-bs-toggle="collapse" data-bs-target="#eventos-collapse" aria-expanded="false">
-                    <svg class="bi me-2" width="20" height="20" aria-hidden="true">
-                        <use xlink:href="#puzzle" >
-                    </svg>
-                    Eventos
-                </button>
-                <div class="collapse" id="eventos-collapse">
-                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                        <?php if (!$_SESSION['USER_IS_VOLUNTARY']) { ?>
-                        <li><a href="index.php?voluntary=2" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Participe de eventos</a></li>
-                        <?php } ?>
-                        <?php if ($_SESSION['USER_IS_ADMINISTRATOR']) { ?>
-                        <li><a href="index.php?adm=2" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Cadastrar evento</a></li>
-                        <li><a href="index.php?adm=5" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Editar evento</a></li>
-                        <?php } ?>
-                        <?php if ($_SESSION['USER_IS_VOLUNTARY']) { ?>
-                        <li><a href="index.php?voluntary=2" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Inscrever-se</a></li>
-                        <?php } ?>
-                    </ul>
-                </div>
-            </li>
-
-            <li class="sidebar-item mb-1">
-                <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#doacoes-collapse" aria-expanded="false">
-                    <svg class="bi me-2" width="20" height="20" aria-hidden="true">
-                        <use xlink:href="#heart" />
-                    </svg>
-                    Doações
-                </button>
-                <div class="collapse" id="doacoes-collapse">
-                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                        <?php if (!$_SESSION['USER_IS_DONATOR']) { ?>
-<!--                        <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Faça a sua primeira doação</a></li>-->
-                        <?php } ?>
-                        <?php if ($_SESSION['USER_IS_ADMINISTRATOR']) { ?>
-                        <li><a href="index.php?adm=1" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Cadastrar campanha</a></li>
-                        <li><a href="index.php?adm=8" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Visualizar campanhas</a></li>
-                        <li><a href="index.php?adm=3" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Cadastrar item</a></li>
-                        <li><a href="index.php?adm=7" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Visualizar doações</a></li>
-                        <?php } ?>
-                        <?php if ($_SESSION['USER_IS_DONATOR']) { ?>
-                        <li><a href="index.php?donator=1" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Suas doações</a></li>
-                        <?php } ?>
-                    </ul>
-                </div>
-            </li>
-        </ul>
-        <!-- fim da navegão -->
-        <div class="sidebar-footer border-top d-flex mt-auto py-2">
-            <a  href="index.php?common=3" class="btn btn-toggle  d-inline-flex align-items-center rounded border-0 collapsed">
-                <svg class="bi me-2" width="20" height="20" aria-hidden="true">
-                    <use xlink:href="#doorOpen"/>
-                </svg>
-                Sair
-            </a>
+    <li class="sidebar-item mb-1">
+        <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+                data-bs-toggle="collapse" data-bs-target="#eventos-collapse" aria-expanded="false">
+            <svg class="bi me-2" width="20" height="20" aria-hidden="true">
+                <use xlink:href="#puzzle" >
+            </svg>
+            Eventos
+        </button>
+        <div class="collapse" id="eventos-collapse">
+            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                <?php if (!$_SESSION['USER_IS_VOLUNTARY']) { ?>
+                    <li><a href="index.php?voluntary=2" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Participe de eventos</a></li>
+                <?php } ?>
+                <?php if ($_SESSION['USER_IS_ADMINISTRATOR']) { ?>
+                    <li><a href="index.php?adm=2" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Cadastrar evento</a></li>
+                    <li><a href="index.php?adm=5" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Editar evento</a></li>
+                <?php } ?>
+                <?php if ($_SESSION['USER_IS_VOLUNTARY']) { ?>
+                    <li><a href="index.php?voluntary=2" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Inscrever-se</a></li>
+                <?php } ?>
+            </ul>
         </div>
-    </div>
-    <div class="b-example-vr"></div>
+    </li>
+
+    <li class="sidebar-item mb-1">
+        <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#doacoes-collapse" aria-expanded="false">
+            <svg class="bi me-2" width="20" height="20" aria-hidden="true">
+                <use xlink:href="#heart" />
+            </svg>
+            Doações
+        </button>
+        <div class="collapse" id="doacoes-collapse">
+            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                <?php if (!$_SESSION['USER_IS_DONATOR']) { ?>
+                    <!--                        <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Faça a sua primeira doação</a></li>-->
+                <?php } ?>
+                <?php if ($_SESSION['USER_IS_ADMINISTRATOR']) { ?>
+                    <li><a href="index.php?adm=1" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Cadastrar campanha</a></li>
+                    <li><a href="index.php?adm=8" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Visualizar campanhas</a></li>
+                    <li><a href="index.php?adm=3" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Registrar doação</a></li>
+                    <li><a href="index.php?adm=7" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Visualizar doações</a></li>
+                <?php } ?>
+                <?php if ($_SESSION['USER_IS_DONATOR']) { ?>
+                    <li><a href="index.php?donator=1" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Suas doações</a></li>
+                <?php } ?>
+            </ul>
+        </div>
+    </li>
+</ul>
+<!-- fim da navegão -->
+<div class="sidebar-footer border-top d-flex mt-auto py-2">
+    <a  href="index.php?common=3" class="btn btn-toggle  d-inline-flex align-items-center rounded border-0 collapsed">
+        <svg class="bi me-2" width="20" height="20" aria-hidden="true">
+            <use xlink:href="#doorOpen"/>
+        </svg>
+        Sair
+    </a>
+</div>
+</div>
+<div class="b-example-vr"></div>
 </aside>
 
 <script>
@@ -137,5 +125,22 @@
     });
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+<?php
+}
+
+function make_mobile_sidebar()
+{?>
+    <button class="btn btn-primary d-md-none m-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSidebar" aria-controls="offcanvasSidebar">&#9776;</button>
+
+    <!-- Menu mobile -->
+    <div class="offcanvas offcanvas-top d-md-none" tabindex="-1" id="offcanvasSidebar" aria-labelledby="offcanvasSidebarLabel">
+        <div class="offcanvas-header justify-content-between align-items-center px-3 pt-3 pb-0 border-bottom-0">
+            <span class="fs-3 fw-semibold mb-1">Olá, <?= $_SESSION['USER_NAME']?></span>
+            <button type="button" class="btn-close ms-2" data-bs-dismiss="offcanvas" aria-label="Fechar"></button>
+        </div>
+        <div class="offcanvas-body pt-2 px-3" id="offcanvasContent"></div>
+    </div>
+
+<?php }
+?>
+

@@ -12,39 +12,39 @@ const MESSAGES = [
     "USER_AUTHENTICATED" => ["status" => true, "statusName" => "USER_AUTHENTICATED"],
 ];
 
-function authenticateUser($sql, $email, $typedPassword): array
+function authenticate_user($sql, $email, $typedPassword): array
 {
     if ($_SESSION['LOGIN_ATTEMPTS'] >= MAX_LOGIN_ATTEMPTS) {
         sleep(3);
         return ["status" => false, "statusName" => "BLOCK"];
     }
     try {
-        $userExists = _getUserByEmail($sql, $email);
+        $userExists = _get_user_by_email($sql, $email);
         if (!$userExists["status"]) {
-            _handleFailedAttempt();
+            _handle_failed_attempt();
             return $userExists;
         }
         $user = $userExists["user"];
-        $passwordResult = _isPasswordCorrect($typedPassword, $user->senha);
+        $passwordResult = _is_password_correct($typedPassword, $user->senha);
         if (!$passwordResult["status"]) {
-            _handleFailedAttempt();
+            _handle_failed_attempt();
             return $passwordResult;
         }
         session_regenerate_id(true);
         $_SESSION["USER_ID"] = $user->id;
         $_SESSION['LOGIN_ATTEMPTS'] = 0;
-        return _loadUserSessionData($sql);
+        return load_user_session_data($sql);
     } catch (mysqli_sql_exception $E) {
         return MESSAGES["AUTH_FAILURE"];
     }
 }
 
-function generatePasswordHash($typedPassword): string
+function generate_password_hash($typedPassword): string
 {
     return password_hash($typedPassword . $_ENV['PEPPER_KEY'], PASSWORD_DEFAULT);
 }
 
-function verifyQueryResult($user): array
+function _verify_query_result($user): array
 {
     if (!$user) {
         return MESSAGES["FETCHING_DATA_ERROR"];
@@ -52,11 +52,11 @@ function verifyQueryResult($user): array
     return MESSAGES["USER_FOUND"];
 }
 
-function _handleFailedAttempt() {
+function _handle_failed_attempt() {
     $_SESSION['LOGIN_ATTEMPTS'] = $_SESSION['LOGIN_ATTEMPTS'] + 1;
 }
 
-function _getUserByEmail($sql, $email): array
+function _get_user_by_email($sql, $email): array
 {
     $query = "SELECT id, senha FROM usuario WHERE email = ?";
     $stmt = $sql->prepare($query);
@@ -64,14 +64,14 @@ function _getUserByEmail($sql, $email): array
     $stmt->execute();
     $result = $stmt->get_result();
     $user = $result->fetch_object();
-    $resultStatus = verifyQueryResult($user);
+    $resultStatus = _verify_query_result($user);
     if (!$resultStatus["status"]) {
         return $resultStatus;
     }
     return ["status"=>true,"user"=>$user];
 }
 
-function _isPasswordCorrect($password, $hashedPassword): array
+function _is_password_correct($password, $hashedPassword): array
 {
     $pepperedPassword = $password . $_ENV['PEPPER_KEY'];
     if(password_verify($pepperedPassword, $hashedPassword)){
@@ -81,7 +81,7 @@ function _isPasswordCorrect($password, $hashedPassword): array
     }
 }
 
-function _loadUserSessionData($sql): array
+function load_user_session_data($sql): array
 {
     $query = "SELECT email, nome, eh_doador, eh_adm, eh_voluntario, id_endereco FROM usuario WHERE id = ?;";
     $stmt = $sql->prepare($query);
@@ -89,11 +89,10 @@ function _loadUserSessionData($sql): array
     $stmt->execute();
     $result = $stmt->get_result();
     $user = $result->fetch_object();
-    $resultStatus = verifyQueryResult($user);
+    $resultStatus = _verify_query_result($user);
     if (!$resultStatus["status"]) {
         return $resultStatus;
     }
-    var_dump($user);
     $_SESSION['USER_EMAIL'] = $user->email;
     $_SESSION['USER_NAME'] = $user->nome;
     $_SESSION['USER_IS_DONATOR'] = $user->eh_doador;

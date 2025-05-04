@@ -18,7 +18,6 @@ function makeFilter()
 
             <!-- Campo de data (visível condicionalmente) -->
             <div class="col-md-3" id="filtroData" style="display: none;">
-                <label for="dia" class="form-label">Data</label>
                 <input type="date" name="dia" id="dia" class="form-control">
             </div>
 

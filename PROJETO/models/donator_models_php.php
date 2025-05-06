@@ -2,14 +2,14 @@
 function get_donations_where($conn, $where)
 {
     $query = "
-            SELECT item.*,
+            SELECT doacao.*,
             usuario.nome AS usuario_nome,
-            opcao_item.nome AS opcao_nome,
+            opcao_item_doacao.nome AS opcao_nome,
             campanha_doacao.nome AS campanha_doacao_nome
-            FROM item
-            LEFT JOIN usuario ON item.id_usuario = usuario.id
-            LEFT JOIN opcao_item ON item.id_opcao = opcao_item.id
-            LEFT JOIN campanha_doacao ON item.id_campanha_doacao = campanha_doacao.id
+            FROM doacao
+            LEFT JOIN usuario ON doacao.id_usuario = usuario.id
+            LEFT JOIN opcao_item_doacao ON doacao.id_opcao_item_doacao = opcao_item_doacao.id
+            LEFT JOIN campanha_doacao ON doacao.id_campanha_doacao = campanha_doacao.id
             $where
             ";
 

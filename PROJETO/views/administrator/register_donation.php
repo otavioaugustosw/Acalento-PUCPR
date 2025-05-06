@@ -1,8 +1,10 @@
 <?php
-include (ROOT . "/php/config/database_php.php");
+include(ROOT . "/php/config/database_php.php");
 include(ROOT . '/php/handlers/form_validator_php.php');
 include(ROOT .  "/components/sidebars/sidebars.php");
-include (ROOT . "/php/auth_services/auth_service_php.php");
+include(ROOT . "/php/auth_services/auth_service_php.php");
+include(ROOT . "/components/back/back.php");
+
 
 $conn = connectDatabase();
 load_user_session_data($conn);
@@ -13,7 +15,8 @@ load_user_session_data($conn);
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/css/bootstrap-select.min.css">
     <link rel="stylesheet" href="css/form-style.css">
     <link rel="stylesheet" href="css/default.css">
     <link rel="stylesheet" href="css/sidebar.css">
@@ -35,15 +38,18 @@ load_user_session_data($conn);
             <div class="container-fluid">
                 <div class="mb-3">
                     <!-- aqui vai o que você quer por -->
+                    <?php make_buttom_back();?>
                     <h4>Registrar doação</h4>
                     <form class="row g-3" method="POST" action="">
                         <div class="col-md-4">
                             <label for="inputDoador" class="form-label">Doador*</label>
-                            <select name="id_usuario" id="inputDoador" class="form-select">
+                            <select name="id_usuario" id="inputDoador" class="selectpicker" data-live-search="true">
                                 <option value="">Selecione o doador</option>
                                 <?php $doador = $conn->query("SELECT id, nome FROM usuario");
                                 while ($a = $doador->fetch_object()) { ?>
-                                    <option value="<?php echo $a->id;?>" <?= (isset($_POST['id_usuario']) && $_POST['id_usuario'] == $a->id) ? 'selected' : '' ?>><?php echo $a->nome; ?></option>
+                                    <option value="<?php echo $a->id;?>" <?= (isset($_POST['id_usuario']) && $_POST['id_usuario'] == $a->id) ? 'selected' : '' ?>>
+                                        <?php echo $a->nome; ?>
+                                    </option>
                                 <?php } ?>
                                 <option value="0">Doador não cadastrado</option>
                             </select>
@@ -168,6 +174,17 @@ load_user_session_data($conn);
         document.getElementById('campoCampanha').style.display = tipo === 'campanha' ? 'block' : 'none';
         document.getElementById('campoEstoque').style.display = tipo === 'estoque' ? 'block' : 'none';
     }
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/js/bootstrap-select.min.js"></script>
+<script>
+    $(document).ready(function () {
+        console.log("DOM carregado");
+        $('.selectpicker').selectpicker();
+        console.log("Selectpicker aplicado:", $('.selectpicker').length);
+    });
+    });
 </script>
 </body>
 </html>

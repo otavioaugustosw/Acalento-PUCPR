@@ -6,7 +6,7 @@ include(ROOT . "/components/sidebars/sidebars.php");
 $conn = connectDatabase();
 
 // query para buscar os eventos no select
-$eventos = $conn->query("SELECT id, nome FROM evento WHERE status = 0");
+$eventos = $conn->query("SELECT id, nome FROM evento WHERE deletado = 0");
 ?>
 
 <!doctype html>

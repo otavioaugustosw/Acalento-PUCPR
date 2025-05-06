@@ -26,7 +26,7 @@ function setWhere(string $nome): string
     $db    = connectDatabase();
     $table = $nome; // ex.: "evento"   ou  "item"
 
-    if($table === 'item' || $table === 'campanha_doacao') {
+    if($table === 'doacao' || $table === 'campanha_doacao') {
         $filtro = $_POST['filtro'] ?? 'todos';
     } else {
         $filtro = $_POST['filtro'] ?? 'futuros';
@@ -42,19 +42,19 @@ function setWhere(string $nome): string
     /* monta o WHERE ------------------------------------------------ */
     $where = '';
 
-    if (hasColumn($db,$table,'status')) {
+    if (hasColumn($db,$table,'deletado')) {
 
         if ($dia !== '') {
             // dia exato tem prioridade
-            $where = "WHERE DATE($table.data) = '$dia' AND $table.status = 0";
+            $where = "WHERE DATE($table.data) = '$dia' AND $table.deletado = 0";
         } else {
             switch ($filtro) {
                 case 'futuros':
-                    $where = "WHERE $table.data >= NOW() AND $table.status = 0";
+                    $where = "WHERE $table.data >= NOW() AND $table.deletado = 0";
                     break;
 
                 case 'passados':
-                    $where = "WHERE $table.data <= NOW() AND $table.status = 0";
+                    $where = "WHERE $table.data <= NOW() AND $table.deletado = 0";
                     break;
                 case "mes":
                     /* DATESUB: para subtrair um mês do dia de hoje (CURRENT_DATE)
@@ -62,10 +62,10 @@ function setWhere(string $nome): string
                     LAST_DAY: pega o último dia do mês */
                     $where = "WHERE $table.data BETWEEN
                     DATE_FORMAT(DATE_SUB(CURRENT_DATE, INTERVAL 1 MONTH), '%Y-%m-01') AND LAST_DAY(DATE_SUB(CURRENT_DATE, INTERVAL 1 MONTH))
-                    AND $table.status = 0";
+                    AND $table.deletado = 0";
                     break;
                 case 'todos':
-                    $where = "WHERE $table.status = 0";
+                    $where = "WHERE $table.deletado = 0";
                     break;
             }
         }
@@ -101,20 +101,20 @@ function set_where_donations($view, $campaign_id = 0)
     if ($_SESSION['USER_IS_ADMINISTRATOR'] && isset($view)) {
         switch ($view) {
             case 'adm':
-                return setWhere('item');
+                return setWhere('doacao');
             case 'inventory':
-               return setWhere('item') . " AND item.id_estoque IS NOT NULL";
+               return setWhere('doacao') . " AND doacao.id_estoque IS NOT NULL";
             case 'campaign':
                 if ($campaign_id <= 0) {
                     showError(10);
-                    return setWhere('item') . " AND id_usuario =" . $_SESSION['USER_ID'];
+                    return setWhere('doacao') . " AND id_usuario =" . $_SESSION['USER_ID'];
 ;
                 }
-                return setWhere('item') . " AND item.id_campanha_doacao = $campaign_id";
+                return setWhere('doacao') . " AND doacao.id_campanha_doacao = $campaign_id";
             default:
-                return setWhere('item') . " AND id_usuario =" . $_SESSION['USER_ID'];
+                return setWhere('doacao') . " AND id_usuario =" . $_SESSION['USER_ID'];
         }
     } else {
-        return setWhere('item') . " AND id_usuario =" . $_SESSION['USER_ID'];
+        return setWhere('doacao') . " AND id_usuario =" . $_SESSION['USER_ID'];
     }
 }

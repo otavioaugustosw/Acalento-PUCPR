@@ -41,7 +41,7 @@ function render_donator_donations_table(array $table_columns, $donations)
             $table_rows = [
                 $donation->opcao_nome,
                 $donation->quantidade,
-                $donation->tipo,
+                $donation->categoria,
                 $donation->usuario_nome ?? 'Doador não cadastrado',
                 format_date($donation->data),
                 $donation->campanha_doacao_nome ?? 'Estoque'

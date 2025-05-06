@@ -1,4 +1,5 @@
 <?php
+include (ROOT. '/components/back/back.php');
 include (ROOT . '/components/buttons/buttons.php');
 include (ROOT . '/components/modal/modal.php');
 function make_text_card($title, $text1, $text2, $buttons = null)

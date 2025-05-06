@@ -39,6 +39,7 @@ $events = get_events_where($conn, setWhere('evento'));
             <div class="container-fluid">
                 <div class="mb-3">
                     <!-- aqui vai o que você quer por -->
+                    <?php make_buttom_back(); ?>
                     <div class="d-flex justify-content-between">
                         <h2>Eventos</h2>
                         <div class="my-5">

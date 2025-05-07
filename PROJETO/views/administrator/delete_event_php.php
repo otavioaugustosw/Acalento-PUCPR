@@ -7,7 +7,7 @@ if (isset($_GET['id'])) {
     $conn = connectDatabase();
 
     $query = "UPDATE evento 
-              SET status=1 
+              SET inativo=1 
               WHERE id = $id";
     $resultado = $conn->query($query);
 

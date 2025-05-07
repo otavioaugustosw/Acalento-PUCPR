@@ -8,8 +8,8 @@ include(ROOT . "/models/voluntary_models_php.php");
 include (ROOT . "/php/handlers/filter_php.php");
 
 $conn = connectDatabase();
-$next_events = get_events_where($conn, 'WHERE evento.data >= NOW() AND evento.deletado = 0 ORDER BY evento.id DESC LIMIT 2;');
-$last_events = get_events_where($conn, 'WHERE evento.data < NOW() AND evento.deletado = 0 LIMIT 2;');
+$next_events = get_events_where($conn, 'WHERE evento.data >= NOW() AND evento.inativo = 0 ORDER BY evento.id DESC LIMIT 2;');
+$last_events = get_events_where($conn, 'WHERE evento.data < NOW() AND evento.inativo = 0 LIMIT 2;');
 $subscribed_events = get_subscribed_events($conn, $_SESSION['USER_ID']);
 $all_donations = get_donations_where($conn, "ORDER BY doacao.id DESC LIMIT 10");
 $my_donations = get_donations_where($conn, set_where_donations('myown'));

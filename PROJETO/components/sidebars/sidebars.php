@@ -13,13 +13,17 @@ function make_sidebar() {?>
     <symbol id="puzzle" viewBox="0 0 16 16">
         <path d="M3.112 3.645A1.5 1.5 0 0 1 4.605 2H7a.5.5 0 0 1 .5.5v.382c0 .696-.497 1.182-.872 1.469a.5.5 0 0 0-.115.118l-.012.025L6.5 4.5v.003l.003.01q.005.015.036.053a.9.9 0 0 0 .27.194C7.09 4.9 7.51 5 8 5c.492 0 .912-.1 1.19-.24a.9.9 0 0 0 .271-.194.2.2 0 0 0 .036-.054l.003-.01v-.008l-.012-.025a.5.5 0 0 0-.115-.118c-.375-.287-.872-.773-.872-1.469V2.5A.5.5 0 0 1 9 2h2.395a1.5 1.5 0 0 1 1.493 1.645L12.645 6.5h.237c.195 0 .42-.147.675-.48.21-.274.528-.52.943-.52.568 0 .947.447 1.154.862C15.877 6.807 16 7.387 16 8s-.123 1.193-.346 1.638c-.207.415-.586.862-1.154.862-.415 0-.733-.246-.943-.52-.255-.333-.48-.48-.675-.48h-.237l.243 2.855A1.5 1.5 0 0 1 11.395 14H9a.5.5 0 0 1-.5-.5v-.382c0-.696.497-1.182.872-1.469a.5.5 0 0 0 .115-.118l.012-.025.001-.006v-.003l-.003-.01a.2.2 0 0 0-.036-.053.9.9 0 0 0-.27-.194C8.91 11.1 8.49 11 8 11s-.912.1-1.19.24a.9.9 0 0 0-.271.194.2.2 0 0 0-.036.054l-.003.01v.002l.001.006.012.025c.016.027.05.068.115.118.375.287.872.773.872 1.469v.382a.5.5 0 0 1-.5.5H4.605a1.5 1.5 0 0 1-1.493-1.645L3.356 9.5h-.238c-.195 0-.42.147-.675.48-.21.274-.528.52-.943.52-.568 0-.947-.447-1.154-.862C.123 9.193 0 8.613 0 8s.123-1.193.346-1.638C.553 5.947.932 5.5 1.5 5.5c.415 0 .733.246.943.52.255.333.48.48.675.48h.238z"/>
     </symbol>
+
     <symbol id="person" viewBox="0 0 16 16">
         <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
-
     </symbol>
 
     <symbol id="doorOpen" viewBox="0 0 16 16">
         <path d="M1.5 15a.5.5 0 0 0 0 1h13a.5.5 0 0 0 0-1H13V2.5A1.5 1.5 0 0 0 11.5 1H11V.5a.5.5 0 0 0-.57-.495l-7 1A.5.5 0 0 0 3 1.5V15zM11 2h.5a.5.5 0 0 1 .5.5V15h-1zm-2.5 8c-.276 0-.5-.448-.5-1s.224-1 .5-1 .5.448.5 1-.224 1-.5 1"/>
+    </symbol>
+
+    <symbol id="key" viewBox="0 0 16 16">
+        <path d="M3.5 11.5a3.5 3.5 0 1 1 3.163-5H14L15.5 8 14 9.5l-1-1-1 1-1-1-1 1-1-1-1 1H6.663a3.5 3.5 0 0 1-3.163 2M2.5 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/>
     </symbol>
 </svg>
 
@@ -64,14 +68,10 @@ function make_sidebar() {?>
             <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                 <?php if (!$_SESSION['USER_IS_VOLUNTARY']) { ?>
                     <li><a href="index.php?voluntary=2" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Participe de eventos</a></li>
-                <?php } ?>
-                <?php if ($_SESSION['USER_IS_ADMINISTRATOR']) { ?>
-                    <li><a href="index.php?adm=2" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Cadastrar evento</a></li>
-                    <li><a href="index.php?adm=5" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Editar evento</a></li>
-                <?php } ?>
-                <?php if ($_SESSION['USER_IS_VOLUNTARY']) { ?>
+                <?php } else { ?>
                     <li><a href="index.php?voluntary=2" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Inscrever-se</a></li>
-                <?php } ?>
+                    <?php
+                }?>
             </ul>
         </div>
     </li>
@@ -87,19 +87,33 @@ function make_sidebar() {?>
             <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                 <?php if (!$_SESSION['USER_IS_DONATOR']) { ?>
                     <!--                        <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Faça a sua primeira doação</a></li>-->
-                <?php } ?>
-                <?php if ($_SESSION['USER_IS_ADMINISTRATOR']) { ?>
+                <?php } else {?>
+                    <li><a href="index.php?donator=1" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Suas doações</a></li>
+
+                <?php }?>
+            </ul>
+        </div>
+    </li>
+    <?php if ($_SESSION['USER_IS_ADMINISTRATOR']) { ?>
+        <li class="sidebar-item mb-1">
+            <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#admin-collapse" aria-expanded="false">
+                <svg class="bi me-2" width="20" height="20" aria-hidden="true">
+                    <use xlink:href="#key" />
+                </svg>
+                Administrador
+            </button>
+            <div class="collapse" id="admin-collapse">
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                     <li><a href="index.php?adm=1" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Cadastrar campanha</a></li>
                     <li><a href="index.php?adm=8" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Visualizar campanhas</a></li>
                     <li><a href="index.php?adm=3" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Registrar doação</a></li>
                     <li><a href="index.php?adm=7" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Visualizar doações</a></li>
-                <?php } ?>
-                <?php if ($_SESSION['USER_IS_DONATOR']) { ?>
-                    <li><a href="index.php?donator=1" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Suas doações</a></li>
-                <?php } ?>
-            </ul>
-        </div>
-    </li>
+                    <li><a href="index.php?adm=2" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Cadastrar evento</a></li>
+                    <li><a href="index.php?adm=5" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Editar evento</a></li>
+                </ul>
+            </div>
+        </li>
+    <?php } ?>
 </ul>
 <!-- fim da navegão -->
 <div class="sidebar-footer border-top d-flex mt-auto py-2">

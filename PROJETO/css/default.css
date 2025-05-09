@@ -44,12 +44,16 @@ p {
     --secondary-blue: #CBDEE4;
 
     /*VERDE PADRÃO*/
-    --primary-green: #00AA25;
-    --secondary-green: #D8FFE1;
+    --dark-green: #104003;
+    --primary-green: #5cb70d;
+    --secondary-green: #c7ffa7;
 
     /*VERMELHO PADRÃO*/
+
+    --dark-red: #480002;;
     --primary-red: #D20004;
     --secondary-red: #FBCACB;
+
 
     /*AMARELO PADRÃO*/
     --primary-yellow: #FFBF00;
@@ -68,6 +72,7 @@ p {
     /*BORDA PADRÃO*/
     --default-border: solid 1px var(--primary-blue);
     --error-border: solid 1px var(--primary-red);
+    --sucsess-border: solid 1px var(--dark-green);
     --acessibility-border: solid 1px var(--acessibility-primary);
     --secondary-border: solid 1px var(--primary-background);
     --default-radius: 18px;
@@ -90,7 +95,6 @@ p {
 
 .btn {
     font-family: var(--text-font), serif;
-    /*font-size: 0.8vw;*/
     align-self: center;
     padding: 5px 20px !important;
     border-radius: var(--btn-radius) !important;
@@ -127,19 +131,44 @@ p {
     color: var(--secondary-blue);
 }
 
-.btn-danger {
-    color: var(--secondary-red) !important;
-    background-color: var(--primary-red) !important;
+.btn-danger:hover {
+    color: var(--secondary-red) ;
+    background-color: var(--primary-red) ;
 }
 
-.btn-danger:hover {
-    color: var(--primary-red) !important;
-    background-color: var(--secondary-red) !important;
+.btn-danger {
+    color: var(--primary-red) ;
+    background-color: var(--secondary-red) ;
 }
 
 .btn-danger:active {
     color: var(--primary-red) !important;
     background-color: var(--secondary-red) !important;
+}
+
+
+.btn-dark-success {
+    color: white !important;
+    background-color: var(--dark-green) !important;
+}
+.btn-dark-danger {
+    color: white !important;
+    background-color: var(--dark-red) !important;
+}
+
+.btn-dark-success:active {
+    color: white !important;
+    background-color: var(--dark-green) !important;
+}
+
+.btn-success {
+    color: white !important;
+    background-color: var(--primary-green) !important;
+}
+
+.btn-success:active {
+    color: white !important;
+    background-color: var(--primary-green) !important;
 }
 
 .largura-completa {

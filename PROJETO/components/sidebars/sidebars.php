@@ -70,6 +70,7 @@ function make_sidebar() {?>
                     <li><a href="index.php?voluntary=2" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Participe de eventos</a></li>
                 <?php } else { ?>
                     <li><a href="index.php?voluntary=2" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Inscrever-se</a></li>
+                    <li><a href="index.php?voluntary=6" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Confirme a presença</a></li>
                     <?php
                 }?>
             </ul>

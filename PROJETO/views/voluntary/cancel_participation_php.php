@@ -32,6 +32,16 @@ if (!$event->esta_inscrito){
     exit();
 }
 
+$isPunishable = is_event_in_days($event, 3);
+
+if ($isPunishable) {
+    $result = add_user_punishment($conn, $_SESSION['USER_ID'], "faltou ao evento $event->nome", event_id: $event_id);
+    if (!$result){
+        header("Location: index.php?voluntary=2&error=12");
+        exit();
+    }
+}
+
 // Cancela a inscrição
 $did_cancel_subscription = cancel_user_event_subscription($conn, $event_id, $_SESSION['USER_ID']);
 if ($did_cancel_subscription) {
@@ -39,3 +49,4 @@ if ($did_cancel_subscription) {
 } else {
     header("Location: index.php?voluntary=2&error=12");
 }
+

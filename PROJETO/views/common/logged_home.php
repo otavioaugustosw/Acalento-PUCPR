@@ -8,9 +8,8 @@ include_once (ROOT . "/models/voluntary_models_php.php");
 include_once  (ROOT . "/php/handlers/filter_php.php");
 
 $conn = connectDatabase();
-$next_events = get_events_where($conn, 'WHERE evento.data >= NOW() AND evento.inativo = 0 ORDER BY evento.id DESC LIMIT 2;');
-$last_events = get_events_where($conn, 'WHERE evento.data < NOW() AND evento.inativo = 0 LIMIT 2;');
-$subscribed_events = get_subscribed_events($conn, $_SESSION['USER_ID']);
+$next_events = get_events_where($conn, 'WHERE evento.data >= NOW() AND evento.inativo = 0 ORDER BY evento.id DESC LIMIT 2;',  $_SESSION['USER_ID']);
+$last_events = get_events_where($conn, 'WHERE evento.data < NOW() AND evento.inativo = 0 LIMIT 2;', $_SESSION['USER_ID']);
 $all_donations = get_donations_where($conn, "ORDER BY doacao.id DESC LIMIT 10");
 $my_donations = get_donations_where($conn, set_where_donations('myown'));
 $table_head = ["Item", "Quantidade", "Tipo", "Doador", "Data da doação", "Destino"];?>
@@ -64,7 +63,7 @@ $table_head = ["Item", "Quantidade", "Tipo", "Doador", "Data da doação", "Dest
                             if ($next_events->num_rows <= 0) {
                                 echo '<h3>Nenhum evento cadastrado</h3>';
                             } else {
-                                render_events_card($next_events, $subscribed_events , voluntary: true, horizontal: true);
+                                render_events_card($next_events, voluntary: true, horizontal: true);
                             }
                         }
 

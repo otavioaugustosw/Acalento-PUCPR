@@ -1,30 +1,16 @@
 <?php
-$conn = connectDatabase();
-$id_usuario = $_SESSION['USER_ID'];
-$id_endereco = $_SESSION['USER_ADDRESS_ID'];
-
-//pega os dados do usuário e endereço
-$query = "SELECT u.*, e.* 
-          FROM usuario u 
-          LEFT JOIN endereco e ON u.id_endereco = e.id 
-          WHERE u.id =" . $_SESSION['USER_ID'];
-$resultado = $conn->query($query);
-
-if (!$resultado) {
-    showError(1);
-}
-
-$dados = $resultado->fetch_object();
 include_once (ROOT . "/php/config/database_php.php");
 include_once (ROOT . "/php/handlers/form_validator_php.php");
 include_once (ROOT . "/components/sidebars/sidebars.php");
 include_once (ROOT . "/models/common_models_php.php");
 
-if (!$dados) {
-    showError(1);
+$conn = connectDatabase();
+load_user_session_data($conn);
+$user = get_user_data($conn, $_SESSION['USER_ID']);
+if (!$user) {
+    showError(7);
 }
 ?>
-
 <!doctype html>
 <html lang="en">
 <head>
@@ -58,13 +44,13 @@ if (!$dados) {
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Nome Completo</label>
                             <input type="text" class="form-control" name="nome"
-                                   value="<?= $dados->nome ?? '' ?>">
+                                   value="<?= $user->nome ?? '' ?>">
                         </div>
 
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Email</label>
                             <input type="email" class="form-control" name="email"
-                                   value="<?= $dados->email ?? '' ?>">
+                                   value="<?= $user->email ?? '' ?>">
                         </div>
                     </div>
 
@@ -72,19 +58,19 @@ if (!$dados) {
                         <div class="col-md-4 mb-3">
                             <label class="form-label">CPF</label>
                             <input type="text" class="form-control" name="cpf"
-                                   value="<?= $dados->cpf ?? '' ?>">
+                                   value="<?= $user->cpf ?? '' ?>">
                         </div>
 
                         <div class="col-md-4 mb-3">
                             <label class="form-label">Telefone</label>
                             <input type="text" class="form-control" name="telefone"
-                                   value="<?= $dados->telefone ?? '' ?>">
+                                   value="<?= $user->telefone ?? '' ?>">
                         </div>
 
                         <div class="col-md-4 mb-3">
                             <label class="form-label">Data de Nascimento</label>
                             <input type="date" class="form-control" name="nascimento"
-                                   value="<?= $dados->nascimento ?? '' ?>">
+                                   value="<?= $user->nascimento ?? '' ?>">
                         </div>
                     </div>
                 </div>
@@ -97,25 +83,25 @@ if (!$dados) {
                         <div class="col-md-3 mb-3">
                             <label class="form-label">CEP</label>
                             <input type="text" class="form-control" name="cep" id="cep"
-                                   value="<?= $dados->cep ?? '' ?>" maxlength="9">
+                                   value="<?= $user->cep ?? '' ?>" maxlength="9">
                         </div>
 
                         <div class="col-md-4 mb-3">
                             <label class="form-label">Logradouro</label>
                             <input type="text" class="form-control" name="rua" id="rua"
-                                   value="<?= $dados->rua ?? '' ?>" maxlength="50">
+                                   value="<?= $user->rua ?? '' ?>" maxlength="50">
                         </div>
 
                         <div class="col-md-2 mb-3">
                             <label class="form-label">Número</label>
                             <input type="text" class="form-control" name="numero" id="numero"
-                                   value="<?= $dados->numero ?? '' ?>" maxlength="6">
+                                   value="<?= $user->numero ?? '' ?>" maxlength="6">
                         </div>
 
                         <div class="col-md-3 mb-3">
                             <label class="form-label">Complemento </label>
                             <input type="text" class="form-control" id="complemento" name="complemento"
-                                   maxlength="50" value="<?= $dados->complemento ?? '' ?>">
+                                   maxlength="50" value="<?= $user->complemento ?? '' ?>">
                         </div>
                     </div>
 
@@ -123,19 +109,19 @@ if (!$dados) {
                         <div class="col-md-3 mb-3">
                             <label class="form-label">Bairro</label>
                             <input type="text" class="form-control" name="bairro" id="bairro"
-                                   value="<?= $dados->bairro ?? '' ?>" maxlength="50">
+                                   value="<?= $user->bairro ?? '' ?>" maxlength="50">
                         </div>
 
                         <div class="col-md-3 mb-3">
                             <label class="form-label">Cidade</label>
                             <input type="text" class="form-control" name="cidade" id="cidade"
-                                   value="<?= $dados->cidade ?? '' ?>" maxlength="50">
+                                   value="<?= $user->cidade ?? '' ?>" maxlength="50">
                         </div>
 
                         <div class="col-md-3 mb-3">
                             <label class="form-label">Estado</label>
                             <input type="text" class="form-control" name="estado" id="estado"
-                                   value="<?= $dados->estado ?? '' ?>" maxlength="50">
+                                   value="<?= $user->estado ?? '' ?>" maxlength="50">
                         </div>
 
                         <div class="col-md-3 mb-3">
@@ -155,157 +141,90 @@ if (!$dados) {
 </html>
 
 <?php
-function validateAddress() {
-    if (!isNumericOnly(preg_replace('/\D/', '', $_POST['cep'])) || !hasMaxLength(preg_replace('/\D/', '', $_POST['cep']), 8)) {
-        displayValidation('cep' , false);
+function validate_address() {
+    if (!is_numeric_only(preg_replace('/\D/', '', $_POST['cep'])) || !has_max_length(preg_replace('/\D/', '', $_POST['cep']), 8)) {
+        display_validation('cep' , false);
         return false;
     }
 
-    if (!isAlphaOnly($_POST['rua']) || !hasMaxLength($_POST['rua'], 50)) {
-        displayValidation('rua', false);
+    if (!is_alpha_only($_POST['rua']) || !has_max_length($_POST['rua'], 50)) {
+        display_validation('rua', false);
         return false;
     }
 
-    if (!isNumericOnly($_POST['numero']) || !hasMaxLength($_POST['numero'], 50)) {
-        displayValidation('numero', false);
+    if (!is_numeric_only($_POST['numero']) || !has_max_length($_POST['numero'], 50)) {
+        display_validation('numero', false);
         return false;
     }
 
-    if (!isAlphaOnly($_POST['bairro']) || !hasMaxLength($_POST['bairro'], 50)) {
-        displayValidation('bairro', false);
+    if (!is_alpha_only($_POST['bairro']) || !has_max_length($_POST['bairro'], 50)) {
+        display_validation('bairro', false);
         return false;
     }
 
-    if (!isAlphaOnly($_POST['cidade']) || !hasMaxLength($_POST['cidade'], 50)) {
-        displayValidation('cidade', false);
+    if (!is_alpha_only($_POST['cidade']) || !has_max_length($_POST['cidade'], 50)) {
+        display_validation('cidade', false);
         return false;
     }
 
-    if (!isAlphaOnly($_POST['estado']) || !hasMaxLength($_POST['estado'], 50)) {
-        displayValidation('estado', false);
-        return false;
-    }
-    return true;
-}
-
-function validateUser()
-{
-    if (!isFullName($_POST['nome']) || !hasMaxLength($_POST['nome'], 50)) {
-        displayValidation('nome', false);
-        return false;
-    }
-
-    if (!isCPFValid($_POST['cpf'])) {
-        displayValidation('cpf' , false);
-        return false;
-    }
-
-    if (!isNumericOnly(preg_replace('/\D/', '', $_POST['telefone']))) {
-        displayValidation('telefone', false);
-        return false;
-    }
-
-    if (!isValidEmail($_POST['email'])) {
-        displayValidation('email', false);
-        return false;
-    }
-
-
-    if (!isDateValid($_POST['nascimento'])) {
-        displayValidation('nascimento', false);
+    if (!is_alpha_only($_POST['estado']) || !has_max_length($_POST['estado'], 50)) {
+        display_validation('estado', false);
         return false;
     }
     return true;
 }
 
-function verifyUserExistence($conn, $email, $cpf)
+function validate_user()
 {
-    try {
-        // Verifica se já existe cadastro com o Email
-        $query = "SELECT email, id FROM usuario WHERE email = ? AND id != ?";
-        $stmt = $conn->prepare($query);
-        $stmt->bind_param("si", $email, $_SESSION['USER_ID']);
-        $stmt->execute();
-        $resultEmail = $stmt->get_result();
-
-        if ($resultEmail->num_rows > 0) {
-            showError(16);
-            var_dump($resultEmail);
-            return true;
-        }
-
-        // Verifica se já existe cadastro com o CPF
-        $query = "SELECT cpf, id FROM usuario WHERE cpf = ? AND id != ?";
-        $stmt = $conn->prepare($query);
-        $stmt->bind_param("si", $cpf, $_SESSION['USER_ID']);
-        $stmt->execute();
-        $resultCpf = $stmt->get_result();
-
-        if ($resultCpf->num_rows > 0) {
-            showError(19);
-            var_dump($resultCpf);
-            return true;
-        }
-        // Não encontrou nem email nem cpf já cadastrados
+    if (!is_full_name($_POST['nome']) || !has_max_length($_POST['nome'], 50)) {
+        display_validation('nome', false);
         return false;
-
-    } catch (Exception $e) {
-        showError(15);
     }
+
+    if (!is_cpf_valid($_POST['cpf'])) {
+        display_validation('cpf' , false);
+        return false;
+    }
+
+    if (!is_numeric_only(preg_replace('/\D/', '', $_POST['telefone']))) {
+        display_validation('telefone', false);
+        return false;
+    }
+
+    if (!is_valid_email($_POST['email'])) {
+        display_validation('email', false);
+        return false;
+    }
+
+
+    if (!is_date_valid($_POST['nascimento'])) {
+        display_validation('nascimento', false);
+        return false;
+    }
+    return true;
 }
-
-function submitUser($conn, $id_usuario, $id_endereco)
+function submit_user(mysqli $conn, $address_id): void
 {
-    $cep = preg_replace('/\D/', '', $_POST['cep']);
-    $rua = $_POST['rua'];
-    $numero = $_POST['numero'];
-    $bairro = $_POST['bairro'];
-    $cidade = $_POST['cidade'];
-    $estado = $_POST['estado'];
-    $complemento = $_POST['complemento'];
-
-    try {
-        // cria o novo endereço
-        $query = "UPDATE endereco
-        SET cep = ?, rua = ?, numero = ?, bairro = ?, cidade = ?, estado = ?, complemento = ? WHERE id = ?";
-        $stmt = $conn->prepare($query);
-        $stmt->bind_param("ssissssi", $cep, $rua, $numero, $bairro, $cidade, $estado, $complemento, $id_endereco);
-        $stmt->execute();
-    } catch (Exception $e) {
-        showError(15);
+    if (!validate_user() || !validate_address()) {
+        return;
     }
 
-    $id_endereco = $_SESSION['USER_ADDRESS_ID'];
-    $email = $_POST['email'];
-    $nome = ucwords(strtolower($_POST['nome']));
     $cpf = preg_replace('/\D/', '', $_POST['cpf']);
-    $telefone = preg_replace('/\D/', '', $_POST['telefone']);
-    $nascimento = $_POST['nascimento'];
+    $email = $_POST['email'];
+
+    if (verify_user_existence($conn, $email, $cpf, $_SESSION['USER_ID'])) {
+        return;
+    }
 
     try {
-        $query = "UPDATE usuario 
-        SET id_endereco = ?, email = ?, nome = ?, cpf = ?, telefone = ?, nascimento = ? WHERE id = ?";
-        $stmt = $conn->prepare($query);
-        $stmt->bind_param("isssssi", $id_endereco, $email, $nome, $cpf, $telefone, $nascimento, $id_usuario);
-        $stmt->execute();
+        update_user_and_address($conn, $_SESSION['USER_ID'], $address_id, $_POST);
+        ?> <script> window.location.href = 'index.php?common=8' </script> <?php
     } catch (Exception $e) {
         showError(15);
     }
 }
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    if (validateUser() && validateAddress()) {
-        $cpf = preg_replace('/\D/', '', $_POST['cpf']);
-        $email = $_POST['email'];
-        if (verifyUserExistence($conn, $email, $cpf)) {
-        } else {
-            submitUser($conn, $id_usuario, $id_endereco);
-            ?>
-            <script>
-                window.location.href = "index.php?common=7";
-            </script>
-            <?php
-        }
-    }
+    submit_user($conn, $user->id_endereco);
 }
 ?>

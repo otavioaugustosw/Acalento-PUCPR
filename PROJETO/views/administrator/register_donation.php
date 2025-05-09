@@ -167,7 +167,6 @@ load_user_session_data($conn);
 </div>
 
 <script>
-
     function mostrarDestino() {
         // pega o valor de seleção de destino e dependendo do valor uma opção fica visivel ou a outra
         const tipo = document.getElementById('selectDestino').value;
@@ -180,11 +179,9 @@ load_user_session_data($conn);
 <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/js/bootstrap-select.min.js"></script>
 <script>
     $(document).ready(function () {
-        console.log("DOM carregado");
         $('.selectpicker').selectpicker();
-        console.log("Selectpicker aplicado:", $('.selectpicker').length);
     });
-    });
+    })
 </script>
 </body>
 </html>
@@ -204,48 +201,48 @@ function submitInformation($conn)
     $opcoes_validas_um = ['mg', 'g', 'kg', 'ml', 'l'];
     $opcoes_validas_categoria = ['Alimentício', 'Brinquedo', 'Limpeza', 'Outros'];
 
-    if ($idEstoque !== null && !isNumericOnly($idEstoque)) {
-        displayValidation('inputEstoque', false);
+    if ($idEstoque !== null && !is_numeric_only($idEstoque)) {
+        display_validation('inputEstoque', false);
         return;
     }
 
-    if ($idCampanha !== null && !isNumericOnly($idCampanha)) {
-        displayValidation('inputCampanha', false);
+    if ($idCampanha !== null && !is_numeric_only($idCampanha)) {
+        display_validation('inputCampanha', false);
         return;
     }
 
-    if (!isNumericOnly($_POST['id_opcao'])) {
-        displayValidation('inputItem', false);
+    if (!is_numeric_only($_POST['id_opcao'])) {
+        display_validation('inputItem', false);
         return;
     }
 
-    if ($id_usuario !== null && !isNumericOnly($id_usuario)) {
-        displayValidation('inputDoador', false);
+    if ($id_usuario !== null && !is_numeric_only($id_usuario)) {
+        display_validation('inputDoador', false);
         return;
     }
 
-    if ($quantidade !== null && !isNumericOnly($quantidade)) {
-        displayValidation('inputQuantidade', false);
+    if ($quantidade !== null && !is_numeric_only($quantidade)) {
+        display_validation('inputQuantidade', false);
         return;
     }
 
-    if ($unidadeMedida !== null && !in_array($unidadeMedida, $opcoes_validas_um) && (!isAlphaOnly($unidadeMedida) || !hasMaxLength($unidadeMedida, 3))) {
-        displayValidation('inputUnidadeMedida', false);
+    if ($unidadeMedida !== null && !in_array($unidadeMedida, $opcoes_validas_um) && (!is_alpha_only($unidadeMedida) || !has_max_length($unidadeMedida, 3))) {
+        display_validation('inputUnidadeMedida', false);
         return;
     }
 
     if ($valor !== null && !is_numeric($valor)) {
-        displayValidation('inputValor', false);
+        display_validation('inputValor', false);
         return;
     }
 
-    if (!in_array($opcoes_validas_categoria, $_POST['tipo']) && !isAlphaOnly($_POST['tipo'])) {
-        displayValidation('inputTipo', false);
+    if (!in_array($opcoes_validas_categoria, $_POST['tipo']) && !is_alpha_only($_POST['tipo'])) {
+        display_validation('inputTipo', false);
         return;
     }
 
-    if (!isDateValid($_POST['data'])) {
-        displayValidation('inputData', false);
+    if (!is_date_valid($_POST['data'])) {
+        display_validation('inputData', false);
         return;
     }
 

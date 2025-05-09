@@ -9,7 +9,7 @@ include_once (ROOT . "/models/admin_models_php.php");
 $conn = connectDatabase();
 
 // busca no banco de dados por assentamentos
-$assentamento = $conn->query("SELECT id, nome FROM assentamento");
+$settlements = get_all_settlements($conn);
 
 ?>
 
@@ -68,7 +68,7 @@ $assentamento = $conn->query("SELECT id, nome FROM assentamento");
                             <label for="inputAssentamento" class="form-label">Local*</label>
                             <select name="id_assentamento" id="inputAssentamento" class="form-select">
                                 <option value="">Selecione um assentamento</option>
-                                <?php while ($a = $assentamento->fetch_object()) { ?>
+                                <?php while ($a = $settlements->fetch_object()) { ?>
                                 <option value="<?php echo $a->id;?>" <?= (isset($_POST['id_assentamento']) && $_POST['id_assentamento'] == $a->id) ? 'selected' : '' ?>><?php echo $a->nome; ?></option>
                                 <?php } ?>
                             </select>
@@ -78,14 +78,14 @@ $assentamento = $conn->query("SELECT id, nome FROM assentamento");
                         </div>
                         <div class="col-md-4">
                             <label for="inputLotacao" class="form-label">Lotação máxima*</label>
-                            <input type="text" class="form-control" id="inputLotacao" name="lotacao" value="<?= $_POST['lotacao'] ?? null ?>">
+                            <input type="text" class="form-control" id="inputLotacao" name="lotacao_max" value="<?= $_POST['lotacao_max'] ?? null ?>">
                             <div id="validacaoLotacaoMax" class="invalid-feedback">
                                 Digite uma lotação máxima válida.
                             </div>
                         </div>
                         <div class="col-md-4">
                             <label for="inputImagem" class="form-label">Insira imagem*</label>
-                            <input type="text" class="form-control" id="inputImagem" name="imagem" value="<?= $_POST['imagem'] ?? null ?>">
+                            <input type="text" class="form-control" id="inputImagem" name="link_media" value="<?= $_POST['link_media'] ?? null ?>">
                             <div id="validacaoImagem" class="invalid-feedback">
                                 Digite um link válido.
                             </div>
@@ -116,55 +116,47 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     submitInformation($conn);
 }
 
-function submitInformation($sql) {
+function submitInformation($conn) {
 
-    if (!isAlphaOnly($_POST['nome']) || !hasMaxLength($_POST['nome'], 50)) {
-        displayValidation('inputNome', false);
+    if (!is_alpha_only($_POST['nome']) || !has_max_length($_POST['nome'], 50)) {
+        display_validation('inputNome', false);
         return;
     }
 
-    if (!isDateValid($_POST['data'])) {
-        displayValidation('inputData', false);
+    if (!is_date_valid($_POST['data'])) {
+        display_validation('inputData', false);
         return;
     }
 
-//    if (!isTimeValid($_POST['hora'])) {
-//        displayValidation('inputHora', false);
-//        return;
-//    }
-
-    if (!isNumericOnly($_POST['id_assentamento'])) {
-        displayValidation('inputAssentamento', false);
+    if (!is_numeric_only($_POST['id_assentamento'])) {
+        display_validation('inputAssentamento', false);
         return;
     }
 
-    if (!isNumericOnly($_POST['lotacao'])) {
-        displayValidation('inputLotacao', false);
+    if (!is_numeric_only($_POST['lotacao_max'])) {
+        display_validation('inputLotacao', false);
         return;
     }
 
-    if (!hasMaxLength($_POST['imagem'], 256)) {
-        displayValidation('inputImagem', false);
+    if (!has_max_length($_POST['link_media'], 256)) {
+        display_validation('inputImagem', false);
         return;
     }
 
-    if (!isAlphaOnly($_POST['descricao']) || !hasMaxLength($_POST['descricao'], 100)) {
-        displayValidation('inputDescricao', false);
+    if (!is_alpha_only($_POST['descricao']) || !has_max_length($_POST['descricao'], 100)) {
+        display_validation('inputDescricao', false);
         return;
     }
 
+    $did_create_event = create_event(
+        $conn,
+        $_POST
+    );
 
-    try {
-        $query = "
-        INSERT INTO evento(id_assentamento, nome, descricao, lotacao_max, data, hora, link_imagem)
-        VALUES ( ?, ?, ?, ?, ?, ?, ?)";
-        $stmt = $sql->prepare($query);
-        $stmt->bind_param("ississs", $_POST['id_assentamento'], $_POST['nome'], $_POST['descricao'], $_POST['lotacao'], $_POST['data'], $_POST['hora'], $_POST['imagem']);
-        $stmt->execute(); // executa query
+    if ($did_create_event) {
         showSucess(2);
-    } catch (mysqli_sql_exception $E) {
-        showError(4);
-        exit();
     }
-
+    else {
+        showError(4);
+    }
 }

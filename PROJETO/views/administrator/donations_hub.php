@@ -38,7 +38,7 @@ $table_head = ["Item", "Quantidade", "Tipo", "Doador", "Data da doação", "Dest
                     <div class="doacoes">
                         <div class="d-flex justify-content-between">
                             <h2>Todas as doações</h2>
-                            <a class="btn btn-primary" href="index.php?adm=9">Ver todas as doações</a>
+                            <a class="btn btn-primary" href="index.php?adm=15&view=adm">Ver todas as doações</a>
                         </div>
                         <?php
                         if (!$all_donations) {
@@ -55,7 +55,7 @@ $table_head = ["Item", "Quantidade", "Tipo", "Doador", "Data da doação", "Dest
                     <div>
                         <div class="d-flex justify-content-between">
                             <h2>Doações em estoque</h2>
-                            <a class="btn btn-primary" href="index.php?adm=11">Ver todas as doações em estoque</a>
+                            <a class="btn btn-primary" href="index.php?adm=15&view=inventory">Ver todas as doações em estoque</a>
                         </div>
                         <?php
                         if (!$inventory_donations) {

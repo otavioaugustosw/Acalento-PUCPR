@@ -7,9 +7,8 @@ include_once (ROOT . "/models/admin_models_php.php");
 
 // conexão com o banco de dado
 $conn = connectDatabase();
-
 // query para buscar os eventos no select
-$eventos = $conn->query("SELECT id, nome FROM evento WHERE inativo = 0");
+$events = get_events_where($conn, " AND inativo = 0", $_SESSION['USER_ID']);
 ?>
 
 <!doctype html>
@@ -61,7 +60,7 @@ $eventos = $conn->query("SELECT id, nome FROM evento WHERE inativo = 0");
                             <label for="inputEvento" class="form-label">Destino*</label>
                             <select name="evento_destino" id="inputEvento" class="form-select">
                                 <option value="">Selecione o evento</option>
-                                <?php while ($a = $eventos->fetch_object()) { ?>
+                                <?php while ($a = $events->fetch_object()) { ?>
                                     <!-- isset($_POST['evento_destino']) && $_POST['evento_destino'] == $a->id) ? 'selected' : '' -> se a variável já foi definida e ela é igual ao id então o valor da esqueda
                                     é o que vai ser utilizado, caso contrário é o da direita. select é um atributo que pré-seleciona uma opção de um select -->
                                     <option value="<?php echo $a->id;?>" <?= (isset($_POST['evento_destino']) && $_POST['evento_destino'] == $a->id) ? 'selected' : '' ?>><?php echo $a->nome; ?></option>
@@ -97,35 +96,28 @@ function submitInformation($conn)
 {
     // isAlphaOnly -> SOMENTE LETRAS
     // hasMaxLength -> tamanho máximo da string para não quebrar o SQL
-    if (!isAlphaOnly($_POST['nome']) || !hasMaxLength($_POST['nome'], 50)) /*se nome não houver somente letras ou nome não for menor que 50 caracteres*/ {
-        displayValidation('inputNome', false); // mostra erro no campo incorreto utilizando ID do input. (FALSE = ERRO, TRUE = SUCESSO)
+    if (!is_alpha_only($_POST['nome']) || !has_max_length($_POST['nome'], 50)) /*se nome não houver somente letras ou nome não for menor que 50 caracteres*/ {
+        display_validation('inputNome', false); // mostra erro no campo incorreto utilizando ID do input. (FALSE = ERRO, TRUE = SUCESSO)
         return;
     }
 
-    if (!isDateValid($_POST['data'])) {
-        displayValidation('inputData', false);
+    if (!is_date_valid($_POST['data'])) {
+        display_validation('inputData', false);
         return;
     }
 
-    if (!isNumericOnly($_POST['evento_destino'])) {
-        displayValidation('inputEvento', false);
+    if (!is_numeric_only($_POST['evento_destino'])) {
+        display_validation('inputEvento', false);
         return;
     }
 
-    try { // tenta executar a query
-        // prepara a query e deixa os valores com um placeholder pra no futuro receber algo
-        $query = "
-        INSERT INTO campanha_doacao(nome, data, evento_destino)
-        VALUES ( ?, ?, ?) ";
-        $stmt = $conn->prepare($query); // prepara a query para receber valores;
-        $stmt->bind_param("ssi", $_POST['nome'], $_POST['data'], $_POST['evento_destino'] ); // coloca os valores nos parametros POR ORDEM
-        // primeiro organizar o tipo dos parametros e depois coloca os dados em ordem
-        $stmt->execute(); // executa query
+    $did_create_donation_campaign = create_donation_campaign($conn, $_POST['nome'], $_POST['data'], $_POST['evento_destino']);
+
+    if ($did_create_donation_campaign) {
         showSucess(1);
-        // mysqli_sql_exception: aviso que o php te dá caso algo dê errado com o seu banco de dados
-    } catch (mysqli_sql_exception $E) { // se dar um erro fatal
+    }
+    else {
         showError(3);
-        exit();
     }
 }
 

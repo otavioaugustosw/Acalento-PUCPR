@@ -1,11 +1,5 @@
 //PARA USUARIO
 
-// Validar senhas iguais
-document.querySelector("form").addEventListener("submit", function (e) {
-    const senha = document.getElementById("senha").value;
-    const confirmar = document.getElementById("confirmarSenha").value;
-});
-
 // CPF máscara
 const cpfInput = document.getElementById('cpf');
 if (cpfInput) {

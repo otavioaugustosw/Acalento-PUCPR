@@ -10,22 +10,32 @@ if (!isset($_SESSION['USER_ID'])) {
     showError(11);
 }
 
-$id_evento = $_POST['id_evento'];
-$id_usuario = $_SESSION['USER_ID'];
+if (!isset($_POST['id_evento'])) {
+    header("Location: index.php?voluntary=2&error=12");
+    exit();
+}
+
+$event_id = $_POST['id_evento'];
+$event = get_events_where($conn, "WHERE evento.id = $event_id", $_SESSION['USER_ID']);
+
+// Verifica se o evento existe
+if ($event->num_rows === 0) {
+    header("Location: index.php?voluntary=2&error=12");
+    exit();
+}
 
 // Verifica se o usuário realmente está inscrito
-$sqlVerifica = "SELECT id FROM usuario_participa_evento WHERE id_evento = $id_evento AND id_usuario = $id_usuario";
-$resultVerifica = $conn->query($sqlVerifica);
+$event = $event->fetch_object();
 
-if ($resultVerifica->num_rows === 0) {
+if (!$event->esta_inscrito){
+    header("Location: index.php?voluntary=2&error=21");
     exit();
 }
 
 // Cancela a inscrição
-$sqlDelete = "DELETE FROM usuario_participa_evento WHERE id_evento = $id_evento AND id_usuario = $id_usuario";
-if ($conn->query($sqlDelete)) {
-    header("Location: index.php?voluntary=5&success=6");
+$did_cancel_subscription = cancel_user_event_subscription($conn, $event_id, $_SESSION['USER_ID']);
+if ($did_cancel_subscription) {
+    $isPunishable ? header("Location: index.php?voluntary=2&error=22") : header("Location: index.php?voluntary=2&success=6");
 } else {
     header("Location: index.php?voluntary=2&error=12");
 }
-?>

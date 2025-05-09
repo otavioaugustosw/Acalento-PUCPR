@@ -45,9 +45,9 @@ $sql_insere = "INSERT INTO usuario_participa_evento (id_usuario, id_evento) VALU
 $sql_update_voluntario = "UPDATE usuario SET eh_voluntario = 1";
 if ($conn->query($sql_insere) && $conn->query($sql_update_voluntario)) {
     load_user_session_data($conn);
-    header("Location: index.php?voluntary=5&success=7");
+    header("Location: index.php?voluntary=2&success=7");
 } else {
-    header("Location: index.php?voluntary=4&error=14");
+    header("Location: index.php?voluntary=2&error=14");
 }
 exit();
 ?>

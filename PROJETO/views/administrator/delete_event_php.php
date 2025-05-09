@@ -3,20 +3,15 @@ include_once (ROOT . "/php/config/database_php.php");
 include_once (ROOT . "/models/admin_models_php.php");
 
 if (isset($_GET['id'])) {
-    // a função intval tranforma o valor em um valor inteiro, está segundo usado apenas por precaução
-    $id = intval($_GET['id']);
+    // a função intval tranforma o valor em um valor inteiro, está sendo usado apenas por precaução
+    $event_id = intval($_GET['id']);
     $conn = connectDatabase();
+    $did_delete_event = soft_delete_event($conn, $event_id);
 
-    $query = "UPDATE evento 
-              SET inativo=1 
-              WHERE id = $id";
-    $resultado = $conn->query($query);
-
-    if ($resultado) {
-        header("Location: index.php?adm=14&success=4");
+    if ($did_delete_event) {
+        header("Location: index.php?adm=5&success=4");
         exit;
     } else {
-        header("Location: index.php?adm=13&error=6");
+        header("Location: index.php?adm=5&error=6");
     }
 }
-?>

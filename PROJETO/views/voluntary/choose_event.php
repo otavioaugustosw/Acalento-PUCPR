@@ -9,8 +9,7 @@ include_once (ROOT .  "/models/voluntary_models_php.php");
 include_once (ROOT .  "/php/handlers/error_handler_php.php");
 
 $conn = connectDatabase();
-$subscribed_events = get_subscribed_events($conn, $_SESSION['USER_ID']);
-$events = get_events_where($conn, setWhere('evento'));
+$events = get_events_where($conn, setWhere('evento'), $_SESSION['USER_ID']);
 
 ?>
 <!doctype html>
@@ -29,7 +28,16 @@ $events = get_events_where($conn, setWhere('evento'));
 <body>
 <?php make_mobile_sidebar() ?>
 <div class="d-flex flex-nowrap">
-    <?php make_sidebar(); ?>
+    <?php make_sidebar();
+
+    if (isset($_GET['error'])){
+        showError($_GET['error']);
+    }
+
+    if (isset($_GET['success'])){
+        showSucess($_GET['success']);
+    }
+    ?>
     <div class="main-content">
         <main class="px-5 row addScroll">
             <div class="container-fluid">
@@ -45,7 +53,7 @@ $events = get_events_where($conn, setWhere('evento'));
                             echo '<h3>Nenhum evento cadastrado</h3>';
                         }
                         else {
-                            render_events_card($events, $subscribed_events , voluntary: true);
+                            render_events_card($events, voluntary: true);
                         }
                         ?>
                     </div>

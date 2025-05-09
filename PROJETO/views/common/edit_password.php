@@ -4,11 +4,8 @@ include_once (ROOT . "/php/handlers/form_validator_php.php");
 include_once (ROOT . "/components/sidebars/sidebars.php");
 include_once (ROOT . "/models/common_models_php.php");
 
-$id_usuario = $_SESSION['USER_ID'] ?? null;
+$conn = connectDatabase();
 
-if (!$id_usuario) {
-    die("<div class='alert alert-danger'>Usuário não autenticado</div>");
-}
 ?>
 <!doctype html>
 <html lang="en">
@@ -56,20 +53,19 @@ if (!$id_usuario) {
 </html>
 <?php
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (!hasMinLength($_POST['senha'], 8) || ($_POST['senha'] !== $_POST['confirmarSenha']) ) {
-        displayValidation('senha', false);
-        displayValidation('confirmarSenha', false);
+    if (!has_min_length($_POST['senha'], 8) || ($_POST['senha'] !== $_POST['confirmarSenha']) ) {
+        display_validation('senha', false);
+        display_validation('confirmarSenha', false);
         showError(17);
-        return false;
-    } else {
-        $senha = generate_password_hash($_POST['senha']);
-        $query = "UPDATE usuario SET senha = '$senha' WHERE id = $id_usuario";
-        if ($conn->query($query)) {
+    }
+    else {
+        $new_password = generate_password_hash($_POST['senha']);
+        $did_change_password = update_password($conn, $_SESSION['USER_ID'], $new_password);
+        if ($did_change_password) {
             showSucess(10);
-            header("Location: index.php?common=7");
-            exit;
-        } else {
-            echo "<div class='alert alert-danger'>Erro ao atualizar senha: " . $conn->error . "</div>";
+        }
+        else {
+            showError(7);
         }
     }
 }

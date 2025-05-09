@@ -38,14 +38,14 @@ $conn = connectDatabase();
 <?php
 if(isset($_POST['email'], $_POST['password'])) {
     $result = authenticate_user($conn, $_POST['email'], $_POST['password']);
-    displayValidation('email', isValidEmail($_POST['email']));
-    displayValidation('password', hasContent($_POST['password']));
+    display_validation('email', is_valid_email($_POST['email']));
+    display_validation('password', has_content($_POST['password']));
     if ($result['status']) {
         header('Location: index.php?common=6');
         exit;
     } else {
-       displayValidation('email', false);
-       displayValidation('password',false);
+       display_validation('email', false);
+       display_validation('password',false);
         ?>
         <div class="toast-container position-absolute p-3 top-0 start-50 translate-middle-x">
             <div class="toast text-bg-danger border-0 show" id="toastRuim">

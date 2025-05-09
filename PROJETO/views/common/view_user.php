@@ -1,7 +1,9 @@
 <?php
-include (ROOT . "/php/config/database_php.php");
-include(ROOT . "/components/sidebars/sidebars.php");
-include (ROOT . "/php/auth_services/auth_service_php.php");
+include_once (ROOT . "/php/config/database_php.php");
+include_once (ROOT . "/components/sidebars/sidebars.php");
+include_once (ROOT . "/php/auth_services/auth_service_php.php");
+include_once (ROOT . "/models/common_models_php.php");
+
 $conn = connectDatabase();
 load_user_session_data($conn);
 

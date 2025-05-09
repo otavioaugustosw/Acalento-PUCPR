@@ -1,5 +1,5 @@
 <?php
-include(ROOT . '/php/handlers/error_handler_php.php');
+include_once (ROOT . '/php/handlers/error_handler_php.php');
 
 function routeToCommon($pageNum)
 {

@@ -1,7 +1,9 @@
 <?php
-include (ROOT . "/php/config/database_php.php");
-include(ROOT . "/php/auth_services/auth_service_php.php");
-include(ROOT . "/php/handlers/form_validator_php.php");
+include_once (ROOT . "/php/config/database_php.php");
+include_once (ROOT . "/php/auth_services/auth_service_php.php");
+include_once (ROOT . "/php/handlers/form_validator_php.php");
+include_once (ROOT . "/models/common_models_php.php");
+
 $conn = connectDatabase();
 ?>
 <!doctype html>

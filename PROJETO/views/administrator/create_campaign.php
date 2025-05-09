@@ -1,7 +1,10 @@
 <?php
-include (ROOT . "/php/config/database_php.php");
-include(ROOT . '/php/handlers/form_validator_php.php');
-include(ROOT . "/components/sidebars/sidebars.php");
+include_once (ROOT . "/php/config/database_php.php");
+include_once (ROOT . '/php/handlers/form_validator_php.php');
+include_once (ROOT . "/components/sidebars/sidebars.php");
+include_once (ROOT . "/models/voluntary_models_php.php");
+include_once (ROOT . "/models/admin_models_php.php");
+
 // conexão com o banco de dado
 $conn = connectDatabase();
 

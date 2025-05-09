@@ -13,7 +13,7 @@
 <body>
 
 <!-- Header fixo -->
-<?php include(ROOT . "/components/header/header.php");?>
+<?php include_once (ROOT . "/components/header/header.php");?>
 
 <!-- Conteúdo principal -->
 <main style="margin-top: 120px;">  <!-- margem para descolar do header -->

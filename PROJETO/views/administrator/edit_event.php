@@ -1,10 +1,9 @@
 <?php
-include(ROOT . "/php/config/database_php.php");
-include(ROOT . "/php/handlers/filter_php.php");
-include(ROOT . "/components/filter/filter.php");
-include(ROOT . "/components/cards/cards.php");
-include(ROOT .  "/components/sidebars/sidebars.php");
-include(ROOT .  "/models/voluntary_models_php.php");
+include_once (ROOT . "/php/config/database_php.php");
+include_once (ROOT . '/php/handlers/form_validator_php.php');
+include_once (ROOT . "/components/sidebars/sidebars.php");
+include_once (ROOT . "/models/admin_models_php.php");
+include_once (ROOT . "/models/voluntary_models_php.php");
 
 $conn = connectDatabase();
 $subscribed_events = get_subscribed_events($conn, $_SESSION['USER_ID']);

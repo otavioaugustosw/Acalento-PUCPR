@@ -1,5 +1,6 @@
 <?php
-include (ROOT . "/php/config/database_php.php");
+include_once (ROOT . "/php/config/database_php.php");
+include_once (ROOT . "/models/common_models_php.php");
 
 $conn = connectDatabase();;
 

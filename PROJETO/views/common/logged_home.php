@@ -1,11 +1,11 @@
 <?php
-include (ROOT . "/php/config/database_php.php");
-include(ROOT . "/components/sidebars/sidebars.php");
-include(ROOT . "/components/table/tables.php");
-include(ROOT . "/components/cards/cards.php");
-include(ROOT . "/models/donator_models_php.php");
-include(ROOT . "/models/voluntary_models_php.php");
-include (ROOT . "/php/handlers/filter_php.php");
+include_once (ROOT . "/php/config/database_php.php");
+include_once (ROOT . "/components/sidebars/sidebars.php");
+include_once (ROOT . "/components/table/tables.php");
+include_once (ROOT . "/components/cards/cards.php");
+include_once (ROOT . "/models/donator_models_php.php");
+include_once (ROOT . "/models/voluntary_models_php.php");
+include_once  (ROOT . "/php/handlers/filter_php.php");
 
 $conn = connectDatabase();
 $next_events = get_events_where($conn, 'WHERE evento.data >= NOW() AND evento.inativo = 0 ORDER BY evento.id DESC LIMIT 2;');

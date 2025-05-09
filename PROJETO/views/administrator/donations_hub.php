@@ -1,9 +1,9 @@
 <?php
-include(ROOT . "/php/config/database_php.php");
-include(ROOT . "/components/sidebars/sidebars.php");
-include(ROOT . "/components/table/tables.php");
-include(ROOT . "/components/cards/cards.php");
-include(ROOT . "/models/donator_models_php.php");
+include_once (ROOT . "/php/config/database_php.php");
+include_once (ROOT . "/components/sidebars/sidebars.php");
+include_once (ROOT . "/components/table/tables.php");
+include_once (ROOT . "/components/cards/cards.php");
+include_once (ROOT . "/models/donator_models_php.php");
 
 $conn = connectDatabase();
 $all_donations = get_donations_where($conn, "ORDER BY doacao.id DESC LIMIT 5");

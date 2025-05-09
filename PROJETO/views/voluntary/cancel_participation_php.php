@@ -1,5 +1,8 @@
 <?php
-include (ROOT . "/php/config/database_php.php");
+include_once (ROOT . "/php/config/database_php.php");
+include_once (ROOT . "/models/voluntary_models_php.php");
+include_once (ROOT . "/models/common_models_php.php");
+
 $conn = connectDatabase();
 
 // Verifica se o usuário está logado

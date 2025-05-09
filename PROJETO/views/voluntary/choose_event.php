@@ -1,11 +1,12 @@
 <?php
 // todos includes e queries sempre no cabeçalho do código
-include(ROOT . "/php/config/database_php.php");
-include(ROOT . "/php/handlers/filter_php.php");
-include(ROOT . "/components/filter/filter.php");
-include(ROOT . "/components/cards/cards.php");
-include(ROOT .  "/components/sidebars/sidebars.php");
-include(ROOT .  "/models/voluntary_models_php.php");
+include_once (ROOT . "/php/config/database_php.php");
+include_once (ROOT . "/php/handlers/filter_php.php");
+include_once (ROOT . "/components/filter/filter.php");
+include_once (ROOT . "/components/cards/cards.php");
+include_once (ROOT .  "/components/sidebars/sidebars.php");
+include_once (ROOT .  "/models/voluntary_models_php.php");
+include_once (ROOT .  "/php/handlers/error_handler_php.php");
 
 $conn = connectDatabase();
 $subscribed_events = get_subscribed_events($conn, $_SESSION['USER_ID']);

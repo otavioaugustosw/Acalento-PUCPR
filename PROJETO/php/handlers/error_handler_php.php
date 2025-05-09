@@ -1,5 +1,5 @@
 <?php
-include (ROOT . '/components/popup/popup.php');
+include_once (ROOT . '/components/popup/popup.php');
 const PAGE_ERROR = [
     1=> "Não possui acesso administrador",
     2=> "Página não existente",

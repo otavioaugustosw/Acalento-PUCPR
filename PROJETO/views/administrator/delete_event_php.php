@@ -1,5 +1,6 @@
 <?php
-include (ROOT . "/php/config/database_php.php");
+include_once (ROOT . "/php/config/database_php.php");
+include_once (ROOT . "/models/admin_models_php.php");
 
 if (isset($_GET['id'])) {
     // a função intval tranforma o valor em um valor inteiro, está segundo usado apenas por precaução

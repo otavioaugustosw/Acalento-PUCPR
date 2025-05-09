@@ -1,7 +1,4 @@
 <?php
-include (ROOT . "/php/config/database_php.php");
-include(ROOT . "/php/handlers/form_validator_php.php");
-include(ROOT . "/components/sidebars/sidebars.php");
 $conn = connectDatabase();
 $id_usuario = $_SESSION['USER_ID'];
 $id_endereco = $_SESSION['USER_ADDRESS_ID'];
@@ -18,6 +15,10 @@ if (!$resultado) {
 }
 
 $dados = $resultado->fetch_object();
+include_once (ROOT . "/php/config/database_php.php");
+include_once (ROOT . "/php/handlers/form_validator_php.php");
+include_once (ROOT . "/components/sidebars/sidebars.php");
+include_once (ROOT . "/models/common_models_php.php");
 
 if (!$dados) {
     showError(1);

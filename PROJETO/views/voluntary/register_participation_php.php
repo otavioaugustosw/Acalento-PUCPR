@@ -1,6 +1,6 @@
 <?php
-include (ROOT . "/php/config/database_php.php");
-include (ROOT . "/php/auth_services/auth_service_php.php");
+include_once (ROOT . "/php/config/database_php.php");
+include_once (ROOT . "/php/auth_services/auth_service_php.php");
 $conn = connectDatabase();
 
 // Verifica se usuário está "logado"

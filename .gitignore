@@ -7,3 +7,7 @@ PROJETO/.idea/sqldialects.xml
 .DS_Store
 PROJETO/.idea/dataSources.xml
 PROJETO/php/config/password_generator.php
+PROJETO/developing.php
+PROJETO/qodana.sarif.json
+PROJETO/qodana.yaml
+PROJETO/.idea/php.xml

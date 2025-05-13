@@ -41,7 +41,7 @@ $settlements = get_all_settlements($conn);
                 <div class="mb-3">
                     <!-- aqui vai o que você quer por -->
                     <h4>Evento</h4>
-                    <form class="row g-3" method="POST" action="">
+                    <form class="row g-3" method="POST" action="" enctype="multipart/form-data">
                         <div class="col-md-6">
                             <label for="inputNome" class="form-label">Nome*</label>
                             <input type="text" class="form-control" id="inputNome" name="nome" value="<?= $_POST['nome'] ?? null ?>">
@@ -85,8 +85,7 @@ $settlements = get_all_settlements($conn);
                         </div>
                         <div class="col-md-4">
                             <label for="inputImagem" class="form-label">Insira imagem*</label>
-                            <input type="text" class="form-control" id="inputImagem" name="link_media" value="<?= $_POST['link_media'] ?? null ?>">
-                            <div id="validacaoImagem" class="invalid-feedback">
+                            <input type="file" class="form-control" id="inputImagem" name="link_media" value="<?= $_FILES['link_media'] ?? null ?>">
                                 Digite um link válido.
                             </div>
                         </div>
@@ -138,7 +137,9 @@ function submitInformation($conn) {
         return;
     }
 
-    if (!has_max_length($_POST['link_media'], 256)) {
+    $image = validateFile('link_media');
+
+    if (!has_max_length($image, 256)) {
         display_validation('inputImagem', false);
         return;
     }
@@ -150,7 +151,8 @@ function submitInformation($conn) {
 
     $did_create_event = create_event(
         $conn,
-        $_POST
+        $_POST,
+        $image
     );
 
     if ($did_create_event) {

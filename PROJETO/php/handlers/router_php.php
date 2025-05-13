@@ -115,6 +115,9 @@ function routeToAdministrator($pageNum)
         case 15:
             include_once 'views/donator/view_donations.php';
             break;
+        case 16:
+            include 'views/administrator/register_donation_material.php';
+            break;
         default:
             header('location: index.php?common=4&error=2');
     }

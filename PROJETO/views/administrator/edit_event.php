@@ -10,16 +10,6 @@ if (!isset($_GET['id'])) {
     showError(9);
 }
 $event_id =  intval($_GET['id']);
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_GET['id'] )) {
-    $did_update_event = update_event($conn, $_POST, $event_id);
-    if (!$did_update_event) {
-        showError(8);
-    } else {
-        showSucess(5);
-    }
-}
-
 $event = get_events_where($conn, "WHERE evento.id = $event_id", $_SESSION['USER_ID'])->fetch_object();
 $settlements = get_all_settlements($conn);
 ?>
@@ -50,19 +40,19 @@ $settlements = get_all_settlements($conn);
                 <div class="mb-3">
                     <!-- aqui vai o que você quer por -->
                     <h4>Evento</h4>
-                    <form class="row g-3" method="POST" action="">
+                    <form class="row g-3" method="POST" action="" enctype="multipart/form-data">
                         <!-- para três em uma linha -->
                         <div class="col-md-6">
                             <label for="inputNome" class="form-label">Nome*</label>
-                            <input type="text" class="form-control" id="inputNome" name="nome" value="<?php echo $event->nome; ?>">
+                            <input type="text" class="form-control" id="inputNome" name="nome" value="<?php echo $_POST['nome'] ?? $event->nome; ?>">
                         </div>
                         <div class="col-md-3">
                             <label for="inputData" class="form-label">Data*</label>
-                            <input type="date" class="form-control" id="inputData" placeholder="Data" name="data" value="<?php echo $event->data; ?>">
+                            <input type="date" class="form-control" id="inputData" placeholder="Data" name="data" value="<?php echo $_POST['data'] ?? $event->data; ?>">
                         </div>
                         <div class="col-md-3">
                             <label for="inputTime" class="form-label">Horário*</label>
-                            <input type="time" class="form-control" id="inputTime" placeholder="Hora" name="hora" value="<?php echo $event->hora; ?>">
+                            <input type="time" class="form-control" id="inputTime" placeholder="Hora" name="hora" value="<?php echo $_POST['hora'] ?? $event->hora; ?>">
                         </div>
 
                         <!-- para dois em uma linha -->
@@ -78,17 +68,17 @@ $settlements = get_all_settlements($conn);
                         </div>
                         <div class="col-md-4">
                             <label for="inputLotacao" class="form-label">Lotação máxima*</label>
-                            <input type="number" class="form-control" id="inputLotacao" name="lotacao_max" value="<?php echo $event->lotacao_max; ?>">
+                            <input type="number" class="form-control" id="inputLotacao" name="lotacao_max" value="<?php echo $_POST['lotacao_max'] ?? $event->lotacao_max; ?>">
                         </div>
                         <div class="col-md-4">
                             <label for="inputImagem" class="form-label">Insira imagem*</label>
-                            <input type="text" class="form-control" id="inputImagem" name="link_media" value="<?php echo $event->link_media; ?>">
+                            <input type="file" class="form-control" id="inputImagem" name="link_media" value="<?php echo $_POST['link_media'] ?? $event->link_media; ?>">
                         </div>
 
                         <!-- um em uma linha -->
                         <div class="col-12">
                             <label for="inputDescricao" class="form-label">Descrição*</label>
-                            <textarea type="text" class="form-control" id="inputDescricao" name="descricao" rows="5"><?php echo $event->descricao; ?></textarea>
+                            <textarea type="text" class="form-control" id="inputDescricao" name="descricao" rows="5"><?php echo$_POST['descricao'] ?? $event->descricao; ?></textarea>
                         </div>
 
                         <div class="col-12">
@@ -103,3 +93,63 @@ $settlements = get_all_settlements($conn);
 </div>
 </body>
 </html>
+<?php
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    submitInformation($conn, $event);
+}
+
+function submitInformation($conn, $event) {
+
+    if (!is_alpha_only($_POST['nome']) || !has_max_length($_POST['nome'], 50)) {
+        display_validation('inputNome', false);
+        return;
+    }
+
+    if (!is_date_valid($_POST['data'])) {
+        display_validation('inputData', false);
+        return;
+    }
+
+    if (!is_numeric_only($_POST['id_assentamento'])) {
+        display_validation('inputAssentamento', false);
+        return;
+    }
+
+    if (!is_numeric_only($_POST['lotacao_max'])) {
+        display_validation('inputLotacao', false);
+        return;
+    }
+
+    $image = $event->link_media;
+
+    if (isset($_FILES['link_media']) && $_FILES['link_media']['error'] === UPLOAD_ERR_OK) {
+        $novoArquivo = validateFile('link_media');
+        if ($novoArquivo) {
+            $image = $novoArquivo;
+        }
+    }
+
+    if (!has_max_length($image, 256)) {
+        display_validation('inputImagem', false);
+        return;
+    }
+
+    if (!is_alpha_only($_POST['descricao']) || !has_max_length($_POST['descricao'], 100)) {
+        display_validation('inputDescricao', false);
+        return;
+    }
+
+    $did_update_event = update_event(
+        $conn,
+        $_POST,
+        $event->id,
+        $image
+    );
+
+    if ($did_update_event) {
+        showSucess(2);
+    }
+    else {
+        showError(4);
+    }
+}

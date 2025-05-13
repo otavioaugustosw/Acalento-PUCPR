@@ -20,3 +20,41 @@ label {
 form {
     margin-block-end: 0 !important;
 }
+
+
+.choices__inner {
+    padding: 10px !important;
+    margin: 5px 0 !important;
+    border: var(--default-border) !important;
+    border-radius: var(--default-radius) !important;
+    font-family: var(--text-font), sans-serif !important;
+    font-size: 14px !important;
+    color: var(--primary-blue) !important;
+    background-color: #fff !important;
+    min-height: 45px;
+}
+
+.choices__list--single {
+    color: var(--primary-blue) !important;
+    font-family: var(--text-font), sans-serif;
+}
+
+/* A caixa que aparece com as opções */
+.choices__list--dropdown {
+    background-color: #fff;
+    border: var(--default-border);
+    border-radius: var(--default-radius);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    font-family: var(--text-font), sans-serif;
+    z-index: 9999;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+/* Itens dentro do dropdown */
+.choices__list--dropdown .choices__item {
+    padding: 10px;
+    font-size: 14px;
+    color: var(--primary-blue);
+    cursor: pointer;
+}

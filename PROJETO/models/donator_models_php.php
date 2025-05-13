@@ -67,3 +67,56 @@ function get_campaigns_where(mysqli $conn, ?string $where = null)
         return false;
     }
 }
+
+/**
+ * Registra uma nova doação e marca o usuário como doador, se aplicável.
+ *
+ * @param mysqli $conn Conexão ativa com o banco de dados.
+ * @param int $campaign_id ID da campanha de doação.
+ * @param int $stock_id ID do estoque associado.
+ * @param int $user_id ID do usuário (ou null se não logado).
+ * @param array $data Dados da doação (id_opcao_item_doacao, quantidade, unidade_medida, categoria, data).
+ * @return bool true em caso de sucesso, false caso contrário.
+ */
+function create_material_donation(
+    mysqli $conn,
+    ?int $campaign_id,
+    ?int $stock_id,
+    int $user_id,
+    array $data
+): bool {
+    try {
+        $query = "
+            INSERT INTO doacao (
+                id_campanha_doacao, id_estoque, id_opcao_item_doacao, id_usuario,
+                quantidade, unidade_medida, categoria, data
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param(
+            "iiiissss",
+            $campaign_id,
+            $stock_id,
+            $data['id_opcao_item_doacao'],
+            $user_id,
+            $data['quantidade'],
+            $data['unidade_medida'],
+            $data['categoria'],
+            $data['data']
+        );
+        $stmt->execute();
+
+        if (!is_null($user_id)) {
+            $updateQuery = "UPDATE usuario SET eh_doador = 1 WHERE id = ?";
+            $updateStmt = $conn->prepare($updateQuery);
+            $updateStmt->bind_param("i", $user_id);
+            $updateStmt->execute();
+        }
+
+        return true;
+
+    } catch (mysqli_sql_exception $e) {
+        var_dump($e);
+        return false;
+    }
+}

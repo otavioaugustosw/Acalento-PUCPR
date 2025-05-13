@@ -161,3 +161,34 @@ function is_date_valid(string $date): bool
     $d = DateTime::createFromFormat('Y-m-d', $date);
     return $d && $d->format('Y-m-d') === $date;
 }
+
+function validateFile(string $nameInput)
+{
+    $arquivo = $_FILES[$nameInput] ?? null;
+
+    if ($arquivo === null || $arquivo["error"] !== UPLOAD_ERR_OK) {
+        echo "Nenhum arquivo enviado ou houve erro no envio.";
+        return;
+    }
+    if ($arquivo["size"] > 10485760) {
+        echo "deu erro";
+        exit;
+    }
+    $pasta = "media/";
+    $nomeArquivo = $arquivo["name"];
+    $novoNomeArquivo = uniqid();
+    $extensao = strtolower(pathinfo($nomeArquivo, PATHINFO_EXTENSION));
+    $permitidos = ['pdf', 'jpg', 'jpeg', 'png', 'gif'];
+    if (!in_array($extensao, $permitidos)) {
+        echo "Tipo de arquivo não permitido.";
+        exit;
+    }
+    $teste = move_uploaded_file($arquivo["tmp_name"], $pasta . $novoNomeArquivo . "." . $extensao);
+    if ($teste) {
+        echo "deu certo!!!!!";
+    } else {
+        echo "Deu errado";
+    }
+
+    return $pasta . $novoNomeArquivo . "." . $extensao;
+}

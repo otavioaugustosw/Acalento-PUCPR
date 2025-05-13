@@ -60,7 +60,7 @@ function create_user_admin(mysqli $conn, array $data, int $address_id): bool
  * @param array $data Dados do evento.
  * @return bool Retorna true se o evento foi criado com sucesso, false caso contrário.
  */
-function create_event(mysqli $conn, array $data): bool
+function create_event(mysqli $conn, array $data, $image_path): bool
 {
     try {
         $query = "
@@ -82,7 +82,7 @@ function create_event(mysqli $conn, array $data): bool
             $data['lotacao_max'],
             $data['data'],
             $data['hora'],
-            $data['link_media']
+            $image_path
         );
 
         if (!$stmt->execute()) {
@@ -103,7 +103,7 @@ function create_event(mysqli $conn, array $data): bool
  * @param int $event_id ID do evento a ser atualizado.
  * @return bool Verdadeiro em caso de sucesso.
  */
-function update_event(mysqli $conn, array $data, int $event_id): bool
+function update_event(mysqli $conn, array $data, int $event_id, string $image_path): bool
 {
     try {
         $query = "UPDATE evento 
@@ -122,14 +122,14 @@ function update_event(mysqli $conn, array $data, int $event_id): bool
         }
 
         $stmt->bind_param(
-            "issssisi",
+            "issssssi",
             $data['id_assentamento'],
             $data['nome'],
             $data['descricao'],
             $data['data'],
             $data['hora'],
             $data['lotacao_max'],
-            $data['link_media'],
+            $image_path,
             $event_id
         );
 

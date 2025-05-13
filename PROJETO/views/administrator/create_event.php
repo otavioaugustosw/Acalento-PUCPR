@@ -1,5 +1,5 @@
 <?php
-include (ROOT . "/php/config/database_php.php");
+include(ROOT . "/php/config/database_php.php");
 include(ROOT . '/php/handlers/form_validator_php.php');
 include(ROOT .  "/components/sidebars/sidebars.php");
 
@@ -39,7 +39,7 @@ $assentamento = $conn->query("SELECT id, nome FROM assentamento");
                 <div class="mb-3">
                     <!-- aqui vai o que você quer por -->
                     <h4>Evento</h4>
-                    <form class="row g-3" method="POST" action="">
+                    <form class="row g-3" method="POST" action="" enctype="multipart/form-data">
                         <div class="col-md-6">
                             <label for="inputNome" class="form-label">Nome*</label>
                             <input type="text" class="form-control" id="inputNome" name="nome" value="<?= $_POST['nome'] ?? null ?>">
@@ -83,9 +83,9 @@ $assentamento = $conn->query("SELECT id, nome FROM assentamento");
                         </div>
                         <div class="col-md-4">
                             <label for="inputImagem" class="form-label">Insira imagem*</label>
-                            <input type="text" class="form-control" id="inputImagem" name="imagem" value="<?= $_POST['imagem'] ?? null ?>">
+                            <input type="file" class="form-control" id="inputImagem" name="imagem" value="<?= $_FILES['imagem'] ?? null ?>">
                             <div id="validacaoImagem" class="invalid-feedback">
-                                Digite um link válido.
+                                Envie uma imagem.
                             </div>
                         </div>
 
@@ -126,11 +126,6 @@ function submitInformation($sql) {
         return;
     }
 
-//    if (!isTimeValid($_POST['hora'])) {
-//        displayValidation('inputHora', false);
-//        return;
-//    }
-
     if (!isNumericOnly($_POST['id_assentamento'])) {
         displayValidation('inputAssentamento', false);
         return;
@@ -151,13 +146,15 @@ function submitInformation($sql) {
         return;
     }
 
+    $imagem = validateFile('imagem');
+
 
     try {
         $query = "
-        INSERT INTO evento(id_assentamento, nome, descricao, lotacao_max, data, hora, link_imagem)
+        INSERT INTO evento(id_assentamento, nome, descricao, lotacao_max, data, hora, link_media)
         VALUES ( ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $sql->prepare($query);
-        $stmt->bind_param("ississs", $_POST['id_assentamento'], $_POST['nome'], $_POST['descricao'], $_POST['lotacao'], $_POST['data'], $_POST['hora'], $_POST['imagem']);
+        $stmt->bind_param("ississs", $_POST['id_assentamento'], $_POST['nome'], $_POST['descricao'], $_POST['lotacao'], $_POST['data'], $_POST['hora'], $imagem);
         $stmt->execute(); // executa query
         showSucess(2);
     } catch (mysqli_sql_exception $E) {

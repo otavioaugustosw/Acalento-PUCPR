@@ -106,7 +106,8 @@ function make_sidebar() {?>
                 <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                     <li><a href="index.php?adm=1" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Cadastrar campanha</a></li>
                     <li><a href="index.php?adm=8" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Visualizar campanhas</a></li>
-                    <li><a href="index.php?adm=3" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Registrar doação</a></li>
+                    <li><a href="index.php?adm=3" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Registrar doação monetária</a></li>
+                    <li><a href="index.php?adm=16" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Registrar doação material</a></li>
                     <li><a href="index.php?adm=7" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Visualizar doações</a></li>
                     <li><a href="index.php?adm=2" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Cadastrar evento</a></li>
                     <li><a href="index.php?adm=5" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Editar evento</a></li>

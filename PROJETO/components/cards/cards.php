@@ -124,7 +124,7 @@ function vertical_admin_event_card($event)
         "$data_formatada às $hora_formatada",
         "$event->inscritos/$event->lotacao_max inscritos",
         $event->descricao,
-        $event->link_imagem,
+        $event->link_media,
         $buttons_render
     );
 }
@@ -152,7 +152,7 @@ function horizontal_admin_event_card($event)
             "$data_formatada às $hora_formatada",
             "$event->inscritos/$event->lotacao_max inscritos",
             $event->descricao,
-            $event->link_imagem,
+            $event->link_media,
             $buttons_render
     );
 }
@@ -181,7 +181,7 @@ function vertical_voluntary_event_card($event, $subscribed_events)
         $event->assentamento_nome,
         "$event->inscritos/$event->lotacao_max inscritos",
         $event->descricao,
-        $event->link_imagem,
+        $event->link_media,
         $buttons_render
     );
 }
@@ -210,7 +210,7 @@ function horizontal_voluntary_event_card($event, $subscribed_events)
         $event->assentamento_nome,
         "$event->inscritos/$event->lotacao_max inscritos",
         $event->descricao,
-        $event->link_imagem,
+        $event->link_media,
         $buttons_render
     );
 }

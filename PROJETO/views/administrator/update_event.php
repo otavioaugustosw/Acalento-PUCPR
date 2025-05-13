@@ -1,5 +1,5 @@
 <?php
-include (ROOT . "/php/config/database_php.php");
+include(ROOT . "/php/config/database_php.php");
 include(ROOT . '/php/handlers/form_validator_php.php');
 include(ROOT .  "/components/sidebars/sidebars.php");
 
@@ -9,33 +9,52 @@ if (!isset($_GET['id'])) {
     showError(9);
 }
 
+$evento = $conn->query("SELECT * FROM evento WHERE id = $id")->fetch_object();
+$assentamento = $conn->query("SELECT id, nome FROM assentamento");
+
 if (isset($_GET['id'])) {
-    if (isset($_POST['descricao'])) {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        $imagem = $evento->link_media;
+
+        if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] === UPLOAD_ERR_OK) {
+            $novoArquivo = validateFile('imagem');
+            if ($novoArquivo) {
+                $imagem = $novoArquivo;
+            }
+        }
+
         $query =
             "UPDATE evento 
             SET
-            id_assentamento = '" . $_POST['id_assentamento'] . "',
-            nome = '" . $_POST['nome'] . "',
-            descricao = '" . $_POST['descricao'] . "',
-            data = '" . $_POST['data'] . "',
-            hora = '" . $_POST['hora'] . "',
-            lotacao_max = " . $_POST['lotacao'] . ",
-            link_imagem = '" . $_POST['imagem'] . "'
-            WHERE id = " . $_GET['id'] . "
+            id_assentamento = ?,
+            nome = ?,
+            descricao = ?,
+            data = ?,
+            hora = ?,
+            lotacao_max = ?,
+            link_media = ?
+            WHERE id = ?
         ";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param(
+            "issssssi",
+            $_POST['id_assentamento'],
+            $_POST['nome'],
+            $_POST['descricao'],
+            $_POST['data'],
+            $_POST['hora'],
+            $_POST['lotacao'],
+            $imagem,
+            $_GET['id']
+        );
 
-
-        $resultado = $conn->query($query);
-
-        if (!$resultado) {
-            showError(8);
-        } else {
+        if ($stmt->execute()) {
             showSucess(5);
+        } else {
+            showError(8);
         }
     }
 }
-$evento = $conn->query("SELECT * FROM evento WHERE id = $id")->fetch_object();
-$assentamento = $conn->query("SELECT id, nome FROM assentamento");
 ?>
 
 <!doctype html>
@@ -65,7 +84,7 @@ $assentamento = $conn->query("SELECT id, nome FROM assentamento");
                 <div class="mb-3">
                     <!-- aqui vai o que você quer por -->
                     <h4>Evento</h4>
-                    <form class="row g-3" method="POST" action="">
+                    <form class="row g-3" method="POST" action="" enctype="multipart/form-data">
                         <!-- para três em uma linha -->
                         <div class="col-md-6">
                             <label for="inputNome" class="form-label">Nome*</label>
@@ -97,7 +116,7 @@ $assentamento = $conn->query("SELECT id, nome FROM assentamento");
                         </div>
                         <div class="col-md-4">
                             <label for="inputImagem" class="form-label">Insira imagem*</label>
-                            <input type="text" class="form-control" id="inputImagem" name="imagem" value="<?php echo $evento->link_imagem; ?>">
+                            <input type="file" class="form-control" id="inputImagem" name="imagem" value="<?php echo $evento->link_media; ?>">
                         </div>
 
                         <!-- um em uma linha -->

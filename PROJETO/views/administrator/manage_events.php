@@ -1,5 +1,4 @@
 <?php
-// todos includes e queries sempre no cabeçalho do código
 include_once (ROOT . "/php/config/database_php.php");
 include_once (ROOT . "/php/handlers/filter_php.php");
 include_once (ROOT . "/components/filter/filter.php");
@@ -23,11 +22,14 @@ $events = get_events_where($conn, setWhere('evento'), $_SESSION['USER_ID']);
     <link rel="stylesheet" href="css/cards.css">
     <link rel="stylesheet" href="css/form-style.css">
     <link rel="stylesheet" href="css/sidebar.css">
-    <title>Acalento | Eventos</title>
+    <title>Acalento | Editar evento</title>
 </head>
+
 <body>
+<!-- monta a sidebar mobile -->
 <?php make_mobile_sidebar() ?>
 <div class="d-flex flex-nowrap">
+    <!--    monta a sidebar desktop-->
     <?php make_sidebar();
 
     if (isset($_GET['error'])){
@@ -38,12 +40,22 @@ $events = get_events_where($conn, setWhere('evento'), $_SESSION['USER_ID']);
         showSucess($_GET['success']);
     }
     ?>
+    <!-- fim sidebar -->
+
+    <!-- conteudo -->
     <div class="main-content">
         <main class="px-5 row addScroll">
             <div class="container-fluid">
                 <div class="mb-3">
-                    <h2>Eventos</h2>
-                    <?php makeFilter() ?>
+                    <!-- aqui vai o que você quer por -->
+                    <?php make_buttom_back(); ?>
+                    <div class="d-flex justify-content-between">
+                        <h2>Eventos</h2>
+                        <div class="my-5">
+                            <?php makeButton("Cadastrar novo evento", "btn btn-primary", "index.php?adm=2"); ?>
+                        </div>
+                    </div>
+                    <?php makeFilter();?>
                     <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-2 row-cols-xl-2 row-cols-xxl-3 g-5 main">
                         <?php
                         if (!$events) {
@@ -53,10 +65,11 @@ $events = get_events_where($conn, setWhere('evento'), $_SESSION['USER_ID']);
                             echo '<h3>Nenhum evento cadastrado</h3>';
                         }
                         else {
-                            render_events_card($events, voluntary: true);
+                            render_events_card($events, admin: true);
                         }
                         ?>
                     </div>
+                    <!-- aqui termina -->
                 </div>
             </div>
         </main>

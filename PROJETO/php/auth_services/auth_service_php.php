@@ -12,14 +12,14 @@ const MESSAGES = [
     "USER_AUTHENTICATED" => ["status" => true, "statusName" => "USER_AUTHENTICATED"],
 ];
 
-function authenticate_user($sql, $email, $typedPassword): array
+function authenticate_user($conn, $email, $typedPassword): array
 {
     if ($_SESSION['LOGIN_ATTEMPTS'] >= MAX_LOGIN_ATTEMPTS) {
         sleep(3);
         return ["status" => false, "statusName" => "BLOCK"];
     }
     try {
-        $userExists = _get_user_by_email($sql, $email);
+        $userExists = _get_user_by_email($conn, $email);
         if (!$userExists["status"]) {
             _handle_failed_attempt();
             return $userExists;
@@ -33,7 +33,7 @@ function authenticate_user($sql, $email, $typedPassword): array
         session_regenerate_id(true);
         $_SESSION["USER_ID"] = $user->id;
         $_SESSION['LOGIN_ATTEMPTS'] = 0;
-        return load_user_session_data($sql);
+        return load_user_session_data($conn);
     } catch (mysqli_sql_exception $E) {
         return MESSAGES["AUTH_FAILURE"];
     }
@@ -56,10 +56,10 @@ function _handle_failed_attempt() {
     $_SESSION['LOGIN_ATTEMPTS'] = $_SESSION['LOGIN_ATTEMPTS'] + 1;
 }
 
-function _get_user_by_email($sql, $email): array
+function _get_user_by_email($conn, $email): array
 {
     $query = "SELECT id, senha FROM usuario WHERE email = ?";
-    $stmt = $sql->prepare($query);
+    $stmt = $conn->prepare($query);
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -81,10 +81,10 @@ function _is_password_correct($password, $hashedPassword): array
     }
 }
 
-function load_user_session_data($sql): array
+function load_user_session_data($conn): array
 {
     $query = "SELECT email, nome, eh_doador, eh_adm, eh_voluntario, id_endereco FROM usuario WHERE id = ?;";
-    $stmt = $sql->prepare($query);
+    $stmt = $conn->prepare($query);
     $stmt->bind_param("i", $_SESSION['USER_ID']);
     $stmt->execute();
     $result = $stmt->get_result();

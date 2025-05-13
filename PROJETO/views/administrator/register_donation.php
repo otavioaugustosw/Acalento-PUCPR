@@ -126,13 +126,23 @@ function submitInformation($conn)
     $id_usuario = $_POST['id_usuario'] == 0 ? null : $_POST['id_usuario'];
     $valor = isset($_POST['valor']) && $_POST['valor'] !== '' ? (float) $_POST['valor'] : null;
 
-    if ($id_usuario !== null && !isNumericOnly($id_usuario)) {
-        displayValidation('inputDoador', false);
+    if ($id_usuario !== null && !is_numeric($id_usuario)) {
+        display_validation('inputDoador', false);
         return;
     }
 
-    if (!isDateValid($_POST['data'])) {
-        displayValidation('inputData', false);
+    if (!is_date_valid($_POST['data'])) {
+        display_validation('inputData', false);
+        return;
+    }
+
+    if (!is_numeric($valor)) {
+        display_validation('inputValor', false);
+        return;
+    }
+
+    if ($campoArquivo === null) {
+        display_validation('inputComprovante', false);
         return;
     }
 

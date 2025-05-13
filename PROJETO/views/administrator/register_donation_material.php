@@ -1,9 +1,10 @@
 <?php
-include(ROOT . "/php/config/database_php.php");
-include(ROOT . '/php/handlers/form_validator_php.php');
-include(ROOT .  "/components/sidebars/sidebars.php");
-include(ROOT . "/php/auth_services/auth_service_php.php");
-include(ROOT . "/components/back/back.php");
+include_once (ROOT . "/php/config/database_php.php");
+include_once (ROOT . "/php/handlers/form_validator_php.php");
+include_once (ROOT . "/components/sidebars/sidebars.php");
+include_once (ROOT . "/php/auth_services/auth_service_php.php");
+include_once (ROOT . "/components/back/back.php");
+include_once (ROOT . "/models/donator_models_php.php");
 
 
 $conn = connectDatabase();
@@ -73,7 +74,7 @@ load_user_session_data($conn);
                         <!-- item -->
                         <div class="col-md-4" id="campoItem">
                             <label for="inputItem" class="form-label">Item*</label>
-                            <select name="id_opcao" id="inputItem" class="form-select">
+                            <select name="id_opcao_item_doacao" id="inputItem" class="form-select">
                                 <option value="">Selecione o item</option>
                                 <?php $item = $conn->query("SELECT id, nome FROM opcao_item_doacao");
                                 while ($a = $item->fetch_object()) { ?>
@@ -194,12 +195,7 @@ load_user_session_data($conn);
 </html>
 <?php
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    if (submitInformation($conn)) {
-        header("Location: index.php?adm=3&success=3");
-    } else {
-        header("Location: index.php?adm=3&error=3");
-    }
-
+    submitInformation($conn);
 }
 
 
@@ -214,70 +210,57 @@ function submitInformation($conn)
     $opcoes_validas_um = ['mg', 'g', 'kg', 'ml', 'l', 'u'];
     $opcoes_validas_categoria = ['Alimentício', 'Brinquedo', 'Limpeza', 'Outros'];
 
-    if (!isNumericOnly($id_usuario)) {
-        displayValidation('inputDoador', false);
+    if (!is_numeric($id_usuario)) {
+        display_validation('inputDoador', false);
         return;
     }
 
-    if (!isDateValid($_POST['data'])) {
-        displayValidation('inputData', false);
+    if (!is_date_valid($_POST['data'])) {
+        display_validation('inputData', false);
         return;
     }
 
-    if ($idEstoque !== null && !isNumericOnly($idEstoque)) {
-        displayValidation('inputEstoque', false);
+    if ($idEstoque !== null && !is_numeric($idEstoque)) {
+        display_validation('inputEstoque', false);
         return;
     }
 
-    if ($idCampanha !== null && !isNumericOnly($idCampanha)) {
-        displayValidation('inputCampanha', false);
+    if ($idCampanha !== null && !is_numeric($idCampanha)) {
+        display_validation('inputCampanha', false);
         return;
     }
 
-    if (!isNumericOnly($_POST['id_opcao'])) {
-        displayValidation('inputItem', false);
+    if (!is_numeric($_POST['id_opcao_item_doacao'])) {
+        display_validation('inputItem', false);
         return;
     }
 
-    if (!isNumericOnly($quantidade)) {
-        displayValidation('inputQuantidade', false);
+    if (!is_numeric($quantidade)) {
+        display_validation('inputQuantidade', false);
         return;
     }
 
-    if (!in_array($unidadeMedida, $opcoes_validas_um) && (!isAlphaOnly($unidadeMedida) || !hasMaxLength($unidadeMedida, 3))) {
-        displayValidation('inputUnidadeMedida', false);
+    if (!in_array($unidadeMedida, $opcoes_validas_um) && (!is_alpha_only($unidadeMedida) || !has_max_length($unidadeMedida, 3))) {
+        display_validation('inputUnidadeMedida', false);
         return;
     }
 
-    if (!in_array($_POST['categoria'], $opcoes_validas_categoria) && !isAlphaOnly($_POST['categoria'])) {
-        displayValidation('inputCategoria', false);
+    if (!in_array($_POST['categoria'], $opcoes_validas_categoria) && !is_alpha_only($_POST['categoria'])) {
+        display_validation('inputCategoria', false);
         return;
     }
 
     if ($_POST['destino'] === "") {
-        displayValidation('selectDestino', false);
+        display_validation('selectDestino', false);
         return;
     }
 
-    try {
-        $query = "
-        INSERT INTO doacao(id_campanha_doacao, id_estoque, id_opcao_item_doacao, id_usuario, quantidade, unidade_medida, categoria, data) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        $stmt = $conn->prepare($query);
-        $stmt->bind_param("iiiissss", $idCampanha, $idEstoque, $_POST['id_opcao'], $id_usuario, $quantidade, $unidadeMedida, $_POST['categoria'], $_POST['data']);
-        $stmt->execute();
-        if ($id_usuario != null) {
-            $query = "UPDATE usuario SET eh_doador = 1 WHERE id = ?";
-            load_user_session_data($conn);
-            $stmt = $conn->prepare($query);
-            $stmt->bind_param("i", $id_usuario);
-            $stmt->execute();
-        }
-        return true;
-    } catch (mysqli_sql_exception $e) {
+    $did_create_donation = create_material_donation($conn, $idCampanha, $idEstoque, $id_usuario, $_POST);
+
+    if ($did_create_donation) {
+        showSucess(3);
+    }
+    else {
         showError(5);
-        ob_start(); // começa a capturar a saída
-        var_dump($e->getMessage());
-        return false;
     }
 }

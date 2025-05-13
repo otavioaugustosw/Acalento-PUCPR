@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @param mysqli $bd recebe a conexão com o banco de dados
  * @param string $tabela recebe o nome da tabela
@@ -8,7 +7,6 @@
  */
 function hasColumn(mysqli $bd, string $tabela, string $coluna): bool
 {
-
     $query = "SHOW COLUMNS FROM $tabela LIKE '$coluna'";
     $resultado = $bd->query($query);
     if (!$resultado) {

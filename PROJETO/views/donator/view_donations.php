@@ -1,10 +1,10 @@
 <?php
-include (ROOT . "/php/config/database_php.php");
-include(ROOT .  "/components/sidebars/sidebars.php");
-include(ROOT . "/components/filter/filter.php");
-include(ROOT . "/php/handlers/filter_php.php");
-include(ROOT . "/components/table/tables.php");
-include(ROOT . "/models/donator_models_php.php");
+include_once (ROOT . "/php/config/database_php.php");
+include_once (ROOT .  "/components/sidebars/sidebars.php");
+include_once (ROOT . "/components/filter/filter.php");
+include_once (ROOT . "/php/handlers/filter_php.php");
+include_once (ROOT . "/components/table/tables.php");
+include_once (ROOT . "/models/donator_models_php.php");
 $conn = connectDatabase();
 $where = set_where_donations($_GET['view'] ?? null, $_GET['id'] ?? 0);
 $page_name = "";

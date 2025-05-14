@@ -40,7 +40,7 @@ load_user_session_data($conn);
             <div class="container-fluid">
                 <div class="mb-3">
                     <!-- aqui vai o que você quer por -->
-                    <?php make_buttom_back();?>
+                    <?php make_buttom_back("index.php?common=6"); ?>
                     <h2>Registrar doação</h2>
                     <form class="row g-3" method="POST" action="">
 

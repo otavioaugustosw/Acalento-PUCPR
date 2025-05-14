@@ -4,6 +4,7 @@ include_once (ROOT . '/php/handlers/form_validator_php.php');
 include_once (ROOT .  "/components/sidebars/sidebars.php");
 include_once (ROOT .  "/models/voluntary_models_php.php");
 include_once (ROOT . "/models/admin_models_php.php");
+include_once (ROOT .  "/components/back/back.php");
 
 // conexão com o banco de dados
 $conn = connectDatabase();
@@ -36,10 +37,13 @@ $settlements = get_all_settlements($conn);
 
     <!-- conteudo -->
     <div class="main-content">
-        <main class="px-5 row align-items-center justify-content-center">
+        <main class="px-5 row justify-content-center">
             <div class="container-fluid">
                 <div class="mb-3">
                     <!-- aqui vai o que você quer por -->
+                    <div class="mb-5">
+                        <?php make_buttom_back("index.php?common=6");?>
+                    </div>
                     <h4>Evento</h4>
                     <form class="row g-3" method="POST" action="" enctype="multipart/form-data">
                         <div class="col-md-6">

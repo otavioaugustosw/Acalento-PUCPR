@@ -59,3 +59,43 @@ function makeFilter($donation = false)
 <?php
 }
 
+function make_filter_events (){ ?>
+    <form method="POST" action="" class="mb-4">
+        <div class="row g-3 align-items-center">
+            <div class="col-md-4">
+                <select name="filtro" id="filtro" class="form-select">
+                    <option value="">Selecione</option>
+                    <option value="ha_confirmar">Necessário a confirmação</option>
+                    <option value="confirmado">Presença confirmada</option>
+                    <option value="presente">Presentes</option>
+                    <option value="todos">Todos</option>
+                </select>
+            </div>
+
+            <div class="col-md-2 ">
+            <?php makeButton("Filtrar", "btn btn-primary w-100", "", true );?>
+            </div>
+        </div>
+    </form>
+<?php }
+
+function make_filter_user() { ?>
+    <form method="POST" action="" class="mb-4">
+        <div class="row g-3 align-items-center">
+            <div class="col-md-4">
+                <select name="filtro" id="filtro" class="form-select">
+                    <option value="">Selecione</option>
+                    <option value="todos">Todos</option>
+                    <option value="voluntario">Voluntário</option>
+                    <option value="administrador">Administrador</option>
+                    <option value="doador">Doador</option>
+                </select>
+            </div>
+
+            <div class="col-md-2 ">
+            <?php makeButton("Filtrar", "btn btn-primary w-100", "", true );?>
+            </div>
+        </div>
+    </form>
+<?php }
+

@@ -71,6 +71,7 @@ function make_sidebar() {?>
                 <?php } else { ?>
                     <li><a href="index.php?voluntary=2" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Inscrever-se</a></li>
                     <li><a href="index.php?voluntary=6" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Confirme a presença</a></li>
+                    <li><a href="index.php?voluntary=7" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Meus eventos</a></li>
                     <?php
                 }?>
             </ul>

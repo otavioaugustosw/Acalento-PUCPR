@@ -115,3 +115,62 @@ function set_where_donations($view, $campaign_id = 0)
         return setWhere('doacao') . " AND id_usuario =" . $_SESSION['USER_ID'];
     }
 }
+
+function set_where_my_events(){
+
+    $filtro = $_POST['filtro'] ?? 'todos';
+
+    /* satinização */
+    $opcoes_valida = ['ha_confirmar', 'confirmado', 'presente', 'todos'];
+    if (!in_array($filtro,$opcoes_valida)) {
+        $filtro = 'todos';
+    }
+
+    $where = '';
+    $usuario = 'id_usuario =' . $_SESSION['USER_ID'];
+
+    switch ($filtro) {
+        case 'ha_confirmar':
+            $where = 'WHERE participacao_confirmada = 0 AND evento.data > CURRENT_DATE AND ' . $usuario;
+            break;
+        case 'confirmado':
+            $where = 'WHERE participacao_confirmada = 1 AND presenca = 0 AND evento.data > CURRENT_DATE AND ' . $usuario;
+            break;
+        case 'presente':
+            $where = 'WHERE presenca = 1 AND evento.data > CURRENT_DATE AND ' . $usuario;
+            break;
+        case 'todos':
+            $where = 'WHERE ' . $usuario;
+            break;
+    }
+    return $where;
+}
+
+function set_where_user() {
+    $filtro = $_POST['filtro'] ?? 'todos';
+
+    /* sanitização */
+    $opcoes_valida = ['voluntario', 'doador', 'administrador', 'todos'];
+    if (!in_array($filtro,$opcoes_valida)) {
+        $filtro = 'todos';
+    }
+
+    $where = '';
+
+    switch ($filtro) {
+        case 'voluntario':
+            $where = 'WHERE eh_voluntario = 1';
+            break;
+        case 'doador':
+            $where = 'WHERE eh_doador = 1';
+            break;
+        case 'administrador':
+            $where = 'WHERE eh_adm = 1';
+            break;
+        case 'todos':
+            $where = 'WHERE 1=1';
+            break;
+    }
+
+    return $where;
+}

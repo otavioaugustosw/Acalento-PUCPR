@@ -60,6 +60,10 @@ function routeToVoluntary($pageNum)
             break;
         case 6:
             include_once 'views/voluntary/confirm_events.php';
+            break;
+        case 7:
+            include_once 'views/voluntary/my_events.php';
+            break;
         default:
             header('location: index.php?common=4&error=2');
     }
@@ -114,9 +118,6 @@ function routeToAdministrator($pageNum)
             break;
         case 15:
             include_once 'views/donator/view_donations.php';
-            break;
-        case 16:
-            include 'views/administrator/register_donation_material.php';
             break;
         case 16:
             include 'views/administrator/register_donation_material.php';

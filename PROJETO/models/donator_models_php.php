@@ -78,7 +78,6 @@ function get_donations_where(mysqli $conn, string $where)
  */
 function create_material_donation(
     mysqli $conn,
-    ?int $campaign_id,
     ?int $stock_id,
     int $user_id,
     array $data
@@ -88,7 +87,7 @@ function create_material_donation(
             INSERT INTO doacao (
                 id_estoque, id_opcao_item_doacao, id_usuario,
                 quantidade, unidade_medida, categoria, data
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            ) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         $stmt = $conn->prepare($query);
         $stmt->bind_param(

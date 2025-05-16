@@ -35,6 +35,12 @@ function routeToCommon($pageNum)
         case 10:
             include_once 'views/common/edit_password.php';
             break;
+        case 11:
+            include_once 'views/common/my_punishments.php';
+            break;
+        case 12:
+            include_once 'views/common/justify_punishment.php';
+            break;
         default:
             header('location: index.php?common=4&error=2');
     }
@@ -99,7 +105,7 @@ function routeToAdministrator($pageNum)
             include_once 'views/administrator/manage_punishments.php';
             break;
         case 10:
-            include_once 'views/administrator/edit_punishments.php';
+            include_once 'views/administrator/analyse_punishment.php';
             break;
         case 11:
             include_once 'views/administrator/register_admin.php';

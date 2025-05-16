@@ -6,7 +6,7 @@ include_once (ROOT . "/php/handlers/filter_php.php");
 include_once (ROOT . "/components/table/tables.php");
 include_once (ROOT . "/models/admin_models_php.php");
 $conn = connectDatabase();
-$where = " WHERE up.id_usuario !=" . $_SESSION['USER_ID'];
+$where = " WHERE up.id_usuario =" . $_SESSION['USER_ID'];
 $punishments = get_all_punishments($conn, $where);
 $table_head = ["ID", "Nome", "Email", "Data", "Evento", "Status", "Revisar"];
 
@@ -31,7 +31,7 @@ $table_head = ["ID", "Nome", "Email", "Data", "Evento", "Status", "Revisar"];
     <div class="main-content">
         <main class="px-5 row">
             <div class="container-fluid">
-                <h2>Gerenciar penalidades</h2>
+                <h2>Minhas penalidades</h2>
                 <?php
                 makeFilter();
                 if (!$punishments) {
@@ -41,7 +41,7 @@ $table_head = ["ID", "Nome", "Email", "Data", "Evento", "Status", "Revisar"];
                     echo '<h3 class="d-flex justify-content-center p-5">Nenhuma penalidade registrada.</h3>';
                 }
                 else {
-                    render_punishments_table($table_head, $punishments);
+                    render_punishments_table($table_head, $punishments, common: true);
                 }?>
             </div>
     </div>

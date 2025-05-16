@@ -132,31 +132,7 @@ load_user_session_data($conn);
                             </div>
                         </div>
 
-                        <div class="col-md-2" id="campoDestino">
-                            <label class="form-label">Destino do item*</label>
-                            <select id="selectDestino" name="destino" class="form-select" onchange="mostrarDestino()">
-                                <option value="">Selecione</option>
-                                <option value="campanha" <?= (($_POST['destino'] ?? '') == 'campanha') ? 'selected' : '' ?>>Campanha</option>
-                                <option value="estoque" <?= (($_POST['destino'] ?? '') == 'estoque')  ? 'selected' : '' ?>>Estoque</option>
-                            </select>
-                            <div id="validacaoDestino" class="invalid-feedback">
-                                Selecione um destino.
-                            </div>
-                        </div>
-
-                        <div class="col-md-10" id="campoCampanha" style="display: none;">
-                            <label class="form-label">Campanha</label>
-                            <select id=inputCampanha name="id_campanha_doacao" class="form-select">
-                                <option value="">Selecione a campanha</option>
-                                <?php
-                                $campanhas = $conn->query("SELECT id, nome FROM campanha_doacao");
-                                while ($a = $campanhas->fetch_object()) { ?>
-                                    <option value="<?php echo $a->id; ?> " <?= (isset($_POST['id_campanha_doacao']) && $_POST['id_campanha_doacao'] == $a->id) ? 'selected' : '' ?>><?php echo $a->nome; ?></option>
-                                <?php } ?>
-                            </select>
-                        </div>
-
-                        <div class="col-md-10" id="campoEstoque" style="display: none;">
+                        <div class="col-md-12" id="campoEstoque">
                             <label class="form-label">Estoque</label>
                             <select id=inputEstoque name="id_estoque" class="form-select">
                                 <option value="1">Estoque geral</option>
@@ -173,14 +149,7 @@ load_user_session_data($conn);
         </main>
     </div>
 </div>
-<script>
-    function mostrarDestino() {
-        // pega o valor de seleção de destino e dependendo do valor uma opção fica visivel ou a outra
-        const tipo = document.getElementById('selectDestino').value;
-        document.getElementById('campoCampanha').style.display = tipo === 'campanha' ? 'block' : 'none';
-        document.getElementById('campoEstoque').style.display = tipo === 'estoque' ? 'block' : 'none';
-    }
-</script>
+
 <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -191,6 +160,7 @@ load_user_session_data($conn);
         });
     });
 </script>
+
 </body>
 </html>
 <?php
@@ -202,9 +172,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 function submitInformation($conn)
 {
 
-    $idCampanha = ($_POST['destino'] === 'campanha' && isset($_POST['id_campanha_doacao'])) ? (int)$_POST['id_campanha_doacao'] : null;
     $id_usuario = $_POST['id_usuario'] == 0 ? null : $_POST['id_usuario'];
-    $idEstoque = ($_POST['destino'] === 'estoque' && isset($_POST['id_estoque'])) ? (int)$_POST['id_estoque'] : null;
+    $idEstoque = $_POST['id_estoque'];
     $quantidade = $_POST['quantidade'];
     $unidadeMedida = $_POST['unidade_medida'];
     $opcoes_validas_um = ['mg', 'g', 'kg', 'ml', 'l', 'u'];
@@ -220,13 +189,8 @@ function submitInformation($conn)
         return;
     }
 
-    if ($idEstoque !== null && !is_numeric($idEstoque)) {
+    if (!is_numeric($idEstoque)) {
         display_validation('inputEstoque', false);
-        return;
-    }
-
-    if ($idCampanha !== null && !is_numeric($idCampanha)) {
-        display_validation('inputCampanha', false);
         return;
     }
 
@@ -250,12 +214,7 @@ function submitInformation($conn)
         return;
     }
 
-    if ($_POST['destino'] === "") {
-        display_validation('selectDestino', false);
-        return;
-    }
-
-    $did_create_donation = create_material_donation($conn, $idCampanha, $idEstoque, $id_usuario, $_POST);
+    $did_create_donation = create_material_donation($conn, $idEstoque, $id_usuario, $_POST);
 
     if ($did_create_donation) {
         showSucess(3);

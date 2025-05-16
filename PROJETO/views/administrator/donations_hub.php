@@ -9,7 +9,6 @@ $conn = connectDatabase();
 $all_donations = get_donations_where($conn, "ORDER BY doacao.id DESC LIMIT 5");
 $inventory_donations = get_donations_where($conn, "WHERE doacao.id_estoque IS NOT NULL ORDER BY doacao.id DESC LIMIT 5");
 $inventory_donations = get_donations_where($conn, "WHERE doacao.id_estoque IS NOT NULL ORDER BY doacao.id DESC LIMIT 5");
-$all_campaigns = get_campaigns_where($conn, "ORDER BY campanha_doacao.id DESC LIMIT 4");
 $table_head = ["Item", "Quantidade", "Tipo", "Doador", "Data da doação", "Destino"];
 
 ?>
@@ -68,25 +67,6 @@ $table_head = ["Item", "Quantidade", "Tipo", "Doador", "Data da doação", "Dest
                             render_donator_donations_table($table_head, $inventory_donations);
                         }
                         ?>
-                    </div>
-                    <div>
-                        <div class="d-flex justify-content-between">
-                            <h2>Doações por campanha</h2>
-                            <a class="btn btn-primary" href="index.php?adm=8">Ver as doações por campanha</a>
-                        </div>
-                        <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-2 row-cols-xl-3 row-cols-xxl-4 g-4">
-                            <?php
-                            if (!$all_campaigns) {
-                                showError(7);
-                            }
-                            if ($all_campaigns->num_rows <= 0) {
-                                echo '<h3 class="d-flex justify-content-center p-4">Nenhuma campanha cadastrada</h3>';
-                            }
-                            else {
-                                render_campaigns_card($all_campaigns);
-                            }
-                            ?>
-                        </div>
                     </div>
                 </div>
         </main>

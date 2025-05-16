@@ -39,7 +39,7 @@ $event = get_events_where($conn,"WHERE evento.id =" . $_GET['id'], $_SESSION['US
         <main class="px-5 row">
             <div class="container-fluid ">
                 <div class="pb-5">
-                    <?php make_buttom_back(); ?>
+                    <?php make_buttom_back("index.php?voluntary=6"); ?>
 
                 </div>
                 <?php

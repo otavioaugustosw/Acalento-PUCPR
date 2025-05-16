@@ -39,7 +39,7 @@ load_user_session_data($conn);
             <div class="container-fluid">
                 <div class="mb-3">
                     <!-- aqui vai o que você quer por -->
-                    <?php make_buttom_back();?>
+                    <?php make_buttom_back("index.php?common=6"); ?>
                     <h2>Registrar doação</h2>
                     <form class="row g-3" method="POST" enctype="multipart/form-data" action="">
 
@@ -143,6 +143,16 @@ function submitInformation($conn)
 
     if ($campoArquivo === null) {
         display_validation('inputComprovante', false);
+        return;
+    }
+
+    if (!is_numeric($valor)) {
+        displayValidation('inputValor', false);
+        return;
+    }
+
+    if ($campoArquivo === null) {
+        displayValidation('inputComprovante', false);
         return;
     }
 

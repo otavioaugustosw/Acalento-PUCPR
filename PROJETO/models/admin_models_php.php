@@ -198,32 +198,6 @@ function soft_delete_event(mysqli $conn, int $event_id): bool {
 }
 
 /**
- * Cria uma nova campanha de doação no banco de dados.
- *
- * @param mysqli $conn Conexão ativa com o banco de dados.
- * @param string $name Nome da campanha.
- * @param string $date Data da campanha (formato yyyy-mm-dd).
- * @param int $destination_event_id ID do evento de destino.
- *
- * @return void
- */
-function create_donation_campaign(mysqli $conn, string $name, string $date, int $destination_event_id): bool
-{
-    try {
-        $query = "
-            INSERT INTO campanha_doacao (nome, data, evento_destino)
-            VALUES (?, ?, ?)
-        ";
-
-        $stmt = $conn->prepare($query);
-        $stmt->bind_param("ssi", $name, $date, $destination_event_id);
-        return $stmt->execute();
-    } catch (mysqli_sql_exception $e) {
-        return false;
-    }
-}
-
-/**
  * Obtém todas as punições com detalhes do usuário e evento, para a tela de admin.
  *
  * @param mysqli $conn Conexão ativa com o banco de dados.

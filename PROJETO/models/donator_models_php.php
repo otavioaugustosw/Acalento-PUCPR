@@ -13,12 +13,10 @@ function get_donations_where(mysqli $conn, string $where)
         $query = "
             SELECT doacao.*,
                 usuario.nome AS usuario_nome,
-                opcao_item_doacao.nome AS opcao_nome,
-                campanha_doacao.nome AS campanha_doacao_nome
+                opcao_item_doacao.nome AS opcao_nome
             FROM doacao
             LEFT JOIN usuario ON doacao.id_usuario = usuario.id
             LEFT JOIN opcao_item_doacao ON doacao.id_opcao_item_doacao = opcao_item_doacao.id
-            LEFT JOIN campanha_doacao ON doacao.id_campanha_doacao = campanha_doacao.id
             $where
         ";
 
@@ -42,31 +40,31 @@ function get_donations_where(mysqli $conn, string $where)
  *
  * @return mysqli_result|false Retorna o resultado da consulta, ou false em caso de erro.
  */
-function get_campaigns_where(mysqli $conn, ?string $where = null)
-{
-    try {
-        // Definir a query com a parte WHERE opcional
-        $query = "
-            SELECT campanha_doacao.*,
-                assentamento.nome AS assentamento_nome
-            FROM campanha_doacao
-            LEFT JOIN assentamento ON campanha_doacao.evento_destino = assentamento.id
-            $where
-        ";
-
-        $stmt = $conn->prepare($query);
-        if (!$stmt) {
-            throw new mysqli_sql_exception("erro da query: " . $conn->error);
-        }
-
-        // Caso haja um where, executamos a consulta
-        $stmt->execute();
-
-        return $stmt->get_result();
-    } catch (mysqli_sql_exception $e) {
-        return false;
-    }
-}
+//function get_campaigns_where(mysqli $conn, ?string $where = null)
+//{
+//    try {
+//        // Definir a query com a parte WHERE opcional
+//        $query = "
+//            SELECT campanha_doacao.*,
+//                assentamento.nome AS assentamento_nome
+//            FROM campanha_doacao
+//            LEFT JOIN assentamento ON campanha_doacao.evento_destino = assentamento.id
+//            $where
+//        ";
+//
+//        $stmt = $conn->prepare($query);
+//        if (!$stmt) {
+//            throw new mysqli_sql_exception("erro da query: " . $conn->error);
+//        }
+//
+//        // Caso haja um where, executamos a consulta
+//        $stmt->execute();
+//
+//        return $stmt->get_result();
+//    } catch (mysqli_sql_exception $e) {
+//        return false;
+//    }
+//}
 
 /**
  * Registra uma nova doação e marca o usuário como doador, se aplicável.
@@ -88,14 +86,13 @@ function create_material_donation(
     try {
         $query = "
             INSERT INTO doacao (
-                id_campanha_doacao, id_estoque, id_opcao_item_doacao, id_usuario,
+                id_estoque, id_opcao_item_doacao, id_usuario,
                 quantidade, unidade_medida, categoria, data
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         $stmt = $conn->prepare($query);
         $stmt->bind_param(
-            "iiiissss",
-            $campaign_id,
+            "iiissss",
             $stock_id,
             $data['id_opcao_item_doacao'],
             $user_id,

@@ -66,6 +66,10 @@ function routeToVoluntary($pageNum)
             break;
         case 6:
             include_once 'views/voluntary/confirm_events.php';
+            break;
+        case 7:
+            include_once 'views/voluntary/my_events.php';
+            break;
         default:
             header('location: index.php?common=4&error=2');
     }

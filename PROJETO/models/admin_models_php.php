@@ -171,18 +171,18 @@ function soft_delete_event(mysqli $conn, int $event_id): bool {
  *
  * @return void
  */
-function create_donation_campaign(mysqli $conn, string $name, string $date, int $destination_event_id): bool
-{
-    try {
-        $query = "
-            INSERT INTO campanha_doacao (nome, data, evento_destino)
-            VALUES (?, ?, ?)
-        ";
-
-        $stmt = $conn->prepare($query);
-        $stmt->bind_param("ssi", $name, $date, $destination_event_id);
-        return $stmt->execute();
-    } catch (mysqli_sql_exception $e) {
-        return false;
-    }
-}
+//function create_donation_campaign(mysqli $conn, string $name, string $date, int $destination_event_id): bool
+//{
+//    try {
+//        $query = "
+//            INSERT INTO campanha_doacao (nome, data, evento_destino)
+//            VALUES (?, ?, ?)
+//        ";
+//
+//        $stmt = $conn->prepare($query);
+//        $stmt->bind_param("ssi", $name, $date, $destination_event_id);
+//        return $stmt->execute();
+//    } catch (mysqli_sql_exception $e) {
+//        return false;
+//    }
+//}

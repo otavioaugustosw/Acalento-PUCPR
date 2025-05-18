@@ -116,3 +116,59 @@ function create_material_donation(
         return false;
     }
 }
+
+function get_donations_where_badges(mysqli $conn, int $user_id)
+{
+    try {
+        $query = "
+            SELECT
+                (SELECT COUNT(*) FROM doacao WHERE id_usuario = ?) +
+                (SELECT COUNT(*) FROM doacao_monetaria WHERE id_usuario = ?)
+                AS total
+        ";
+
+        $stmt = $conn->prepare($query);
+        if (!$stmt) {
+            throw new mysqli_sql_exception("erro da query: " . $conn->error);
+        }
+
+        $stmt->bind_param("ii", $user_id, $user_id);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+        $total = $result->fetch_object();
+
+        return (int) $total->total;
+    } catch (mysqli_sql_exception $e) {
+        return false;
+    }
+}
+
+function get_last_donation(mysqli $conn, int $user_id)
+{
+    try {
+        $query = "
+            SELECT DATEDIFF(CURDATE(), ultima_doacao) AS dias_sem_doar
+            FROM (SELECT MAX(data_doacao) AS ultima_doacao
+                FROM (SELECT data AS data_doacao FROM doacao WHERE id_usuario = ?
+                UNION ALL
+                SELECT data AS data_doacao FROM doacao_monetaria WHERE id_usuario = ?) AS todas
+                ) AS resultado
+        ";
+
+        $stmt = $conn->prepare($query);
+        if (!$stmt) {
+            throw new mysqli_sql_exception("erro da query: " . $conn->error);
+        }
+
+        $stmt->bind_param("ii", $user_id, $user_id);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+        $total_dias = $result->fetch_object();
+
+        return (int) $total_dias-> dias_sem_doar;
+    } catch (mysqli_sql_exception $e) {
+        return false;
+    }
+}

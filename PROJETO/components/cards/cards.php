@@ -102,6 +102,30 @@ function make_big_card($title, $text1,$text2, $text3, $text4, $sub_text, $image_
         </div>
     </div>
 <?php }
+
+function make_event_card_reveal($title, $text1, $btnText, $btnHref, $btnClass, $imgPath)
+{ ?>
+    <div class="card-fade-reveal">
+        <div class="card-img-wrapper">
+            <img src="<?= $imgPath ?>" alt="<?= htmlspecialchars($title) ?>">
+
+            <!-- Título sobre imagem -->
+            <div class="card-title-overlay">
+                <span class="badge btn-primary mb-1 p-2">DOAÇÕES</span>
+                <h2 class="m-0 fw-bold text-dark"><?= $title ?></h2>
+            </div>
+        </div>
+
+        <!-- Conteúdo que sobe no hover -->
+        <div class="card-hover-body">
+            <h2 class="fw-bold m-0"><?= $title ?></h2>
+            <p class="mb-3"><?= $text1 ?></p>
+            <a href="<?= $btnHref ?>" class="btn btn-primary largura-completa"><?= $btnText ?></a>
+        </div>
+    </div>
+<?php
+}
+
 function render_event_detail_card($event) {
     $formated_date = format_date($event->data);
     $formated_hour = format_hour($event->hora);
@@ -162,15 +186,15 @@ function render_event_detail_card($event) {
     );
 }
 
-function render_campaigns_card($campaigns)
-{
-    while ($event = $campaigns->fetch_object()) {
-        $buttons = function () use ($event) {
-            makeButton("Visualizar doações", "btn btn-primary", "index.php?adm=15&view=campaign&id=$event->id");
-        };
-        make_text_card($event->nome, format_date($event->data), $event->assentamento_nome, $buttons);
-    }
-}
+//function render_campaigns_card($campaigns)
+//{
+//    while ($event = $campaigns->fetch_object()) {
+//        $buttons = function () use ($event) {
+//            makeButton("Visualizar doações", "btn btn-primary", "index.php?adm=15&view=campaign&id=$event->id");
+//        };
+//        make_text_card($event->nome, format_date($event->data), $event->assentamento_nome, $buttons);
+//    }
+//}
 
 function render_events_card(
         $events,
@@ -198,6 +222,23 @@ function render_events_card(
         while ($event = $events->fetch_object()) {
             voluntary_event_card($event, $horizontal);
         }
+    }
+}
+
+function render_one_event_card(
+    $event,
+    bool $admin = false,
+    bool $voluntary = false,
+    bool $horizontal = false,
+)
+{
+
+    if ($admin) {
+        admin_event_card($event, $horizontal);
+        return;
+    }
+    if ($voluntary) {
+        voluntary_event_card($event, $horizontal);
     }
 }
 

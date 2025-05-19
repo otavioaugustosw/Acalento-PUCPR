@@ -171,3 +171,50 @@ function cancel_user_event_subscription(mysqli $conn, $event_id, $user_id): bool
     }
 }
 
+function get_total_participation_events(mysqli $conn, int $user_id)
+{
+    try {
+        $query = "SELECT COUNT(*) AS total
+        FROM usuario_participa_evento
+        WHERE id_usuario = ? AND presenca = 1";
+
+        $stmt = $conn->prepare($query);
+        if (!$stmt) {
+            throw new mysqli_sql_exception("erro da query: " . $conn->error);
+        }
+
+        $stmt->bind_param("i", $user_id);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+        $total = $result->fetch_object();
+
+        return (int) $total->total;
+    } catch (mysqli_sql_exception $e) {
+        return false;
+    }
+}
+
+function get_last_event(mysqli $conn, int $user_id)
+{
+    try {
+        $query = "SELECT DATEDIFF(CURDATE(), MAX(evento.data)) AS dias_sem_participar
+                    FROM usuario_participa_evento
+                    JOIN evento ON evento.id = usuario_participa_evento.id_evento
+                    WHERE id_usuario = ? AND presenca = 1";
+        $stmt = $conn->prepare($query);
+        if (!$stmt) {
+            throw new mysqli_sql_exception("erro da query: " . $conn->error);
+        }
+
+        $stmt->bind_param("i", $user_id);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+        $total = $result->fetch_object()->dias_sem_participar;
+
+        return $total;
+    } catch (mysqli_sql_exception $e) {
+        return false;
+    }
+}

@@ -42,6 +42,7 @@ p {
     /*AZUL PADRÃO*/
     --primary-blue: #033240;
     --secondary-blue: #CBDEE4;
+    --tertiary-blue: #DFE9F5;
 
     /*VERDE PADRÃO*/
     --dark-green: #104003;
@@ -53,11 +54,14 @@ p {
     --dark-red: #480002;;
     --primary-red: #D20004;
     --secondary-red: #FBCACB;
-
+    --tertiary-red: #C58B93;
 
     /*AMARELO PADRÃO*/
     --primary-yellow: #FFBF00;
     --secondary-yellow: #FFF7D8;
+    --tertiary-yellow: #FFEE8C;
+    --quaternary-yellow: #FFC89C;
+    --quintenary-yellow: #E65100;
 
     /*FUNDO PADRÃO*/
     --primary-background: #cbc8aa;

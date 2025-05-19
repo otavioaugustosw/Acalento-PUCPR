@@ -71,13 +71,13 @@ if (!$dados) {
                         <div class="col-md-4 mb-3">
                             <label class="form-label">CPF</label>
                             <input type="text" class="form-control" name="cpf"
-                                   value="<?= $dados->cpf ?? '' ?>">
+                                   value="<?= formatCPF($dados->cpf) ?? '' ?>">
                         </div>
 
                         <div class="col-md-4 mb-3">
                             <label class="form-label">Telefone</label>
                             <input type="text" class="form-control" name="telefone"
-                                   value="<?= $dados->telefone ?? '' ?>">
+                                   value="<?= formatPhoneNumber($dados->telefone) ?? '' ?>">
                         </div>
 
                         <div class="col-md-4 mb-3">
@@ -138,8 +138,7 @@ if (!$dados) {
                         </div>
 
                         <div class="col-md-3 mb-3">
-                            <div class="invisible">Confirmar</div>
-                            <button type="submit" class="btn btn-primary mt-1">Salvar Alterações</button>
+                            <?php makeFormButton("index.php?common=8","Editar Dados","","Editar Dados","btn btn-primary")?>
                         </div>
                     </div>
 

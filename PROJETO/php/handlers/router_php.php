@@ -36,7 +36,7 @@ function routeToCommon($pageNum)
             include 'views/common/edit_password.php';
             break;
         case 11:
-            include 'views/common/public_home.php';
+            include 'views/common/help_the_ong.php';
             break;
 
         default:
@@ -121,6 +121,9 @@ function routeToAdministrator($pageNum)
             break;
         case 15:
             include 'views/donator/view_donations.php';
+            break;
+        case 16:
+            include 'views/administrator/view_users.php';
             break;
         default:
             header('location: index.php?common=4&error=2');

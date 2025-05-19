@@ -10,6 +10,8 @@ const MESSAGES = [
     "PASSWORD_AUTHENTICATED" => ["status" => true, "statusName" => "PASSWORD_AUTHENTICATED"],
     "USER_FOUND" => ["status" => true, "statusName" => "USER_FOUND"],
     "USER_AUTHENTICATED" => ["status" => true, "statusName" => "USER_AUTHENTICATED"],
+    "SUSPENDED_USER" => ["status" => false, "statusName" => "SUSPENDED_USER"],
+    "INACTIVE_USER" => ["status" => false, "statusName" => "INACTIVE_USER"]
 ];
 
 function authenticate_user($sql, $email, $typedPassword): array
@@ -25,6 +27,12 @@ function authenticate_user($sql, $email, $typedPassword): array
             return $userExists;
         }
         $user = $userExists["user"];
+        if ($user->suspenso) {
+            return MESSAGES["SUSPENDED_USER"];
+        }
+        if ($user->inativo) {
+            return MESSAGES["INACTIVE_USER"];
+        }
         $passwordResult = _is_password_correct($typedPassword, $user->senha);
         if (!$passwordResult["status"]) {
             _handle_failed_attempt();
@@ -58,7 +66,7 @@ function _handle_failed_attempt() {
 
 function _get_user_by_email($sql, $email): array
 {
-    $query = "SELECT id, senha FROM usuario WHERE email = ?";
+    $query = "SELECT id, senha, suspenso, inativo  FROM usuario WHERE email = ?";
     $stmt = $sql->prepare($query);
     $stmt->bind_param("s", $email);
     $stmt->execute();

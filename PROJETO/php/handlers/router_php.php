@@ -35,6 +35,21 @@ function routeToCommon($pageNum)
         case 10:
             include_once 'views/common/edit_password.php';
             break;
+        case 11:
+            include_once 'views/common/login_donation.php';
+            break;
+        case 12:
+            include_once 'views/common/choose_donation_value.php';
+            break;
+        case 13:
+            include_once 'views/common/payment.php';
+            break;
+        case 14:
+            include_once 'views/common/register_user_donation.php';
+            break;
+        case 15:
+            include_once 'views/common/thank_you.php';
+            break;
         case 16:
             include_once 'views/common/my_punishments.php';
             break;

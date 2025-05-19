@@ -5,6 +5,8 @@ include_once (ROOT . "/components/filter/filter.php");
 include_once (ROOT . "/php/handlers/filter_php.php");
 include_once (ROOT . "/components/table/tables.php");
 include_once (ROOT . "/models/admin_models_php.php");
+include_once (ROOT .  "/components/back/back.php");
+
 $conn = connectDatabase();
 $where = " WHERE up.id_usuario =" . $_SESSION['USER_ID'];
 $punishments = get_all_punishments($conn, $where);
@@ -30,6 +32,7 @@ $table_head = ["ID", "Nome", "Email", "Data", "Evento", "Status", "Revisar"];
     <?php make_sidebar(); ?>
     <div class="main-content">
         <main class="px-5 row">
+            <?php make_buttom_back("index.php?common=6");?>
             <div class="container-fluid">
                 <h2>Minhas penalidades</h2>
                 <?php

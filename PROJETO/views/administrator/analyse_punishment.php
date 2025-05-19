@@ -58,8 +58,8 @@ if (isset($_GET['confirmar'])) {
         <div class="main-content">
             <main class="px-5 row align-items-center justify-content-center">
                 <div class="container-fluid">
+                    <?php make_buttom_back("index.php?adm=12");?>
                     <div class="mb-3">
-                        <?php make_buttom_back();?>
                         <!-- aqui vai o que você quer por -->
                         <h4>Verificar punição</h4>
                         <div class="div">

@@ -4,6 +4,7 @@ include_once (ROOT . "/php/config/database_php.php");
 include_once (ROOT . "/components/cards/cards.php");
 include_once (ROOT .  "/components/sidebars/sidebars.php");
 include_once (ROOT .  "/models/voluntary_models_php.php");
+include_once (ROOT .  "/components/back/back.php");
 
 $conn = connectDatabase();
 $events = get_events_where($conn, "", $_SESSION['USER_ID']);
@@ -38,6 +39,7 @@ $events = get_events_where($conn, "", $_SESSION['USER_ID']);
     <div class="main-content">
         <main class="px-5 row addScroll">
             <div class="container-fluid">
+                <?php make_buttom_back("index.php?common=6");?>
                 <div class="mb-3">
                     <h2>Check-ins de Eventos</h2>
                     <div class="row">

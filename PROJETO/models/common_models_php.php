@@ -3,69 +3,45 @@
 include_once (ROOT . "/php/auth_services/auth_service_php.php");
 
 /**
- * Adiciona uma punição para um usuário que esteve em um evento ou não.
+ * Atualiza apenas a justificativa de uma punição para um usuário específico
+ * e marca a punição como não revisada
  *
  * @param mysqli $conn Conexão ativa com o banco de dados.
- * @param int $user_id ID do usuário a ser punido.
- * @param string $reason Motivo da punição.
- * @param string|null $justification Justificativa da punição (opcional).
- *
- * @param int|null $event_id ID do evento no qual o usuário será punido.
- * @return bool Retorna true se a punição foi adicionada com sucesso, ou false em caso de erro.
+ * @param int $punishment_id ID da punição.
+ * @param string $justification Nova justificativa.
+ * @param int $user_id ID do usuário que está fazendo a atualização.
+ * @return bool Retorna true se a atualização for sucedida, false caso contrário.
  */
-function add_user_punishment(mysqli $conn, int $user_id, string $reason, ?string $justification = null, ?int $event_id = null)
+function update_punishment_justification(mysqli $conn, int $punishment_id, string $justification, int $user_id): bool
 {
     try {
-        $stmt = $conn->prepare("
-            INSERT INTO usuario_punicao (id_usuario, id_evento, motivo, justificativa)
-            VALUES (?, ?, ?, ?)
-        ");
-
-        $stmt->bind_param(
-            "iiss",
-            $user_id,
-            $event_id,
-            $reason,
-            $justification
-        );
-
-        $success = $stmt->execute();
+        $stmt = $conn->prepare("SELECT id FROM usuario_punicao WHERE id = ? AND id_usuario = ?");
+        if (!$stmt) {
+            throw new mysqli_sql_exception("erro na query " . $conn->error);
+        }
+        $stmt->bind_param("ii", $punishment_id, $user_id);
+        $stmt->execute();
+        $stmt = $stmt->get_result();
+        if ($stmt->num_rows === 0) {
+            $stmt->close();
+            return false;
+        }
         $stmt->close();
 
-        return $success;
-    } catch (mysqli_sql_exception $e) {
-        return false;
-    }
-}
-
-/**
- * Edita uma punição de usuário no banco de dados.
- *
- * @param mysqli $conn Conexão com o banco de dados.
- * @param int $punishment_id ID da punição a ser editada.
- * @param int $user_id ID do usuário a ser punido.
- * @param int|null $event_id ID do evento associado à punição (pode ser nulo).
- * @param string $reason Motivo da punição.
- * @param string|null $justification Justificativa para a punição (opcional).
- *
- * @return bool Retorna true se a atualização for bem-sucedida, ou false caso contrário.
- */
-function edit_user_punishment(mysqli $conn, int $punishment_id, int $user_id, ?int $event_id, string $reason, ?string $justification = null)
-{
-    try {
         $stmt = $conn->prepare("
             UPDATE usuario_punicao 
-            SET id_usuario = ?, id_evento = ?, motivo = ?, justificativa = ? 
-            WHERE id = ?
+            SET justificativa = ?, revisado = 0 
+            WHERE id = ? AND id_usuario = ?
         ");
+        if (!$stmt) {
+            throw new mysqli_sql_exception("erro na query " . $conn->error);
+        }
 
         $stmt->bind_param(
-            "iissi",
-            $user_id,
-            $event_id,
-            $reason,
+            "sii",
             $justification,
-            $punishment_id
+            $punishment_id,
+            $user_id
         );
 
         $success = $stmt->execute();
@@ -73,9 +49,11 @@ function edit_user_punishment(mysqli $conn, int $punishment_id, int $user_id, ?i
 
         return $success;
     } catch (mysqli_sql_exception $e) {
+        // error_log("Erro em update_punishment_justification: " . $e->getMessage());
         return false;
     }
 }
+
 
 /**
  * Alterna o status de inatividade de uma punição de usuário.
@@ -84,10 +62,10 @@ function edit_user_punishment(mysqli $conn, int $punishment_id, int $user_id, ?i
  * @param int $punishment_id ID da punição na tabela usuario_punicao.
  * @return bool true em caso de sucesso, false em falha.
  */
-function toggle_user_punishment_status(mysqli $conn, int $punishment_id): bool
+function toggle_user_punishment_status(mysqli $conn, int $punishment_id, int $inativo): bool
 {
     try {
-        $update = "UPDATE usuario_punicao SET inativo = !inativo WHERE id = ?";
+        $update = "UPDATE usuario_punicao SET inativo = {$inativo}, revisado = 1 WHERE id = ?";
         $stmt = $conn->prepare($update);
         $stmt->bind_param("i", $punishment_id);
         return $stmt->execute();
@@ -112,7 +90,11 @@ function get_user_punishments(mysqli $conn, int $user_id, string $where)
 {
     try {
         $stmt = $conn->prepare("
-            SELECT * FROM usuario_punicao WHERE id_usuario = ? $where
+            SELECT up.*, e.nome AS nome_evento, e.data AS data_evento
+            FROM usuario_punicao up
+            LEFT JOIN evento e ON up.id_evento = e.id
+            WHERE up.id_usuario = ? $where
+            ORDER BY up.data_punicao DESC
         ");
         $stmt->bind_param(
             "i",
@@ -142,6 +124,11 @@ function apply_user_suspension(mysqli $conn, int $user_id): ?bool
 {
     try {
         $punishments = get_user_punishments($conn, $user_id, "AND inativo = 0");
+
+        if ($punishments === false) {
+            return null;
+        }
+
         if ($punishments->num_rows < 3) {
             return null;
         }
@@ -214,6 +201,36 @@ function deactivate_user(mysqli $conn, int $user_id): bool
 {
     try {
         $query = "UPDATE usuario SET inativo = 1 WHERE id = ?";
+        $stmt = $conn->prepare($query);
+
+        if (!$stmt) {
+            throw new mysqli_sql_exception("erro na query: " . $conn->error);
+        }
+
+        $stmt->bind_param("i", $user_id);
+
+        if (!$stmt->execute()) {
+            throw new mysqli_sql_exception("erro na query: " . $stmt->error);
+        }
+
+        return true;
+    } catch (mysqli_sql_exception $e) {
+        return false;
+    }
+}
+
+
+/**
+ * Marca um usuário como inativo no banco de dados.
+ *
+ * @param mysqli $conn Conexão ativa com o banco de dados.
+ * @param int $user_id ID do usuário a ser desativado.
+ * @return bool Retorna true se a operação foi bem-sucedida, false caso contrário.
+ */
+function reactivate_user(mysqli $conn, int $user_id): bool
+{
+    try {
+        $query = "UPDATE usuario SET inativo = 0 WHERE id = ?";
         $stmt = $conn->prepare($query);
 
         if (!$stmt) {

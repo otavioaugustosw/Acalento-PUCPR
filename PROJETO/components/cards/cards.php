@@ -2,6 +2,8 @@
 include_once (ROOT. '/components/back/back.php');
 include_once (ROOT . '/components/buttons/buttons.php');
 include_once (ROOT . '/components/modal/modal.php');
+include_once (ROOT . '/php/handlers/time_handler.php');
+
 function make_text_card($title, $text1, $text2, $buttons = null)
 {?>
     <div class="col">
@@ -199,9 +201,17 @@ function render_events_card(
         bool $admin = false,
         bool $voluntary = false,
         bool $horizontal = false,
+        bool $check_in = false
 )
 {
 
+    if ($check_in) {
+        while ($event = $events->fetch_object()) {
+            if (!$event->inativo) {
+                check_in_event_card($event, $horizontal);
+            }
+        }
+    }
     if ($admin) {
         while ($event = $events->fetch_object()) {
             admin_event_card($event, $horizontal);
@@ -308,6 +318,33 @@ function voluntary_event_card($event, $horizontal = false)
             makeButton("Evento Lotado", "btn btn-secondary");
         } else {
             makeFormButton('index.php?voluntary=3', 'id_evento', $event->id, 'Inscrever-se');
+        }
+    };
+
+    if ($horizontal)  {
+        make_horizontal_card($card_link, $title, $text1, $text2, $text3, $sub_text, $image_link, $buttons_render);
+    } else {
+        make_vertical_card($card_link, $title, $text1, $text2, $text3, $sub_text, $image_link, $buttons_render);
+    }
+}
+
+function check_in_event_card($event, $horizontal = false)
+{
+    $formated_date = format_date($event->data);
+    $formated_hour = format_hour($event->hora);
+    $card_link = "index.php?voluntary=4&id=$event->id";
+    $title = $event->nome;
+    $text1 = $event->assentamento_nome;
+    $text2 = "$formated_date às $formated_hour";
+    $text3 = "$event->inscritos/$event->lotacao_max inscritos";
+    $sub_text = $event->descricao;
+    $image_link = $event->link_media;
+    $buttons_render = function () use ($event){
+        if ($event->evento_comecou) {
+            makeButton("Realizar check-in dos voluntários", "btn btn-primary", "index.php?adm=13&id=" . $event->id);
+        }
+        else {
+            makeButton("Ver voluntários confirmados", "btn btn-secondary", "index.php?adm=13&id=" . $event->id);
         }
     };
 

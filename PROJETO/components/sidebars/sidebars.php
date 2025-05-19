@@ -25,6 +25,10 @@ function make_sidebar() {?>
     <symbol id="key" viewBox="0 0 16 16">
         <path d="M3.5 11.5a3.5 3.5 0 1 1 3.163-5H14L15.5 8 14 9.5l-1-1-1 1-1-1-1 1-1-1-1 1H6.663a3.5 3.5 0 0 1-3.163 2M2.5 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/>
     </symbol>
+
+    <symbol id="guard" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M8 0c-.69 0-1.843.265-2.928.56-1.11.3-2.229.655-2.887.87a1.54 1.54 0 0 0-1.044 1.262c-.596 4.477.787 7.795 2.465 9.99a11.8 11.8 0 0 0 2.517 2.453c.386.273.744.482 1.048.625.28.132.581.24.829.24s.548-.108.829-.24a7 7 0 0 0 1.048-.625 11.8 11.8 0 0 0 2.517-2.453c1.678-2.195 3.061-5.513 2.465-9.99a1.54 1.54 0 0 0-1.044-1.263 63 63 0 0 0-2.887-.87C9.843.266 8.69 0 8 0m-.55 8.502L7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0M8.002 12a1 1 0 1 1 0-2 1 1 0 0 1 0 2"/>
+    </symbol>
 </svg>
 
 <h1 class="visually-hidden">Menu lateral</h1>
@@ -53,6 +57,15 @@ function make_sidebar() {?>
                 <use xlink:href="#person"/>
             </svg>
             Minha conta
+        </a>
+    </li>
+
+    <li class="sidebar-item mb-1">
+        <a  href="index.php?common=11" class="btn btn-toggle  d-inline-flex align-items-center rounded border-0 collapsed">
+            <svg class="bi me-2" width="20" height="20" aria-hidden="true">
+                <use xlink:href="#guard"/>
+            </svg>
+            MInhas penalidades
         </a>
     </li>
 
@@ -106,13 +119,14 @@ function make_sidebar() {?>
             </button>
             <div class="collapse" id="admin-collapse">
                 <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                    <li><a href="index.php?adm=9" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Gerenciar penalidades</a></li>
+                    <li><a href="index.php?adm=5" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Gerenciar eventos</a></li>
+                    <li><a href="index.php?adm=12" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Check-in de Eventos</a></li>
                     <li><a href="index.php?adm=1" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Cadastrar campanha</a></li>
                     <li><a href="index.php?adm=8" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Visualizar campanhas</a></li>
                     <li><a href="index.php?adm=3" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Registrar doação monetária</a></li>
                     <li><a href="index.php?adm=16" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Registrar doação material</a></li>
                     <li><a href="index.php?adm=7" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Visualizar doações</a></li>
-                    <li><a href="index.php?adm=2" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Cadastrar evento</a></li>
-                    <li><a href="index.php?adm=5" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Editar evento</a></li>
                 </ul>
             </div>
         </li>

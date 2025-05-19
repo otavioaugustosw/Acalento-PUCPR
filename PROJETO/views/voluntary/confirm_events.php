@@ -6,7 +6,7 @@ include_once (ROOT .  "/components/sidebars/sidebars.php");
 include_once (ROOT .  "/models/voluntary_models_php.php");
 
 $conn = connectDatabase();
-$events = get_events_where($conn, " WHERE upe.id_evento = id_evento AND participacao_confirmada = 0 AND evento.data > NOW()", $_SESSION['USER_ID']);
+$events = get_events_where($conn, "", $_SESSION['USER_ID']);
 
 ?>
 <!doctype html>

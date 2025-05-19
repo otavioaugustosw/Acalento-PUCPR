@@ -28,14 +28,22 @@ function get_events_where(mysqli $conn, string $where, int $user_id): mysqli_res
                     WHEN upe.participacao_confirmada IS NOT NULL THEN 1
                     ELSE 0
                 END AS esta_inscrito,
+                CASE
+                    WHEN evento.data = DATE(NOW()) THEN 1
+                    ELSE 0
+                END AS eh_dia_evento,
+                CASE
+                    WHEN (evento.data <= DATE(NOW())) AND (evento.hora < TIME(NOW())) AND !evento.finalizado THEN 1
+                    ELSE 0
+                END AS evento_comecou,
                 upe.participacao_confirmada AS confirmacao,
                 upe.presenca
             FROM evento
             LEFT JOIN assentamento ON evento.id_assentamento = assentamento.id
             LEFT JOIN endereco ON assentamento.id_endereco = endereco.id
-            LEFT JOIN usuario_participa_evento upe 
-                ON upe.id_evento = evento.id AND upe.id_usuario = ? 
-            $where
+            LEFT JOIN usuario_participa_evento upe
+                ON upe.id_evento = evento.id AND upe.id_usuario = ?
+            $where 
         ";
 
         $stmt = $conn->prepare($query);
@@ -94,7 +102,7 @@ function toggle_voluntary_participation_event(mysqli $conn, int $user_id, int $e
  *
  * @return bool Retorna true em caso de sucesso, false caso contrário.
  */
-function toggle_voluntary_presence_event(mysqli $conn, int $user_id, int $event_id): bool
+function toggle_voluntary_presence_event(mysqli $conn, $user_id, $event_id): bool
 {
     try {
         $query = "
@@ -147,7 +155,7 @@ function get_all_settlements(mysqli $conn): ?mysqli_result
  * @param int $user_id ID do usuário a ser removido do evento.
  * @return bool True se a operação foi bem-sucedida, false caso contrário.
  */
-function cancel_user_event_subscription(mysqli $conn, int $event_id, int $user_id): bool
+function cancel_user_event_subscription(mysqli $conn, $event_id, $user_id): bool
 {
     try {
         $query = "DELETE FROM usuario_participa_evento WHERE id_evento = ? AND id_usuario = ?";

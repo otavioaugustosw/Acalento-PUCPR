@@ -29,9 +29,9 @@ function format_hour(string $hour): string
  */
 function has_event_already_occurred(object $event): bool
 {
+
     $event_datetime = new DateTime("{$event->data} {$event->hora}");
     $now = new DateTime();
-
     return $event_datetime < $now;
 }
 

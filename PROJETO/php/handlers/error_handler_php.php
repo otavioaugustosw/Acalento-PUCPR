@@ -24,7 +24,8 @@ const PAGE_ERROR = [
     21=> "Erro ao confirmar presença",
     22=> "Cancelamos sua inscrição porém uma punição foi aplicada",
     23=> "Sua conta foi deletada, contate um administrador caso queira utiliza-la novamente",
-    24=> "Sua conta está suspensa, contate um administrador"
+    24=> "Sua conta está suspensa, contate um administrador",
+    360=> "Erro ao alterar a punição",
 ];
 
 
@@ -41,6 +42,9 @@ const PAGE_SUCCESS = [
     10=> "Senha alterada com sucesso",
     20=> "Perfil inativado com sucesso",
     21=> "Presença confirmada com sucesso!",
+    360=> "Punição confirmada",
+    361=> "Punição cancelada",
+    362=> "Justificação enviada!",
 ];
 
 function showError($error_num)

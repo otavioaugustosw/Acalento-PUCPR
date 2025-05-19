@@ -1,2 +1,0 @@
-<?php
-// edição de punições

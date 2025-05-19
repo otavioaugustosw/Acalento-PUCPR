@@ -118,7 +118,7 @@ function routeToAdministrator($pageNum)
             include_once 'views/administrator/manage_punishments.php';
             break;
         case 10:
-            include_once 'views/administrator/edit_punishments.php';
+            include_once 'views/administrator/analyse_punishment.php';
             break;
         case 11:
             include_once 'views/administrator/register_admin.php';

@@ -40,3 +40,27 @@ function makeFilter()
 <?php
 }
 
+function makeFilterUser()
+{?>
+    <form method="GET" action="" class="mb-4">
+        <div class="row g-3 align-items-center">
+
+            <!-- Campo de filtro -->
+            <div class="col-md-3">
+                <select name="filtro" id="filtro" class="form-select">
+                    <option value="">Selecione</option>
+                    <option value="administrador">Administrador</option>
+                    <option value="doador">Doador</option>
+                    <option value="voluntario">Voluntário/option>
+                    <option value="todos">Todos</option>
+                </select>
+            </div>
+            <div class="col-md-2 ">
+                <button type="submit" class="btn btn-primary w-100">
+                    Filtrar
+                </button>
+            </div>
+        </div>
+    </form>
+    <?php
+}

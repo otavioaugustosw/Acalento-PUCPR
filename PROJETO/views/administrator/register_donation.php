@@ -64,7 +64,7 @@ load_user_session_data($conn);
                             <label for="inputItem" class="form-label">Item*</label>
                             <select name="id_opcao" id="inputItem" class="form-select">
                                 <option value="">Selecione o item</option>
-                                <?php $item = $conn->query("SELECT id, nome FROM opcao_item");
+                                <?php $item = $conn->query("SELECT id, nome FROM opcao_item_doacao");
                                 while ($a = $item->fetch_object()) { ?>
                                     <option value="<?php echo $a->id;?>" <?= (isset($_POST['id_opcao']) && $_POST['id_opcao'] == $a->id) ? 'selected' : '' ?>><?php echo $a->nome; ?></option>
                                 <?php } ?>
@@ -225,10 +225,10 @@ function submitInformation($conn)
 
     try {
         $query = "
-        INSERT INTO item(id_campanha_doacao, id_estoque, id_opcao, id_usuario, quantidade, unidade_medida, valor, tipo, data) 
+        INSERT INTO doacao(id_campanha_doacao, id_estoque, id_opcao_item_doacao, id_usuario, quantidade, unidade_medida, tipo, data) 
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($query);
-        $stmt->bind_param("iiiiisdss", $idCampanha, $idEstoque, $_POST['id_opcao'], $id_usuario, $quantidade, $unidadeMedida, $valor, $_POST['tipo'], $_POST['data']);
+        $stmt->bind_param("iiiiisdss", $idCampanha, $idEstoque, $_POST['id_opcao'], $id_usuario, $quantidade, $unidadeMedida, $_POST['tipo'], $_POST['data']);
         $stmt->execute();
         if ($id_usuario != null) {
             $query = "UPDATE usuario SET eh_doador = 1 WHERE id = ?";

@@ -6,11 +6,11 @@ include(ROOT . "/components/cards/cards.php");
 include(ROOT . "/models/donator_models_php.php");
 
 $conn = connectDatabase();
-$all_donations = get_donations_where($conn, "ORDER BY item.id DESC LIMIT 5");
-$inventory_donations = get_donations_where($conn, "WHERE item.id_estoque IS NOT NULL ORDER BY item.id DESC LIMIT 5");
-$inventory_donations = get_donations_where($conn, "WHERE item.id_estoque IS NOT NULL ORDER BY item.id DESC LIMIT 5");
+$all_donations = get_donations_where($conn, "ORDER BY doacao.id DESC LIMIT 5");
+$inventory_donations = get_donations_where($conn, "WHERE doacao.id_estoque IS NOT NULL ORDER BY doacao.id DESC LIMIT 5");
+$inventory_donations = get_donations_where($conn, "WHERE doacao.id_estoque IS NOT NULL ORDER BY doacao.id DESC LIMIT 5");
 $all_campaigns = get_campaigns_where($conn, "ORDER BY campanha_doacao.id DESC LIMIT 4");
-$table_head = ["Item", "Quantidade", "Tipo", "Doador", "Data da doação", "Destino"];
+$table_head = ["Doação", "Quantidade", "Tipo", "Doador", "Data da doação", "Destino"];
 
 ?>
 <!doctype html>

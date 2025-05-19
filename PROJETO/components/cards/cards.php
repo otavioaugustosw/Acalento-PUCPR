@@ -107,8 +107,9 @@ function vertical_admin_event_card($event)
 
     $buttons_render = function () use ($event) {
         makeButton("Editar", "btn btn-primary", "index.php?adm=6&id=$event->id");
-        makeModal(
+        make_default_modal(
             $event->id,
+            button_classes: "btn btn-danger largura-completa",
             button_text: 'Deletar',
             modal_title: 'Confirmar exclusão',
             modal_body: 'Tem certeza que deseja deletar esse evento',
@@ -135,8 +136,9 @@ function horizontal_admin_event_card($event)
 
     $buttons_render = function () use ($event) {
         makeButton("Editar", "btn btn-primary", "index.php?adm=6&id=$event->id");
-        makeModal(
+        make_default_modal(
             $event->id,
+            button_classes: "btn btn-danger largura-completa",
             button_text: 'Deletar',
             modal_title: 'Confirmar exclusão',
             modal_body: 'Tem certeza que deseja deletar esse evento',
@@ -163,7 +165,10 @@ function vertical_voluntary_event_card($event, $subscribed_events)
 
     $buttons_render = function () use ($event, $subscribed_events) {
         if (in_array($event->id, $subscribed_events)) {
-            makeModal($event->id, button_text: 'Cancelar inscrição',
+            make_default_modal(
+                $event->id,
+                button_classes: "btn btn-danger largura-completa",
+                button_text: 'Cancelar inscrição',
                 modal_title: 'Cancelar inscrição',
                 modal_body: 'Tem certeza que deseja cancelar a inscrição?',
                 confirm_text: 'Sim, cancelar',
@@ -192,7 +197,10 @@ function horizontal_voluntary_event_card($event, $subscribed_events)
 
     $buttons_render = function () use ($event, $subscribed_events) {
         if (in_array($event->id, $subscribed_events)) {
-            makeModal($event->id, button_text: 'Cancelar inscrição',
+            make_default_modal(
+                $event->id,
+                button_classes: "btn btn-danger largura-completa",
+                button_text: 'Cancelar inscrição',
                 modal_title: 'Cancelar inscrição',
                 modal_body: 'Tem certeza que deseja cancelar a inscrição?',
                 confirm_text: 'Sim, cancelar',

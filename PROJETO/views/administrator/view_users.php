@@ -71,6 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email'])) {
         $stmt = $conn->prepare("UPDATE usuario SET suspenso = 1 WHERE email = ?");
         $stmt->bind_param("s", $email);
         $did_suspend = $stmt->execute();
+        $filterUsers = get_users_where($conn, "");
         $did_suspend ? header('Location: index.php?adm=16') : null;
 
     }
@@ -79,6 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email'])) {
         $stmt = $conn->prepare("UPDATE usuario SET suspenso = 0 WHERE email = ?");
         $stmt->bind_param("s", $email);
         $did_suspend = $stmt->execute();
+        $filterUsers = get_users_where($conn, "");
         $did_suspend ? header('Location: index.php?adm=16') : null;
     }
 
@@ -86,6 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email'])) {
         $stmt = $conn->prepare("UPDATE usuario SET inativo = 1 WHERE email = ?");
         $stmt->bind_param("s", $email);
         $did_suspend = $stmt->execute();
+        $filterUsers = get_users_where($conn, "");
         $did_suspend ? header('Location: index.php?adm=16') : null;
     }
 
@@ -93,6 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email'])) {
         $stmt = $conn->prepare("UPDATE usuario SET inativo = 0 WHERE email = ?");
         $stmt->bind_param("s", $email);
         $did_suspend = $stmt->execute();
+        $filterUsers = get_users_where($conn, "");
         $did_suspend ? header('Location: index.php?adm=16') : null;
     };
 

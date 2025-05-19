@@ -219,6 +219,36 @@ function deactivate_user(mysqli $conn, int $user_id): bool
     }
 }
 
+
+/**
+ * Marca um usuário como inativo no banco de dados.
+ *
+ * @param mysqli $conn Conexão ativa com o banco de dados.
+ * @param int $user_id ID do usuário a ser desativado.
+ * @return bool Retorna true se a operação foi bem-sucedida, false caso contrário.
+ */
+function reactivate_user(mysqli $conn, int $user_id): bool
+{
+    try {
+        $query = "UPDATE usuario SET inativo = 0 WHERE id = ?";
+        $stmt = $conn->prepare($query);
+
+        if (!$stmt) {
+            throw new mysqli_sql_exception("erro na query: " . $conn->error);
+        }
+
+        $stmt->bind_param("i", $user_id);
+
+        if (!$stmt->execute()) {
+            throw new mysqli_sql_exception("erro na query: " . $stmt->error);
+        }
+
+        return true;
+    } catch (mysqli_sql_exception $e) {
+        return false;
+    }
+}
+
 /**
  * Atualiza a senha do usuário no banco de dados.
  *

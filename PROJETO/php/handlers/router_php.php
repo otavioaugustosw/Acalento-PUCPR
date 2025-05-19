@@ -50,6 +50,12 @@ function routeToCommon($pageNum)
         case 15:
             include_once 'views/common/thank_you.php';
             break;
+        case 16:
+            include_once 'views/common/my_punishments.php';
+            break;
+        case 17:
+            include_once 'views/common/justify_punishment.php';
+            break;
         default:
             header('location: index.php?common=4&error=2');
     }

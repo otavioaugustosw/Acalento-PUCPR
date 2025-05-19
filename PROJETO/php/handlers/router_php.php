@@ -35,10 +35,10 @@ function routeToCommon($pageNum)
         case 10:
             include_once 'views/common/edit_password.php';
             break;
-        case 11:
+        case 16:
             include_once 'views/common/my_punishments.php';
             break;
-        case 12:
+        case 17:
             include_once 'views/common/justify_punishment.php';
             break;
         default:

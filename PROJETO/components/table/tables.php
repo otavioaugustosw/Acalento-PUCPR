@@ -85,7 +85,7 @@ function render_punishments_table(array $table_columns, mysqli_result $punishmen
                 makeButton(
                         "Ver mais",
                     "btn btn-primary",
-                    $common ? "index.php?common=12&id=" . $punishment->punicao_id : "index.php?adm=10&id=" . $punishment->punicao_id
+                    $common ? "index.php?common=17&id=" . $punishment->punicao_id : "index.php?adm=10&id=" . $punishment->punicao_id
                 );
             };
             $table_rows = [

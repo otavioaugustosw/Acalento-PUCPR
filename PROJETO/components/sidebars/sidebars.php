@@ -61,7 +61,7 @@ function make_sidebar() {?>
     </li>
 
     <li class="sidebar-item mb-1">
-        <a  href="index.php?common=11" class="btn btn-toggle  d-inline-flex align-items-center rounded border-0 collapsed">
+        <a  href="index.php?common=16" class="btn btn-toggle  d-inline-flex align-items-center rounded border-0 collapsed">
             <svg class="bi me-2" width="20" height="20" aria-hidden="true">
                 <use xlink:href="#guard"/>
             </svg>

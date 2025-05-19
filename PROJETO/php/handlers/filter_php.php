@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @param mysqli $bd recebe a conexão com o banco de dados
  * @param string $tabela recebe o nome da tabela
@@ -8,7 +7,6 @@
  */
 function hasColumn(mysqli $bd, string $tabela, string $coluna): bool
 {
-
     $query = "SHOW COLUMNS FROM $tabela LIKE '$coluna'";
     $resultado = $bd->query($query);
     if (!$resultado) {
@@ -42,19 +40,19 @@ function setWhere(string $nome): string
     /* monta o WHERE ------------------------------------------------ */
     $where = '';
 
-    if (hasColumn($db,$table,'status')) {
+    if (hasColumn($db,$table,'inativo')) {
 
         if ($dia !== '') {
             // dia exato tem prioridade
-            $where = "WHERE DATE($table.data) = '$dia' AND $table.status = 0";
+            $where = "WHERE DATE($table.data) = '$dia' AND $table.inativo = 0";
         } else {
             switch ($filtro) {
                 case 'futuros':
-                    $where = "WHERE $table.data >= NOW() AND $table.status = 0";
+                    $where = "WHERE $table.data >= NOW() AND $table.inativo = 0";
                     break;
 
                 case 'passados':
-                    $where = "WHERE $table.data <= NOW() AND $table.status = 0";
+                    $where = "WHERE $table.data <= NOW() AND $table.inativo = 0";
                     break;
                 case "mes":
                     /* DATESUB: para subtrair um mês do dia de hoje (CURRENT_DATE)
@@ -62,10 +60,10 @@ function setWhere(string $nome): string
                     LAST_DAY: pega o último dia do mês */
                     $where = "WHERE $table.data BETWEEN
                     DATE_FORMAT(DATE_SUB(CURRENT_DATE, INTERVAL 1 MONTH), '%Y-%m-01') AND LAST_DAY(DATE_SUB(CURRENT_DATE, INTERVAL 1 MONTH))
-                    AND $table.status = 0";
+                    AND $table.inativo = 0";
                     break;
                 case 'todos':
-                    $where = "WHERE $table.status = 0";
+                    $where = "WHERE $table.inativo = 0";
                     break;
             }
         }
@@ -101,14 +99,13 @@ function set_where_donations($view, $campaign_id = 0)
     if ($_SESSION['USER_IS_ADMINISTRATOR'] && isset($view)) {
         switch ($view) {
             case 'adm':
-                return setWhere('item');
+                return setWhere('doacao');
             case 'inventory':
-               return setWhere('item') . " AND doacao.id_estoque IS NOT NULL";
+               return setWhere('doacao') . " AND doacao.id_estoque IS NOT NULL";
             case 'campaign':
                 if ($campaign_id <= 0) {
                     showError(10);
                     return setWhere('doacao') . " AND id_usuario =" . $_SESSION['USER_ID'];
-;
                 }
                 return setWhere('doacao') . " AND doacao.id_campanha_doacao = $campaign_id";
             default:
@@ -119,3 +116,61 @@ function set_where_donations($view, $campaign_id = 0)
     }
 }
 
+function set_where_my_events(){
+
+    $filtro = $_POST['filtro'] ?? 'todos';
+
+    /* satinização */
+    $opcoes_valida = ['ha_confirmar', 'confirmado', 'presente', 'todos'];
+    if (!in_array($filtro,$opcoes_valida)) {
+        $filtro = 'todos';
+    }
+
+    $where = '';
+    $usuario = 'id_usuario =' . $_SESSION['USER_ID'];
+
+    switch ($filtro) {
+        case 'ha_confirmar':
+            $where = 'WHERE participacao_confirmada = 0 AND evento.data > CURRENT_DATE AND ' . $usuario;
+            break;
+        case 'confirmado':
+            $where = 'WHERE participacao_confirmada = 1 AND presenca = 0 AND evento.data > CURRENT_DATE AND ' . $usuario;
+            break;
+        case 'presente':
+            $where = 'WHERE presenca = 1 AND evento.data > CURRENT_DATE AND ' . $usuario;
+            break;
+        case 'todos':
+            $where = 'WHERE ' . $usuario;
+            break;
+    }
+    return $where;
+}
+
+function set_where_user() {
+    $filtro = $_POST['filtro'] ?? 'todos';
+
+    /* sanitização */
+    $opcoes_valida = ['voluntario', 'doador', 'administrador', 'todos'];
+    if (!in_array($filtro,$opcoes_valida)) {
+        $filtro = 'todos';
+    }
+
+    $where = '';
+
+    switch ($filtro) {
+        case 'voluntario':
+            $where = 'WHERE eh_voluntario = 1';
+            break;
+        case 'doador':
+            $where = 'WHERE eh_doador = 1';
+            break;
+        case 'administrador':
+            $where = 'WHERE eh_adm = 1';
+            break;
+        case 'todos':
+            $where = 'WHERE 1=1';
+            break;
+    }
+
+    return $where;
+}

@@ -4,28 +4,13 @@ include_once (ROOT .  "/components/sidebars/sidebars.php");
 include_once (ROOT . "/components/filter/filter.php");
 include_once (ROOT . "/php/handlers/filter_php.php");
 include_once (ROOT . "/components/table/tables.php");
-include_once (ROOT . "/models/donator_models_php.php");
+include_once (ROOT . "/models/admin_models_php.php");
+include_once (ROOT .  "/components/back/back.php");
+
 $conn = connectDatabase();
-$where = set_where_donations($_GET['view'] ?? null, $_GET['id'] ?? 0);
-$page_name = "";
-
-switch ($_GET['view'] ?? null){
-    case 'adm':
-        $page_name = "Todas doações";
-        break;
-    case 'inventory':
-        $page_name = "Doações em estoque";
-        break;
-    case 'campaign':
-        $page_name = "Doações da campanha";
-        break;
-    default:
-        $page_name = "Minhas doações";
-        break;
-}
-
-$donations = get_donations_where($conn, $where);
-$table_head = ["Item", "Quantidade", "Tipo", "Doador", "Data da doação", "Destino"];
+$where = " WHERE up.id_usuario =" . $_SESSION['USER_ID'];
+$punishments = get_all_punishments($conn, $where);
+$table_head = ["ID", "Nome", "Email", "Data", "Evento", "Status", "Revisar"];
 
 ?>
 <!doctype html>
@@ -39,7 +24,7 @@ $table_head = ["Item", "Quantidade", "Tipo", "Doador", "Data da doação", "Dest
     <link rel="stylesheet" href="css/main-content.css">
     <link rel="stylesheet" href="css/form-style.css">
     <link rel="stylesheet" href="css/cards.css">
-    <title>Acalento | Doações</title>
+    <title>Gerenciar punições</title>
 </head>
 <body>
 <?php make_mobile_sidebar() ?>
@@ -47,18 +32,19 @@ $table_head = ["Item", "Quantidade", "Tipo", "Doador", "Data da doação", "Dest
     <?php make_sidebar(); ?>
     <div class="main-content">
         <main class="px-5 row">
+            <?php make_buttom_back("index.php?common=6");?>
             <div class="container-fluid">
-                <h2><?= $page_name ?></h2>
+                <h2>Minhas penalidades</h2>
                 <?php
                 makeFilter();
-                if (!$donations) {
+                if (!$punishments) {
                     showError(7);
                 }
-                if ($donations->num_rows <= 0) {
-                    echo '<h3 class="d-flex justify-content-center p-5">Nenhuma doação encontrada.</h3>';
+                if ($punishments->num_rows <= 0) {
+                    echo '<h3 class="d-flex justify-content-center p-5">Nenhuma penalidade registrada.</h3>';
                 }
                 else {
-                    render_donator_donations_table($table_head, $donations);
+                    render_punishments_table($table_head, $punishments, common: true);
                 }?>
             </div>
     </div>

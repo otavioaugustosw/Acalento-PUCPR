@@ -9,7 +9,7 @@ include_once (ROOT .  "/models/voluntary_models_php.php");
 include_once (ROOT .  "/php/handlers/error_handler_php.php");
 
 $conn = connectDatabase();
-$events = get_events_where($conn, setWhere('evento'), $_SESSION['USER_ID']);
+$events = get_events_where($conn, set_where_my_events(), $_SESSION['USER_ID']);
 
 ?>
 <!doctype html>
@@ -42,15 +42,15 @@ $events = get_events_where($conn, setWhere('evento'), $_SESSION['USER_ID']);
         <main class="px-5 row addScroll">
             <div class="container-fluid">
                 <div class="mb-3">
-                    <h2>Eventos</h2>
-                    <?php makeFilter() ?>
+                    <h2>Meus eventos</h2>
+                    <?php make_filter_events(); ?>
                     <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-2 row-cols-xl-2 row-cols-xxl-3 g-5 main">
                         <?php
                         if (!$events) {
                             showError(7);
                         }
                         if ($events->num_rows <= 0) {
-                            echo '<h3>Nenhum evento cadastrado</h3>';
+                            echo '<h3>Nenhum evento encontrado</h3>';
                         }
                         else {
                             render_events_card($events, voluntary: true);
@@ -64,3 +64,4 @@ $events = get_events_where($conn, setWhere('evento'), $_SESSION['USER_ID']);
 </div>
 </body>
 </html>
+

@@ -1,43 +1,41 @@
 
 <?php
-function make_default_modal(
-    $id,
-    $button_classes = 'btn btn-danger',
-    $button_text = 'TITULO BOTÃO',
-    $modal_title = 'CONFIRMAR AÇÃO',
-    $modal_body = 'QUER CONTINUAR?',
-    $cancel_text = 'Não, voltar',
-    $confirm_text = 'Sim, confirmar',
-    $confirm_btn_class = 'btn btn-danger',
-    $form_action = 'index.php',
-    $form_method = 'POST',
-    $hide_id = false
+function makeModal(
+     $id,
+     $modal_id = null,
+     $button_classes = 'btn btn-danger largura-completa',
+     $button_text = 'TITULO BOTÃO',
+     $modal_title = 'CONFIRMAR AÇÃO',
+     $modal_body = 'QUER CONTINUAR?',
+     $cancel_text = 'Não, voltar',
+     $confirm_text = 'Sim, confirmar',
+     $confirm_btn_class = 'btn btn-danger',
+     $form_action = 'index.php',
+     $form_method = 'POST'
 ) {
     ?>
     <div class="col">
 
-        <button type="button" class="<?= $button_classes ?>" data-bs-toggle="modal" data-bs-target="#modal_action_<?= $hide_id ? null : $id ?>">
-            <?= $button_text ?>
-        </button>
+    <button type="button" class="<?= $button_classes ?>" data-bs-toggle="modal" data-bs-target="#modal_action_<?= $id , $modal_id?>">
+        <?= $button_text ?>
+    </button>
     </div>
 
-    <div class="modal fade" id="modal_action_<?= $hide_id ? null : $id ?>" tabindex="-1" aria-labelledby="modal_label_<?=$hide_id ? null : $id?>" aria-hidden="true">
+    <div class="modal fade" id="modal_action_<?= $id , $modal_id?>" tabindex="-1" aria-labelledby="modal_label_<?= $id , $modal_id?>" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content amarelo">
                 <form action="<?= $form_action ?>" method="<?= $form_method ?>">
-                    <?php
-                    if (!$hide_id) {?>
-                        <input type = "hidden" name = "id_evento" value = "<?= $id ?>" >
-                    <?php
-                    }
-                    ?>
+                    <input type="hidden" name="id_evento" value="<?= $id ?>">
+
                     <div class="modal-header">
-                        <h5 class="modal-title" id="modal_label_<?= $hide_id ? null : $id ?>"><?= $modal_title ?></h5>
+                        <h5 class="modal-title" id="modal_label_<?= $id , $modal_id?>"><?= $modal_title ?></h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
+
                     <div class="modal-body">
                         <?= $modal_body ?>
                     </div>
+
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?= $cancel_text ?></button>
                         <button type="submit" class="<?= $confirm_btn_class ?>"><?= $confirm_text ?></button>

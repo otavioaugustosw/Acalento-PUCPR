@@ -6,6 +6,7 @@ include_once (ROOT . "/components/cards/cards.php");
 include_once (ROOT .  "/components/sidebars/sidebars.php");
 include_once (ROOT .  "/components/back/back.php");
 include_once (ROOT .  "/models/voluntary_models_php.php");
+include_once (ROOT .  "/models/admin_models_php.php");
 include_once (ROOT .  "/php/handlers/error_handler_php.php");
 
 $conn = connectDatabase();
@@ -33,6 +34,10 @@ $events = get_events_where($conn, setWhere('evento'), $_SESSION['USER_ID']);
     <!--    monta a sidebar desktop-->
     <?php make_sidebar();
 
+    if (isset($_GET['delete']) && $_GET['delete']) {
+        soft_delete_event($conn, $_GET['id']);
+        $events = get_events_where($conn, setWhere('evento'), $_SESSION['USER_ID']);
+    }
     if (isset($_GET['error'])){
         showError($_GET['error']);
     }

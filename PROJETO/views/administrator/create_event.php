@@ -141,7 +141,7 @@ function submitInformation($conn) {
         return;
     }
 
-    $image = validateFile('link_media');
+    $image = validateFile('link_media', 'media');
 
     if (!has_max_length($image, 256)) {
         display_validation('inputImagem', false);

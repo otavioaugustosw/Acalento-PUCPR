@@ -191,11 +191,13 @@ function soft_delete_event(mysqli $conn, int $event_id): bool {
     try {
         $stmt = $conn->prepare($query);
         $stmt->bind_param("i", $event_id);
-        return $stmt->execute();
+        $stmt->execute();
+        return true;
     } catch (mysqli_sql_exception $e) {
         return false;
     }
 }
+
 
 /**
  * Obtém todas as punições com detalhes do usuário e evento, para a tela de admin.
@@ -291,5 +293,28 @@ function end_event(mysqli $conn, int $event_id): bool {
         return $stmt->execute();
     } catch (mysqli_sql_exception $e) {
         return false;
+    }
+}
+
+function register_donation_monetary(mysqli $conn, $id_usuario, $valor, $data, $caminho , $validado)
+{
+    try {
+        $query = "
+        INSERT INTO doacao_monetaria(id_usuario, valor, data, link_media, validado)
+        VALUES (?, ?, ?, ?, ?)";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("idssi", $id_usuario, $valor, $data, $caminho , $validado);
+        $stmt->execute();
+        if ($id_usuario != null) {
+            $query = "UPDATE usuario SET eh_doador = 1 WHERE id = ?";
+            load_user_session_data($conn);
+            $stmt = $conn->prepare($query);
+            $stmt->bind_param("i", $id_usuario);
+            $stmt->execute();
+        }
+        showSucess(3);
+
+    } catch (mysqli_sql_exception $e) {
+        echo $e->getMessage();
     }
 }

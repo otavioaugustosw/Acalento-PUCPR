@@ -162,32 +162,30 @@ function is_date_valid(string $date): bool
     return $d && $d->format('Y-m-d') === $date;
 }
 
-function validateFile(string $nameInput)
+function validateFile(string $nameInput, $pasta)
 {
     $arquivo = $_FILES[$nameInput] ?? null;
 
     if ($arquivo === null || $arquivo["error"] !== UPLOAD_ERR_OK) {
-        echo "Nenhum arquivo enviado ou houve erro no envio.";
-        return;
+        showError(26);
     }
     if ($arquivo["size"] > 10485760) {
-        echo "deu erro";
+        showError(27);
         exit;
     }
-    $pasta = "media/";
+
+    $pasta =  $pasta . "/";
     $nomeArquivo = $arquivo["name"];
     $novoNomeArquivo = uniqid();
     $extensao = strtolower(pathinfo($nomeArquivo, PATHINFO_EXTENSION));
     $permitidos = ['pdf', 'jpg', 'jpeg', 'png', 'gif'];
     if (!in_array($extensao, $permitidos)) {
-        echo "Tipo de arquivo não permitido.";
+        showError(25);
         exit;
     }
     $teste = move_uploaded_file($arquivo["tmp_name"], $pasta . $novoNomeArquivo . "." . $extensao);
-    if ($teste) {
-        echo "deu certo!!!!!";
-    } else {
-        echo "Deu errado";
+    if (!$teste) {
+        exit;
     }
 
     return $pasta . $novoNomeArquivo . "." . $extensao;

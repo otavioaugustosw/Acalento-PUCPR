@@ -262,7 +262,7 @@ function admin_event_card($event, $horizontal = false)
             modal_body: 'Tem certeza que deseja deletar esse evento',
             cancel_text: "Cancelar",
             confirm_text: 'Sim, deletar',
-            form_action: "index.php?adm=4&id=$event->id"
+            form_action: "index.php?adm=5&id=$event->id&delete=1"
         );
     };
 

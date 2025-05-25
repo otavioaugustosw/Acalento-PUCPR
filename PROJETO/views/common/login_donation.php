@@ -5,6 +5,7 @@ include_once (ROOT . '/php/config/database_php.php');
 include_once (ROOT . '/php/auth_services/auth_service_php.php');
 include_once (ROOT . '/php/handlers/form_validator_php.php');
 
+
 $conn = connectDatabase();
 ?>
 
@@ -32,7 +33,7 @@ $conn = connectDatabase();
         <!-- Lado esquerdo -->
         <div class="col-md-6 bg-login-left d-flex flex-column justify-content-center align-items-center p-5" style="background-color: var(--secondary-background)">
             <h2 class="text-center mb-4">Ainda não faz parte do acalento?</h2>
-            <a href="" class="btn btn-primary largura-50 px-5 py-2">Cadastre-se</a>
+            <a href="index.php?common=14" class="btn btn-primary largura-50 px-5 py-2">Cadastre-se</a>
         </div>
 
         <!-- Lado direito -->

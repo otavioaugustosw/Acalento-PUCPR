@@ -83,7 +83,7 @@ if (!$punishment) {
                         </div>
                     </div>
                     <div class="row">
-                        <form action="index.php?common=12&id=<?= $punishment_id ?>" method="post">
+                        <form action="index.php?common=17&id=<?= $punishment_id ?>" method="post">
                             <?php
                             if ($punishment->revisado) {
                                 ?>

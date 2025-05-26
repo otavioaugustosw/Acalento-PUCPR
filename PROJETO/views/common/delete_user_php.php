@@ -2,7 +2,7 @@
 include_once (ROOT . "/php/config/database_php.php");
 include_once (ROOT . "/models/common_models_php.php");
 
-$conn = connectDatabase();;
+$conn = connectDatabase();
 
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['inativar'])) {
     $did_deactivated_user = deactivate_user($conn, $_SESSION['USER_ID']);

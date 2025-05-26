@@ -4,7 +4,7 @@ include(ROOT . '/php/handlers/form_validator_php.php');
 include(ROOT .  "/components/sidebars/sidebars.php");
 include(ROOT . "/php/auth_services/auth_service_php.php");
 include(ROOT . "/components/back/back.php");
-
+include_once (ROOT . '/models/admin_models_php.php');
 
 $conn = connectDatabase();
 load_user_session_data($conn);
@@ -121,7 +121,7 @@ function submitInformation($conn)
     $validado = 1;
 
     $campoArquivo = $_FILES["comprovante"];
-    $caminho = validateFile("comprovante");
+    $caminho = validateFile("comprovante", 'comprovantes');
 
     $id_usuario = $_POST['id_usuario'] == 0 ? null : $_POST['id_usuario'];
     $valor = isset($_POST['valor']) && $_POST['valor'] !== '' ? (float) $_POST['valor'] : null;
@@ -156,28 +156,5 @@ function submitInformation($conn)
         return;
     }
 
-    try {
-        $query = "
-        INSERT INTO doacao_monetaria(id_usuario, valor, data, link_media, validado)
-        VALUES (?, ?, ?, ?, ?)";
-        $stmt = $conn->prepare($query);
-        $stmt->bind_param("idssi", $id_usuario, $valor, $_POST['data'], $caminho , $validado);
-        $stmt->execute();
-        if ($id_usuario != null) {
-            $query = "UPDATE usuario SET eh_doador = 1 WHERE id = ?";
-            load_user_session_data($conn);
-            $stmt = $conn->prepare($query);
-            $stmt->bind_param("i", $id_usuario);
-            $stmt->execute();
-        }
-        showSucess(3);
-
-    } catch (mysqli_sql_exception $e) {
-        showError(5);
-        ob_start(); // começa a capturar a saída
-        var_dump($e->getMessage());
-        $dump = ob_get_clean(); // salva a saída em uma variável
-
-        echo "<div id='debug-dump'>{$dump}</div>";
-    }
+    register_donation_monetary($conn, $id_usuario, $valor, $_POST['data'], $caminho , $validado);
 }

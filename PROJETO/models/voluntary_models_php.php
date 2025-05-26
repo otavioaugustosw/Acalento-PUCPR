@@ -133,7 +133,7 @@ function toggle_voluntary_presence_event(mysqli $conn, $user_id, $event_id): boo
  * @param mysqli $conn Conexão ativa com o banco de dados.
  * @return mysqli_result|null Resultado da consulta ou null em caso de falha.
  */
-function get_all_settlements(mysqli $conn): ?mysqli_result
+function get_all_settlements(mysqli $conn): ? mysqli_result
 {
     try {
         $query = "SELECT id, nome FROM assentamento";

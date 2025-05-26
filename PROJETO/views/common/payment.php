@@ -5,47 +5,42 @@ include_once (ROOT . '/php/config/session_php.php');
 include_once (ROOT . '/php/config/database_php.php');
 include_once (ROOT . '/php/auth_services/auth_service_php.php');
 include_once (ROOT . '/php/handlers/form_validator_php.php');
+include_once (ROOT . '/php/handlers/payment_handler.php');
+include_once (ROOT . '/models/admin_models_php.php');
 
-$valor = $_SESSION['valor_doacao'] ?? null;
-if (!$valor) {
-    header('Location: escolher-valor.php');
+$conn = connectDatabase();
+load_user_session_data($conn);
+
+// Obtém valor da doação
+$valorBruto = $_SESSION['valor_doacao'] ?? null;
+if (!$valorBruto) {
     exit;
 }
 
-$valorFormatado = number_format((float)str_replace(',', '.', $valor), 2, '.', '');
+$valor = (float) str_replace(',', '.', $valorBruto);
 
-// Dados da ONG
-$chavePix = '12345678000199'; // ou e-mail Pix
-$nome = 'ACALENTO ONG';
-$cidade = 'SAO PAULO';
-$txid = 'doacao-' . time();
+$chave = '70230618600';
+$nome = 'ANNA QUEZIA DOS SANTOS';
+$cidade = 'CURITIBA';
+$txid = uniqid();
 
-// Gera código Pix simples (usável em apps bancários)
-$pixCopiaCola = "00020126360014BR.GOV.BCB.PIX0111{$chavePix}520400005303986540" . strlen($valorFormatado) . "{$valorFormatado}5802BR5914{$nome}6009{$cidade}62070503***6304";
-$qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=" . urlencode($pixCopiaCola);
+$pixCode = geraPixCode($chave, $valor, $nome, $cidade, $txid);
+$qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" . urlencode($pixCode);
 
-// Mensagem de status após upload
-$msg = '';
+// Upload do comprovante
 
-// Envio do comprovante
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['comprovante'])) {
-    $file = $_FILES['comprovante'];
-    if ($file['error'] === UPLOAD_ERR_OK) {
-        $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
-        $filename = 'comprovante_' . time() . '.' . $ext;
-        $uploadDir = __DIR__ . '/uploads/comprovantes/';
-        if (!is_dir($uploadDir)) {
-            mkdir($uploadDir, 0777, true);
+    $arquivo = validateFile('comprovante', 'comprovantes');
+    if ($arquivo) {
+            date_default_timezone_set('America/Sao_Paulo');
+            $data = date('Y-m-d');
+            $validado = 0;
+            register_donation_monetary($conn, $_SESSION['USER_ID'], $valor, $data, $arquivo, $validado);
+            load_user_session_data($conn);
+            header("Location: index.php?common=15");
+            exit;
         }
-        $path = $uploadDir . $filename;
-        if (move_uploaded_file($file['tmp_name'], $path)) {
-            $msg = '<div class="alert alert-success mt-3">Comprovante enviado com sucesso!</div>';
-        } else {
-            $msg = '<div class="alert alert-danger mt-3">Erro ao salvar o comprovante.</div>';
-        }
-    } else {
-        $msg = '<div class="alert alert-warning mt-3">Erro no envio do arquivo.</div>';
-    }
+
 }
 ?>
 
@@ -55,22 +50,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['comprovante'])) {
     <meta charset="UTF-8">
     <title>Pagamento Pix</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/default.css">
+    <link rel="stylesheet" href="css/main-content.css">
+    <link rel="stylesheet" href="css/progress-bar.css">
+    <link rel="stylesheet" href="css/form-style.css">
 </head>
-<body class="bg-light d-flex justify-content-center align-items-center min-vh-100">
+<body class="d-flex justify-content-center align-items-center">
+
+<div class="position-fixed top-0 start-0 w-100 z-3 py-3">
+    <?php render_progress_bar(3); ?>
+</div>
 
 <div class="container">
-    <div class="card shadow-lg mx-auto p-4" style="max-width: 600px;">
+    <div class="card shadow-lg mx-auto p-4" style="max-width: 600px; margin-top: 150px">
         <h2 class="text-center mb-3">Realize o pagamento</h2>
         <p class="text-center text-muted">Valor: <strong>R$ <?= number_format($valor, 2, ',', '.') ?></strong></p>
 
         <div class="text-center mb-4">
-            <img src="<?= $qrUrl ?>" alt="QR Code Pix" class="img-fluid" width="200">
+            <img src="<?= $qrUrl ?>" alt="QR Code Pix" class="img-fluid" style="max-width: 200px;">
         </div>
 
         <div class="bg-body-secondary rounded p-3 mb-4 text-center">
-            <p class="mb-1 fw-semibold">Chave Pix (CNPJ):</p>
-            <p class="mb-2 small"><?= $chavePix ?></p>
-            <button class="btn btn-outline-primary btn-sm" onclick="navigator.clipboard.writeText('<?= $chavePix ?>')">Copiar chave</button>
+            <p class="mb-1 fw-semibold">Copia e Cola:</p>
+            <textarea class="form-control small" rows="3" readonly><?= $pixCode ?></textarea>
         </div>
 
         <form action="" method="POST" enctype="multipart/form-data">
@@ -80,10 +83,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['comprovante'])) {
             </div>
             <button type="submit" class="btn btn-primary w-100">Enviar comprovante</button>
         </form>
-
-        <?= $msg ?>
     </div>
 </div>
-
 </body>
 </html>
+

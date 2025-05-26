@@ -25,6 +25,9 @@ const PAGE_ERROR = [
     22=> "Cancelamos sua inscrição porém uma punição foi aplicada",
     23=> "Sua conta foi deletada, contate um administrador caso queira utiliza-la novamente",
     24=> "Sua conta está suspensa, contate um administrador",
+    25=> "Envie um tipo de documento válido",
+    26=> "Erro no envio do documento",
+    27=> "O documento excede o tamanho limite",
     360=> "Erro ao alterar a punição",
 ];
 

@@ -100,7 +100,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 function submitInformation($conn, $event) {
 
-    if (!is_alpha_only($_POST['nome']) || !has_max_length($_POST['nome'], 50)) {
+    if (!has_max_length($_POST['nome'], 50)) {
         display_validation('inputNome', false);
         return;
     }
@@ -123,7 +123,7 @@ function submitInformation($conn, $event) {
     $image = $event->link_media;
 
     if (isset($_FILES['link_media']) && $_FILES['link_media']['error'] === UPLOAD_ERR_OK) {
-        $novoArquivo = validateFile('link_media');
+        $novoArquivo = validateFile('link_media', 'media');
         if ($novoArquivo) {
             $image = $novoArquivo;
         }
@@ -134,7 +134,7 @@ function submitInformation($conn, $event) {
         return;
     }
 
-    if (!is_alpha_only($_POST['descricao']) || !has_max_length($_POST['descricao'], 100)) {
+    if (!has_max_length($_POST['descricao'], 100)) {
         display_validation('inputDescricao', false);
         return;
     }

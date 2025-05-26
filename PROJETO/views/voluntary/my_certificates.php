@@ -38,7 +38,7 @@ $conn = connectDatabase();
                     if (!$events) {
                         showError(7);
                     } else if ($events->num_rows <= 0) {
-                        echo '<h3 class="pb-2">Você ainda não teve sua presença confirmada em nenhum evento. A declaração só pode ser gerada depois disso.</h3>';
+                        echo '<h3 class="pb-2">Você ainda não teve sua presença confirmada em nenhum evento :( </h3>';
                     } else {
                         render_certificates_table($table_head, $events);
                     }

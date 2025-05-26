@@ -141,10 +141,6 @@ if (!$user) {
 </html>
 
 <?php
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    validate_address();
-    validate_user();
-}
 
 function validate_address(): bool
 {
@@ -236,7 +232,7 @@ function submit_user(mysqli $conn, $address_id): void
     }
 }
 
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["cpf"])) {
     submit_user($conn, $user->id_endereco);
 }
 ?>

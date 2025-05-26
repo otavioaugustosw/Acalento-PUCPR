@@ -45,6 +45,7 @@ const PAGE_SUCCESS = [
     10=> "Senha alterada com sucesso",
     20=> "Perfil inativado com sucesso",
     21=> "Presença confirmada com sucesso!",
+    22=> "Cadastro alterado com sucesso",
     360=> "Punição confirmada",
     361=> "Punição cancelada",
     362=> "Justificação enviada!",

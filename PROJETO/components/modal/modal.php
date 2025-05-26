@@ -49,14 +49,14 @@ function makeModal(
 }
 
 function make_form_modal(
-    $button_classes = 'btn btn-primary',
+    $button_classes = 'btn btn-primary largura-completa',
     $button_text = 'TITULO BOTÃO',
     $modal_title = 'CONFIRMAR AÇÃO',
     $confirm_text = 'Salvar alterações',
     $confirm_btn_class = 'w-100 mb-2 btn btn-lg rounded-3 btn-primary',
     $form_action = 'index.php',
     $form_method = 'POST',
-    $modal_inputs = null,
+    $modal_inputs = null
 )  {?>
     <div class="col">
 

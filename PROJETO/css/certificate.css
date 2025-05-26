@@ -1,0 +1,43 @@
+body {
+    background-size: cover;
+    color:var(--primary-background);
+    height: 100vh;
+}
+.certificado {
+    text-align: center;
+    padding: 100px 60px;
+    background-color: var(--tertiary-background);
+    margin: 50px auto;
+    width: 80%;
+    box-shadow: 0 0 15px var(--primary-blue);
+}
+.certificado h1 {
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+.certificado p {
+    font-size: 20px;
+    line-height: 1.6;
+}
+
+@media print {
+    @page {
+        size: A4;
+        margin: 0;
+    }
+
+    .sidebar,
+    .mobile-sidebar,
+    .btn,
+    header,
+    nav {
+        display: none !important;
+    }
+
+    .main-content,
+    .container-fluid {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+    }
+}

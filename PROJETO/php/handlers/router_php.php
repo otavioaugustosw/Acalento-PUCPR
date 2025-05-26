@@ -85,6 +85,12 @@ function routeToVoluntary($pageNum)
         case 7:
             include_once 'views/voluntary/my_events.php';
             break;
+        case 8:
+            include_once 'views/voluntary/my_certificates.php';
+            break;
+        case 9:
+            include_once 'views/voluntary/certificate.php';
+            break;
         default:
             header('location: index.php?common=4&error=2');
     }
@@ -145,6 +151,7 @@ function routeToAdministrator($pageNum)
             break;
         case 17:
             include_once 'views/administrator/view_users.php';
+            break;
         default:
             header('location: index.php?common=4&error=2');
     }

@@ -67,7 +67,7 @@ function _handle_failed_attempt() {
 function _get_user_by_email($conn, $email): array
 {
     $query = "SELECT id, senha, suspenso, inativo  FROM usuario WHERE email = ?";
-    $stmt = $sql->prepare($query);
+    $stmt = $conn->prepare($query);
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $result = $stmt->get_result();

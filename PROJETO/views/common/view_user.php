@@ -4,6 +4,7 @@ include_once (ROOT . "/php/handlers/form_validator_php.php");
 include_once (ROOT . "/components/sidebars/sidebars.php");
 include_once (ROOT . "/php/auth_services/auth_service_php.php");
 include_once (ROOT . "/components/modal/modal.php");
+include_once (ROOT . "/components/cards/cards.php");
 include_once (ROOT . "/components/buttons/buttons.php");
 include_once (ROOT . "/models/common_models_php.php");
 $conn = connectDatabase();
@@ -24,6 +25,8 @@ if (!$user) {
     <link rel="stylesheet" href="css/sidebar.css">
     <link rel="stylesheet" href="css/form-style.css">
     <link rel="stylesheet" href="css/main-content.css">
+    <link rel="stylesheet" href="css/cards.css">
+
 
 
 
@@ -131,33 +134,33 @@ if (isset($_GET['error'])) {
                             <label class="form-label">Estado</label>
                             <div class="form-control "><?= $user->estado ?? 'Não informado' ?></div>
                         </div>
+                        <?php
+                        makeModal(
+                            $_SESSION['USER_ID'],
+                            button_text: 'Inativar conta',
+                            modal_title: 'Confirmar inativação',
+                            modal_body: 'Tem certeza que deseja inativar sua conta?',
+                            confirm_text: 'Sim, inativar',
+                            form_action: "index.php?common=9",
+                        );
+                        ?>
 
-                        <?php makeFormButton("index.php?common=8","Editar Dados","","Editar Dados","btn btn-primary")?>
+                        <?php makeFormButton("index.php?common=8","Editar Dados","","Editar Dados")?>
                         <?php
                         $modal_inputs = function () { ?>
                         <div class="form-floating mb-3">
-                            <input type="password" class="form-control rounded-3" id="floatingInput" placeholder="********" name="password">
-                            <label for="floatingInput">Nova senha</label>
+                            <input type="password" class="form-control rounded-3" id="Input" placeholder="********" name="password">
+                            <label for="password">Nova senha</label>
                         <div class="form-floating mb-3">
-                            <input type="password" class="form-control rounded-3" id="floatingPassword" placeholder="********" name="passwordConfirm">
-                            <label for="floatingPassword">Confirmar nova senha</label>
+                            <input type="password" class="form-control rounded-3" id="Input" placeholder="********" name="passwordConfirm">
+                            <label for="passwordConfirm">Confirmar nova senha</label>
                     <?php };
                     make_form_modal(
                         button_text: "Alterar senha",
                         modal_title: "Alterar senha",
                         form_action: "index.php?common=7",
                         modal_inputs: $modal_inputs,
-                    );
-                    make_default_modal(
-                        $_SESSION['USER_ID'],
-                        button_text: 'Inativar conta',
-                        modal_title: 'Confirmar inativação',
-                        modal_body: 'Tem certeza que deseja inativar sua conta?',
-                        confirm_text: 'Sim, inativar',
-                        form_action: "index.php?common=9",
-                        hide_id: true
-                    );
-                    ?>
+                    );?>
                 </div>
             </div>
         </main>
@@ -166,32 +169,23 @@ if (isset($_GET['error'])) {
     </html>
 
 <?php
+if (isset($_POST["password"], $_POST["passwordConfirm"])) {
+    $password = $_POST["password"];
+    $passwordConfirm = $_POST["passwordConfirm"];
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    var_dump($_POST);
-    update_password($conn, $_SESSION['USER_ID']);
+    if (!has_min_length($password, 8)) {
+        display_validation('password', false);
+        display_validation('passwordConfirm', false);
+        showError(17);
+        return false;
+    }
+    if ($password !== $passwordConfirm) {
+        display_validation('password', false);
+        display_validation('passwordConfirm', false);
+        showError(17);
+        return false;
+    }
+    $senha = generate_password_hash($password);
+    update_password($conn, $_SESSION['USER_ID'], $senha);
 }
-
-function update_password($conn, $id_usuario) {
-        if (!hasMinLength($_POST['password'], 8) || ($_POST['password'] !== $_POST['passwordConfirm'])) {
-            displayValidation('password', false);
-            displayValidation('passwordConfirm', false);
-            showError(17);
-            return false;
-        } else {
-            $senha = generate_password_hash($_POST['password']);
-
-            try {
-                $query = "UPDATE usuario SET senha = ? WHERE id = ?";
-                $stmt = $conn->prepare($query);
-                $stmt->bind_param("si", $senha, $id_usuario);
-                if ($stmt->execute()) {
-                    showSucess(10);
-                    return true;
-                }
-            } catch (Exception $e) {
-                showError(15);
-                return false;
-            }
-        }
-}
+?>

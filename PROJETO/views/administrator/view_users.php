@@ -3,22 +3,32 @@ include (ROOT . "/php/config/database_php.php");
 include(ROOT . "/components/sidebars/sidebars.php");
 include(ROOT . "/components/table/tables.php");
 include(ROOT . "/components/cards/cards.php");
-include(ROOT . "/models/donator_models_php.php");
+include(ROOT . "/models/common_models_php.php");
 
 $conn = connectDatabase();
 
-function get_users_where($conn, $where)
-{
-    $query = "
-        SELECT nome, telefone, email, cpf, eh_doador, eh_voluntario, eh_adm, inativo, suspenso
-        FROM usuario
-        $where";
-    return $conn->query($query);
-}
-
-$all_users = get_users_where($conn, "ORDER BY id DESC LIMIT 50");
 $table_head = ["Nome", "Email", "Telefone", "CPF", "Doador", "Voluntário", "Administrador", "Suspender", "Inativar"];
 $filterUsers = get_users_where($conn, "");
+
+if (isset($_GET['id_user'])) {
+
+    if (isset($_GET['suspender'])) {
+        if ($_GET['suspender']) apply_user_suspension($conn, $_GET['id_user'], true); else {
+            retire_user_suspension($conn, $_GET['id_user']);
+        }
+        $filterUsers = get_users_where($conn, "");
+    }
+
+    if (isset($_GET['inativar'])) {
+        if ($_GET['inativar']) {
+            deactivate_user($conn, $_GET['id_user']);
+        } else {
+            reactivate_user($conn, $_GET['id_user']);
+        }
+        $filterUsers = get_users_where($conn, "");
+    }
+}
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -52,7 +62,6 @@ $filterUsers = get_users_where($conn, "");
                         }
                         else {
                             render_users_table($table_head, $filterUsers);
-
                         }
                         ?>
                     </div>
@@ -62,44 +71,3 @@ $filterUsers = get_users_where($conn, "");
 </div>
 </body>
 </html>
-
-<?php
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['email'])) {
-    $email = $_POST['email'];
-
-    if (isset($_POST['suspender'])) {
-        $stmt = $conn->prepare("UPDATE usuario SET suspenso = 1 WHERE email = ?");
-        $stmt->bind_param("s", $email);
-        $did_suspend = $stmt->execute();
-        $filterUsers = get_users_where($conn, "");
-        $did_suspend ? header('Location: index.php?adm=16') : null;
-
-    }
-
-    if (isset($_POST['reativar_suspenso'])) {
-        $stmt = $conn->prepare("UPDATE usuario SET suspenso = 0 WHERE email = ?");
-        $stmt->bind_param("s", $email);
-        $did_suspend = $stmt->execute();
-        $filterUsers = get_users_where($conn, "");
-        $did_suspend ? header('Location: index.php?adm=16') : null;
-    }
-
-    if (isset($_POST['inativar'])) {
-        $stmt = $conn->prepare("UPDATE usuario SET inativo = 1 WHERE email = ?");
-        $stmt->bind_param("s", $email);
-        $did_suspend = $stmt->execute();
-        $filterUsers = get_users_where($conn, "");
-        $did_suspend ? header('Location: index.php?adm=16') : null;
-    }
-
-    if (isset($_POST['reativar_inativo'])) {
-        $stmt = $conn->prepare("UPDATE usuario SET inativo = 0 WHERE email = ?");
-        $stmt->bind_param("s", $email);
-        $did_suspend = $stmt->execute();
-        $filterUsers = get_users_where($conn, "");
-        $did_suspend ? header('Location: index.php?adm=16') : null;
-    };
-
-}
-?>
-

@@ -218,3 +218,28 @@ function get_last_event(mysqli $conn, int $user_id)
         return false;
     }
 }
+
+function get_confirmed_events(mysqli $conn, int $user_id): mysqli_result|false {
+    $query = "
+        SELECT 
+            evento.id,
+            evento.nome AS nome_evento,
+            evento.data,
+            upe.presenca
+        FROM usuario_participa_evento upe
+        JOIN evento ON evento.id = upe.id_evento
+        WHERE upe.id_usuario = ?
+          AND upe.participacao_confirmada = 1
+          AND upe.presenca = 1
+        ORDER BY evento.data DESC
+    ";
+
+    $stmt = $conn->prepare($query);
+    if (!$stmt) {
+        return false;
+    }
+
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    return $stmt->get_result();
+}

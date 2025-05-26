@@ -139,7 +139,25 @@ function render_users_table(array $table_columns, $users)
     <table class="table table-hover table-amarela">
         <?php
         make_table_head($table_columns);
+
         while ($user = $users->fetch_object()) {
+            $button_inactivate = function () use ($user) {
+                if ($user->inativo) {
+                    makeButton("Reativar", "btn btn-dark-success", "index.php?adm=17&inativar=0&id_user=$user->id");
+                }
+                else {
+                    makeButton("Inativar", "btn btn-danger", "index.php?adm=17&inativar=1&id_user=$user->id");
+                }
+            };
+
+            $button_suspend = function () use ($user) {
+                if ($user->suspenso) {
+                    makeButton("Retirar suspensão", "btn btn-dark-success", "index.php?adm=17&suspender=0&id_user=$user->id");
+                }
+                else {
+                    makeButton("Suspender", "btn btn-danger", "index.php?adm=17&suspender=1&id_user=$user->id");
+                }
+            };
             $table_rows = [
                 $user->nome,
                 $user->email,
@@ -159,44 +177,37 @@ function render_users_table(array $table_columns, $users)
 <svg class="bi me-2" width="20" height="20" aria-hidden="true">
                 <use xlink:href="#circle"/>
             </svg>
+            
 </div>' : '',
-                //Suspender/Reativar
-                '<form method="POST" action="index.php?adm=16">
-                    <input type="hidden" name="email" value="' . $user->email . '">
-                    <input type="hidden" name="' . ($user->suspenso ? 'reativar_suspenso' : 'suspender') . '" value="1">
-                    <button type="submit" class="btn btn-' . ($user->suspenso ? 'success' : 'danger') . ' btn-sm">'
-                . ($user->suspenso ? 'Reativar' : 'Suspender') .
-                '</button>
-                </form>',
-
-                //Inativar/Reativar
-                '<form method="POST" action="index.php?adm=16">
-                    <input type="hidden" name="email" value="' . $user->email . '">
-                    <input type="hidden" name="' . ($user->inativo ? 'reativar_inativo' : 'inativar') . '" value="1">
-                    <button type="submit" class="btn btn-' . ($user->inativo ? 'success' : 'primary') . ' btn-sm">'
-                . ($user->inativo ? 'Reativar' : 'Inativar') .
-                '</button>
-                </form>'
+                $button_suspend,
+                $button_inactivate,
             ];
-
-            echo "<tr>";
-            foreach ($table_rows as $value) {
-                echo "<td>$value</td>";
-            }
-            echo "</tr>";
+            make_table_rows($table_rows);
         }
         ?>
     </table>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            document.querySelectorAll("form button").forEach(function (button) {
-                button.addEventListener("click", function () {
-                    button.classList.remove("btn-success", "btn-danger", "btn-primary");
-                    button.classList.add("btn-warning");
-                });
-            });
-        });
-    </script>
     <?php
 }
+
+function render_certificates_table(array $table_columns, mysqli_result $events)
+{ ?>
+    <table class="table table-hover table-amarela">
+        <?php make_table_head($table_columns); ?>
+        <?php while ($event = $events->fetch_object()) {
+            $button_certificate = function () use ($event) {
+            if ($event->presenca) {
+                makeButton("Visualizar certificado","btn btn-primary", "index.php?voluntary=9&nome_evento=$event->nome_evento&date=$event->data");
+            }
+            };
+            $table_rows = [
+                $event->nome_evento,
+                date("d/m/Y", strtotime($event->data)),
+                $button_certificate
+            ];
+            make_table_rows($table_rows);
+        } ?>
+    </table>
+<?php }
+
+
 

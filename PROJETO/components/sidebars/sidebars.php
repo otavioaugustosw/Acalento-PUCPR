@@ -122,8 +122,6 @@ function make_sidebar() {?>
                     <li><a href="index.php?adm=9" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Gerenciar penalidades</a></li>
                     <li><a href="index.php?adm=5" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Gerenciar eventos</a></li>
                     <li><a href="index.php?adm=12" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Check-in de Eventos</a></li>
-                    <li><a href="index.php?adm=1" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Cadastrar campanha</a></li>
-                    <li><a href="index.php?adm=8" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Visualizar campanhas</a></li>
                     <li><a href="index.php?adm=3" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Registrar doação monetária</a></li>
                     <li><a href="index.php?adm=16" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Registrar doação material</a></li>
                     <li><a href="index.php?adm=7" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Visualizar doações</a></li>

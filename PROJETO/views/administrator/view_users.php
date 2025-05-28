@@ -13,20 +13,23 @@ $filterUsers = get_users_where($conn, "");
 if (isset($_GET['id_user'])) {
 
     if (isset($_GET['suspender'])) {
-        if ($_GET['suspender']) apply_user_suspension($conn, $_GET['id_user'], true); else {
-            retire_user_suspension($conn, $_GET['id_user']);
+        if ($_GET['suspender']) {
+           echo apply_user_suspension($conn, $_GET['id_user'], true) ? "suspendeu" : "não suspendeu";
         }
-        $filterUsers = get_users_where($conn, "");
+        else {
+            echo retire_user_suspension($conn, $_GET['id_user']) ? "retirou" : "não retirou";
+        }
     }
 
     if (isset($_GET['inativar'])) {
         if ($_GET['inativar']) {
             deactivate_user($conn, $_GET['id_user']);
-        } else {
+        }
+        else {
             reactivate_user($conn, $_GET['id_user']);
         }
-        $filterUsers = get_users_where($conn, "");
     }
+    $filterUsers = get_users_where($conn, "");
 }
 
 ?>

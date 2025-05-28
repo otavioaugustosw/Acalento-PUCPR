@@ -152,7 +152,7 @@ function render_users_table(array $table_columns, $users)
 
             $button_suspend = function () use ($user) {
                 if ($user->suspenso) {
-                    makeButton("Retirar suspensão", "btn btn-dark-success", "index.php?adm=17&suspender=0&id_user=$user->id");
+                    makeButton("Retirar", "btn btn-dark-success", "index.php?adm=17&suspender=0&id_user=$user->id");
                 }
                 else {
                     makeButton("Suspender", "btn btn-danger", "index.php?adm=17&suspender=1&id_user=$user->id");

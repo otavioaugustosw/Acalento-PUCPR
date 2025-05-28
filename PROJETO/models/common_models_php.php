@@ -124,11 +124,7 @@ function apply_user_suspension(mysqli $conn, $user_id, $admin_override = false)
 {
     try {
         if ($admin_override) {
-            $stmt = $conn->prepare("UPDATE usuario SET suspenso = 1 WHERE id_usuario = ?");
-            if (!$stmt) {
-                return false;
-            }
-
+            $stmt = $conn->prepare("UPDATE usuario SET suspenso = 1 WHERE id = ?");
             $stmt->bind_param("i", $user_id);
             return $stmt->execute();
         }

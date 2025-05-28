@@ -4,6 +4,7 @@ include_once (ROOT . '/php/handlers/form_validator_php.php');
 include_once (ROOT . "/components/sidebars/sidebars.php");
 include_once (ROOT . "/models/admin_models_php.php");
 include_once (ROOT . "/models/voluntary_models_php.php");
+include_once (ROOT .  "/components/back/back.php");
 
 $conn = connectDatabase();
 if (!isset($_GET['id'])) {
@@ -35,8 +36,9 @@ $settlements = get_all_settlements($conn);
 
     <!-- conteudo -->
     <div class="main-content">
-        <main class="px-5 row align-items-center justify-content-center">
+        <main class="px-5 row">
             <div class="container-fluid">
+                <div class="mb-4"><?php make_buttom_back("index.php?adm=5");?></div>
                 <div class="mb-3">
                     <!-- aqui vai o que você quer por -->
                     <h4>Evento</h4>

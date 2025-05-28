@@ -4,9 +4,10 @@ include_once (ROOT . "/php/config/database_php.php");
 include_once (ROOT . "/components/cards/cards.php");
 include_once (ROOT .  "/components/sidebars/sidebars.php");
 include_once (ROOT .  "/models/voluntary_models_php.php");
+include_once (ROOT .  "/components/back/back.php");
 
 $conn = connectDatabase();
-$events = get_events_where($conn, "", $_SESSION['USER_ID']);
+$events = get_events_where($conn, " WHERE upe.participacao_confirmada = 1", $_SESSION['USER_ID']);
 
 ?>
 <!doctype html>
@@ -46,7 +47,7 @@ $events = get_events_where($conn, "", $_SESSION['USER_ID']);
                         if (!$events) {
                             showError(7);
                         }
-                        if ($events->num_rows <= 0) {
+                        else if ($events->num_rows <= 0) {
                             echo '<h3>Nenhum evento para confirmar</h3>';
                         }
                         else {

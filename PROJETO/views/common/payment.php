@@ -7,6 +7,7 @@ include_once (ROOT . '/php/auth_services/auth_service_php.php');
 include_once (ROOT . '/php/handlers/form_validator_php.php');
 include_once (ROOT . '/php/handlers/payment_handler.php');
 include_once (ROOT . '/models/admin_models_php.php');
+include_once (ROOT .  "/components/back/back.php");
 
 $conn = connectDatabase();
 load_user_session_data($conn);
@@ -17,7 +18,8 @@ if (!$valorBruto) {
     exit;
 }
 
-$valor = (float) str_replace(',', '.', $valorBruto);
+$valorLimpo = str_replace(['R$', '.', ' '], '', $valorBruto);
+$valor = (float) str_replace(',', '.', $valorLimpo);
 
 $chave = '70230618600';
 $nome = 'ANNA QUEZIA DOS SANTOS';
@@ -31,16 +33,16 @@ $qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" . urle
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['comprovante'])) {
     $arquivo = validateFile('comprovante', 'comprovantes');
-    if ($arquivo) {
-            date_default_timezone_set('America/Sao_Paulo');
-            $data = date('Y-m-d');
-            $validado = 0;
-            register_donation_monetary($conn, $_SESSION['USER_ID'], $valor, $data, $arquivo, $validado);
-            load_user_session_data($conn);
-            header("Location: index.php?common=15");
-            exit;
-        }
 
+    if ($arquivo) {
+        date_default_timezone_set('America/Sao_Paulo');
+        $data = date('Y-m-d');
+        $validado = 0;
+        register_donation_monetary($conn, $_SESSION['USER_ID'], $valor, $data, $arquivo, $validado);
+        load_user_session_data($conn);
+        header("Location: index.php?common=15");
+        exit;
+    }
 }
 ?>
 
@@ -64,6 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['comprovante'])) {
 
 <div class="container">
     <div class="card shadow-lg mx-auto p-4" style="max-width: 600px; margin-top: 150px">
+        <?php make_buttom_onclick(); ?>
         <h2 class="text-center mb-3">Realize o pagamento</h2>
         <p class="text-center text-muted">Valor: <strong>R$ <?= number_format($valor, 2, ',', '.') ?></strong></p>
 
@@ -80,6 +83,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['comprovante'])) {
             <div class="mb-3">
                 <label for="comprovante" class="form-label fw-semibold">Comprovante de pagamento</label>
                 <input type="file" name="comprovante" id="comprovante" class="form-control" required accept=".jpg,.jpeg,.png,.pdf">
+                <div id="validacaoComprovante" class="invalid-feedback">
+                    Envie um arquivo válido.
+                </div>
             </div>
             <button type="submit" class="btn btn-primary w-100">Enviar comprovante</button>
         </form>
@@ -87,4 +93,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['comprovante'])) {
 </div>
 </body>
 </html>
+
+<?php
+if ($_SERVER["REQUEST_METHOD"] === "FILES") {
+    submitInformation($conn);
+}
+
+function submitInformation($conn)
+{
+
+    if ($_POST['comprovante'] == null) {
+        display_validation('validacaoComprovante', false);
+        return;
+    }
+}
 

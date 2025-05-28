@@ -42,7 +42,7 @@ $settlements = get_all_settlements($conn);
                 <div class="mb-3">
                     <!-- aqui vai o que você quer por -->
                     <div class="mb-5">
-                        <?php make_buttom_back("index.php?common=6");?>
+                        <?php make_buttom_back("index.php?adm=5");?>
                     </div>
                     <h4>Evento</h4>
                     <form class="row g-3" method="POST" action="" enctype="multipart/form-data">
@@ -90,7 +90,8 @@ $settlements = get_all_settlements($conn);
                         <div class="col-md-4">
                             <label for="inputImagem" class="form-label">Insira imagem*</label>
                             <input type="file" class="form-control" id="inputImagem" name="link_media" value="<?= $_FILES['link_media'] ?? null ?>">
-                                Digite um link válido.
+                            <div id="validacaoLinkMedia" class="invalid-feedback">
+                                Envie uma imagem.
                             </div>
                         </div>
 
@@ -143,7 +144,7 @@ function submitInformation($conn) {
 
     $image = validateFile('link_media', 'media');
 
-    if (!has_max_length($image, 256)) {
+    if (!$image) {
         display_validation('inputImagem', false);
         return;
     }

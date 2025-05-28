@@ -6,6 +6,7 @@ include_once (ROOT . '/models/admin_models_php.php');
 include_once (ROOT . '/php/config/database_php.php');
 include_once (ROOT . "/components/table/tables.php");
 include_once (ROOT . '/php/handlers/time_handler.php');
+include_once (ROOT .  "/components/back/back.php");
 
 if (!isset($_GET['id'])) {
     ?> <script> history.back() </script> <?php

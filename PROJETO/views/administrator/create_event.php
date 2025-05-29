@@ -42,7 +42,7 @@ $settlements = get_all_settlements($conn);
                 <div class="mb-3">
                     <!-- aqui vai o que você quer por -->
                     <div class="mb-5">
-                        <?php make_buttom_back("index.php?common=6");?>
+                        <?php make_buttom_back("index.php?adm=5");?>
                     </div>
                     <h4>Evento</h4>
                     <form class="row g-3" method="POST" action="" enctype="multipart/form-data">

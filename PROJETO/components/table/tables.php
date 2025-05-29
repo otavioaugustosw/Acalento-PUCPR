@@ -143,19 +143,19 @@ function render_users_table(array $table_columns, $users)
         while ($user = $users->fetch_object()) {
             $button_inactivate = function () use ($user) {
                 if ($user->inativo) {
-                    makeButton("Reativar", "btn btn-dark-success", "index.php?adm=17&inativar=0&id_user=$user->id");
+                    makeButton("Reativar", "btn btn-dark-success", "index.php?adm=21&inativar=0&id_user=$user->id");
                 }
                 else {
-                    makeButton("Inativar", "btn btn-danger", "index.php?adm=17&inativar=1&id_user=$user->id");
+                    makeButton("Inativar", "btn btn-danger", "index.php?adm=21&inativar=1&id_user=$user->id");
                 }
             };
 
             $button_suspend = function () use ($user) {
                 if ($user->suspenso) {
-                    makeButton("Retirar", "btn btn-dark-success", "index.php?adm=17&suspender=0&id_user=$user->id");
+                    makeButton("Retirar", "btn btn-dark-success", "index.php?adm=21&suspender=0&id_user=$user->id");
                 }
                 else {
-                    makeButton("Suspender", "btn btn-danger", "index.php?adm=17&suspender=1&id_user=$user->id");
+                    makeButton("Suspender", "btn btn-danger", "index.php?adm=21&suspender=1&id_user=$user->id");
                 }
             };
             $table_rows = [
@@ -209,5 +209,30 @@ function render_certificates_table(array $table_columns, mysqli_result $events)
     </table>
 <?php }
 
+function render_settlements_table(array $table_columns, mysqli_result $settlements_result): void
+{ ?>
+    <table class="table table-hover table-amarela">
+        <?php make_table_head($table_columns); ?>
+        <?php while ($settlement = $settlements_result->fetch_object()) {
+            $button_edit = function () use ($settlement) {
+                makeButton("Editar", "btn btn-primary", "index.php?adm=14&id=$settlement->id");
+            };
+            $button_delete = function () use ($settlement) {
+                makeFormButton("index.php?adm=18", "inativar", "$settlement->id_estoque,$settlement->id", "Deletar", "btn btn-danger");
+
+
+            };
+            $table_rows = [
+                $settlement->nome,
+                $settlement->familias,
+                $settlement->rua,
+                $settlement->numero,
+                $button_edit,
+                $button_delete
+            ];
+            make_table_rows($table_rows);
+        } ?>
+    </table>
+<?php }
 
 

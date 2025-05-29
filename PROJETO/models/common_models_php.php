@@ -139,7 +139,7 @@ function apply_user_suspension(mysqli $conn, $user_id, $admin_override = false)
             return null;
         }
 
-        $stmt = $conn->prepare("UPDATE usuario SET suspenso = 1 WHERE id_usuario = ?");
+        $stmt = $conn->prepare("UPDATE usuario SET suspenso = 1 WHERE id_= ?");
         if (!$stmt) {
             return false;
         }
@@ -162,7 +162,7 @@ function apply_user_suspension(mysqli $conn, $user_id, $admin_override = false)
 function retire_user_suspension(mysqli $conn, int $user_id): bool
 {
     try {
-        $stmt = $conn->prepare("UPDATE usuario SET suspenso = 0 WHERE id_usuario = ?");
+        $stmt = $conn->prepare("UPDATE usuario SET suspenso = 0 WHERE id = ?");
         if (!$stmt) {
             return false;
         }
@@ -184,7 +184,7 @@ function retire_user_suspension(mysqli $conn, int $user_id): bool
 function is_user_suspended(mysqli $conn, int $user_id): bool
 {
     try {
-        $stmt = $conn->prepare("SELECT suspenso FROM usuario WHERE id_usuario = ?");
+        $stmt = $conn->prepare("SELECT suspenso FROM usuario WHERE id = ?");
         if (!$stmt) {
             return false;
         }

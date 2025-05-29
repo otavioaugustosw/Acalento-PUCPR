@@ -97,7 +97,7 @@ if (isset($_GET['error'])) {
                     <div class="row">
                         <div class="col-md-2 mb-3">
                             <label class="form-label">CEP</label>
-                            <div class="form-control "><?= $user->cep ?? 'Não informado' ?></div>
+                            <div class="form-control "><?= formatCEP($user->cep) ?? 'Não informado' ?></div>
                         </div>
 
                         <div class="col-md-5 mb-3">
@@ -141,7 +141,7 @@ if (isset($_GET['error'])) {
                             modal_title: 'Confirmar inativação',
                             modal_body: 'Tem certeza que deseja inativar sua conta?',
                             confirm_text: 'Sim, inativar',
-                            form_action: "index.php?common=9",
+                            form_action: "index.php?common=9"
                         );
                         ?>
 
@@ -149,10 +149,10 @@ if (isset($_GET['error'])) {
                         <?php
                         $modal_inputs = function () { ?>
                         <div class="form-floating mb-3">
-                            <input type="password" class="form-control rounded-3" id="Input" placeholder="********" name="password">
+                            <input type="password" class="form-control rounded-3" id="senha" placeholder="********" name="senha">
                             <label for="password">Nova senha</label>
                         <div class="form-floating mb-3">
-                            <input type="password" class="form-control rounded-3" id="Input" placeholder="********" name="passwordConfirm">
+                            <input type="password" class="form-control rounded-3" id="confirmarSenha" placeholder="********" name="pconfirmarSenha">
                             <label for="passwordConfirm">Confirmar nova senha</label>
                     <?php };
                     make_form_modal(
@@ -169,23 +169,19 @@ if (isset($_GET['error'])) {
     </html>
 
 <?php
-if (isset($_POST["password"], $_POST["passwordConfirm"])) {
-    $password = $_POST["password"];
-    $passwordConfirm = $_POST["passwordConfirm"];
 
-    if (!has_min_length($password, 8)) {
-        display_validation('password', false);
-        display_validation('passwordConfirm', false);
-        showError(17);
-        return false;
+if (isset( $_POST['senha'])){
+    $password =$_POST['senha'];
+    $uppercase = preg_match('@[A-Z]@', $password);
+    $lowercase = preg_match('@[a-z]@', $password);
+    $number    = preg_match('@[0-9]@', $password);
+    $specialChars = preg_match('@[^\w]@', $password);
+
+    if(!$uppercase || !$lowercase || !$number || !$specialChars || !($_POST['senha'] === $_POST['confirmarSenha']) || mb_strlen($password) < 8) {
+        display_validation('senha', false);
+        display_validation('confirmarSenha', false);
+        showError(40);
     }
-    if ($password !== $passwordConfirm) {
-        display_validation('password', false);
-        display_validation('passwordConfirm', false);
-        showError(17);
-        return false;
-    }
-    $senha = generate_password_hash($password);
-    update_password($conn, $_SESSION['USER_ID'], $senha);
+    update_password($conn, $_SESSION['USER_ID'], $password);
 }
 ?>

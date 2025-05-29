@@ -33,7 +33,6 @@ function routeToCommon($pageNum)
             include_once 'views/common/delete_user_php.php';
             break;
         case 10:
-            include_once 'views/common/edit_password.php';
             break;
         case 11:
             include_once 'views/common/login_donation.php';
@@ -115,7 +114,7 @@ function routeToAdministrator($pageNum)
             include_once 'views/administrator/register_donation.php';
             break;
         case 4:
-            include_once '';
+            include_once 'views/administrator/create_settlement.php';
             break;
         case 5:
             include_once 'views/administrator/manage_events.php';
@@ -127,7 +126,7 @@ function routeToAdministrator($pageNum)
             include_once 'views/administrator/donations_hub.php';
             break;
         case 8:
-            include_once 'views/administrator/view_campaign.php';
+            include_once 'views/administrator/manage_settlements.php';
             break;
         case 9:
             include_once 'views/administrator/manage_punishments.php';
@@ -145,6 +144,7 @@ function routeToAdministrator($pageNum)
             include_once 'views/administrator/event_check_in.php';
             break;
         case 14:
+            include_once 'views/administrator/edit_settlement.php';
             break;
         case 15:
             include_once 'views/donator/view_donations.php';
@@ -152,7 +152,10 @@ function routeToAdministrator($pageNum)
         case 16:
             include_once 'views/administrator/register_donation_material.php';
             break;
-        case 17:
+        case 18:
+            include_once 'views/administrator/delete_settlement_php.php';
+            break;
+        case 21:
             include_once 'views/administrator/view_users.php';
             break;
         default:

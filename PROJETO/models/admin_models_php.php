@@ -318,3 +318,160 @@ function register_donation_monetary(mysqli $conn, $id_usuario, $valor, $data, $c
         echo $e->getMessage();
     }
 }
+
+
+function create_inventory($conn, array $data) {
+
+    $nome = ucwords(strtolower("Estoque " . $data['nome']));
+
+    $query = "
+    INSERT INTO estoque(nome) 
+    VALUES (?)";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("s", $nome);
+
+    $stmt->execute();
+    return $conn->insert_id;
+}
+
+function create_settlement($conn, array $data, $id_endereco, $id_estoque) {
+    try {
+        $nome = ucwords(strtolower($data['nome']));
+
+        $query = "
+        INSERT INTO assentamento(id_endereco, nome, familias, id_estoque) 
+        VALUES (?, ?, ?, ?)";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("isii",$id_endereco, $nome, $data['familias'], $id_estoque);
+
+        if (!$stmt->execute()) {
+            throw new mysqli_sql_exception("Erro na execução da query: " . $stmt->error);
+        }
+        return true;
+
+    } catch (mysqli_sql_exception $e) {
+        error_reporting(E_ALL);
+        return false;
+    }
+}
+
+
+function get_settlement_info(mysqli $conn, int $id): ?stdClass
+{
+    try {
+        $stmt = $conn->prepare("
+            SELECT 
+                a.id, 
+                a.nome, 
+                a.familias, 
+                a.id_endereco, 
+                a.id_estoque,
+                e.cep, e.rua, e.numero, e.bairro, e.cidade, e.estado, e.complemento
+            FROM assentamento a
+            JOIN endereco e ON a.id_endereco = e.id
+            WHERE a.id = ?
+        ");
+
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+        return $result->fetch_object();
+    } catch (mysqli_sql_exception $e) {
+        return null;
+    }
+}
+
+
+function get_settlements_info(mysqli $conn): ? mysqli_result
+{
+    try {
+        $query = "SELECT 
+                a.id, 
+                a.nome, 
+                a.familias, 
+                a.id_endereco, 
+                a.id_estoque,
+                e.rua, e.numero
+              FROM assentamento a
+              JOIN endereco e ON a.id_endereco = e.id
+              WHERE a.inativo = 0";
+        return $conn->query($query);
+    } catch (mysqli_sql_exception $e) {
+        return null;
+    }
+}
+
+function update_address_inventory_settlement(mysqli $conn, array $data, int $address_id, int $inventory_id, int $settlement_id): bool {
+    try {
+        $cep = preg_replace('/\D/', '', $data['cep']);
+        $query = "UPDATE endereco
+                  SET cep = ?, rua = ?, numero = ?, bairro = ?, cidade = ?, estado = ?, complemento = ?
+                  WHERE id = ?";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param(
+            "ssissssi",
+            $cep,
+            $data['rua'],
+            $data['numero'],
+            $data['bairro'],
+            $data['cidade'],
+            $data['estado'],
+            $data['complemento'],
+            $address_id
+        );
+        if (!$stmt->execute()) return false;
+        $stmt->close();
+
+
+        $query = "UPDATE estoque 
+                  SET nome = ? 
+                  WHERE id = ?";
+        $stmt = $conn->prepare($query);
+        $nomeEstoque = ucwords(strtolower("Estoque " . $data['nome']));
+        $stmt->bind_param("si", $nomeEstoque, $inventory_id);
+        if (!$stmt->execute()) return false;
+        $stmt->close();
+
+        $query = "UPDATE assentamento 
+                  SET id_endereco = ?, 
+                      nome = ?, 
+                      familias = ?, 
+                      id_estoque = ? 
+                  WHERE id = ?";
+        $stmt = $conn->prepare($query);
+        $nomeAssentamento = ucwords(strtolower($data['nome']));
+        $stmt->bind_param(
+            "isiii",
+            $address_id,
+            $nomeAssentamento,
+            $data['familias'],
+            $inventory_id,
+            $settlement_id
+        );
+        if (!$stmt->execute()) return false;
+        $stmt->close();
+
+        return true;
+    } catch (Exception $e) {
+        return false;
+    }
+}
+
+function soft_delete_inventory_settlement(mysqli $conn, int $inventory_id, int $settlement_id): bool {
+    try {
+        $query = "UPDATE estoque SET inativo = 1 WHERE id = ?";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("i", $inventory_id);
+        $stmt->execute();
+
+        $query = "UPDATE assentamento SET inativo = 1 WHERE id = ?";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("i", $settlement_id);
+        $stmt->execute();
+
+        return true;
+    } catch (mysqli_sql_exception $e) {
+        return false;
+    }
+}

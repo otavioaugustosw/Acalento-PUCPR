@@ -162,6 +162,32 @@ function is_date_valid(string $date): bool
     return $d && $d->format('Y-m-d') === $date;
 }
 
+function is_age_valid(string $birthDate): bool
+{
+    $birthDate = DateTime::createFromFormat('Y-m-d', $birthDate);
+    date_default_timezone_set('America/Sao_Paulo');
+
+    $currentDay = date('d');
+    $currentMonth = date('m');
+    $currentYear = date('Y');
+
+    $birthDay = $birthDate->format('d');
+    $birthMonth = $birthDate->format('m');
+    $birthYear = $birthDate->format('Y');
+
+    $age = $currentYear - $birthYear;
+
+    if ($currentMonth < $birthMonth || ($currentMonth == $birthMonth && $currentDay < $birthDay)) {
+        $age--;
+    }
+
+    if ($age >= 16) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 function validateFile(string $nameInput, $pasta)
 {
     $arquivo = $_FILES[$nameInput] ?? null;
@@ -195,6 +221,12 @@ function formatCPF($cpf) {
     $cpf = preg_replace('/\D/', '', $cpf);
     return preg_replace('/(\d{3})(\d{3})(\d{3})(\d{2})/', '$1.$2.$3-$4', $cpf);
 }
+
+function formatCEP($cep) {
+    $cpf = preg_replace('/\D/', '', $cep);
+    return preg_replace('/(\d{5})(\d{3})/', '$1-$2', $cep);
+}
+
 
 function formatPhoneNumber($telefone) {
     $telefone = preg_replace('/\D/', '', $telefone);

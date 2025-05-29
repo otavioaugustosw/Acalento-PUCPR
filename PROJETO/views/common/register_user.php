@@ -5,6 +5,7 @@ include_once (ROOT . "/php/handlers/form_validator_php.php");
 include_once (ROOT . "/models/common_models_php.php");
 
 $conn = connectDatabase();
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -13,10 +14,12 @@ $conn = connectDatabase();
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/confirmation.js" defer></script>
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/default.css">
     <link rel="stylesheet" href="css/form-style.css">
     <link rel="stylesheet" href="css/main-content.css">
+
     <title>Cadastro de usuário</title>
 </head>
 <body>
@@ -72,7 +75,7 @@ $conn = connectDatabase();
         </div>
         <!-- CEP -->
         <div class="mb-3 mt-2">
-            <label for="cep" class="form-label">CEP *</label>
+            <label class="form-label">CEP *</label>
             <input type="text" class="form-control" id="cep" name="cep" maxlength="9" pattern="\d{5}-\d{3}" value="<?= $_POST['cep'] ?? '' ?>">
         </div>
 
@@ -130,72 +133,94 @@ $conn = connectDatabase();
 
 <?php
 
-function validate_address() {
-    if (!is_numeric_only(preg_replace('/\D/', '', $_POST['cep'])) || !has_max_length(preg_replace('/\D/', '', $_POST['cep']), 8)) {
-        display_validation('cep' , false);
+function validate_address(): bool
+{
+    if (!isset($_POST['cep']) ||
+        !is_numeric_only(preg_replace('/\D/', '', $_POST['cep'])) ||
+        !has_max_length(preg_replace('/\D/', '', $_POST['cep']), 8)) {
+        display_validation('cep', false);
+        showError(28);
         return false;
     }
 
-    if (!is_alpha_only($_POST['rua']) || !has_max_length($_POST['rua'], 50)) {
+    if (!isset($_POST['rua']) || !is_alpha_only($_POST['rua']) || !has_max_length($_POST['rua'], 50)) {
         display_validation('rua', false);
+        showError(29);
         return false;
     }
 
-    if (!is_numeric_only($_POST['numero']) || !has_max_length($_POST['numero'], 50)) {
+    if (!isset($_POST['numero']) || !is_numeric_only($_POST['numero']) || !has_max_length($_POST['numero'], 50)) {
         display_validation('numero', false);
+        showError(30);
         return false;
     }
 
-    if (!is_alpha_only($_POST['bairro']) || !has_max_length($_POST['bairro'], 50)) {
+    if (!isset($_POST['bairro']) || !is_alpha_only($_POST['bairro']) || !has_max_length($_POST['bairro'], 50)) {
         display_validation('bairro', false);
+        showError(31);
         return false;
     }
 
-    if (!is_alpha_only($_POST['cidade']) || !has_max_length($_POST['cidade'], 50)) {
+    if (!isset($_POST['cidade']) || !is_alpha_only($_POST['cidade']) || !has_max_length($_POST['cidade'], 50)) {
         display_validation('cidade', false);
+        showError(32);
         return false;
     }
 
-    if (!is_alpha_only($_POST['estado']) || !has_max_length($_POST['estado'], 50)) {
+    if (!isset($_POST['estado']) || !is_alpha_only($_POST['estado']) || !has_max_length($_POST['estado'], 50)) {
         display_validation('estado', false);
+        showError(33);
         return false;
     }
     return true;
 }
 
-function validate_user()
+function validate_user(): bool
 {
-    if (!is_full_name($_POST['nome']) || !has_max_length($_POST['nome'], 50)) {
+    if (!isset($_POST['nome']) || !is_full_name($_POST['nome']) || !has_max_length($_POST['nome'], 50)) {
         display_validation('nome', false);
+        showError(34);
         return false;
     }
 
-    if (!is_cpf_valid($_POST['cpf'])) {
-        display_validation('cpf' , false);
+    if (!isset($_POST['cpf']) || !is_cpf_valid($_POST['cpf'])) {
+        display_validation('cpf', false);
+        showError(35);
         return false;
     }
 
-    if (!is_numeric_only(preg_replace('/\D/', '', $_POST['telefone']))) {
+    if (!isset($_POST['telefone']) || !is_numeric_only(preg_replace('/\D/', '', $_POST['telefone']))) {
         display_validation('telefone', false);
+        showError(36);
         return false;
     }
 
-    if (!is_valid_email($_POST['email'])) {
+    if (!isset($_POST['email']) || !is_valid_email($_POST['email'])) {
         display_validation('email', false);
+        showError(37);
         return false;
     }
 
-
-    if (!is_date_valid($_POST['nascimento'])) {
+    if (!isset($_POST['nascimento']) || !is_date_valid($_POST['nascimento'])) {
         display_validation('nascimento', false);
+        showError(38);
         return false;
     }
 
-    if (!has_min_length($_POST['senha'], 8) || !($_POST['senha'] === $_POST['confirmarSenha']) ) {
-        display_validation('senha', false);
-        display_validation('confirmarSenha', false);
-        return false;
+    if (isset( $_POST['senha'])){
+        $password =$_POST['senha'];
+        $uppercase = preg_match('@[A-Z]@', $password);
+        $lowercase = preg_match('@[a-z]@', $password);
+        $number    = preg_match('@[0-9]@', $password);
+        $specialChars = preg_match('@[^\w]@', $password);
+
+        if(!$uppercase || !$lowercase || !$number || !$specialChars || !($_POST['senha'] === $_POST['confirmarSenha']) || mb_strlen($password) < 8) {
+            display_validation('senha', false);
+            display_validation('confirmarSenha', false);
+            showError(40);
     }
+
+}
 
     return true;
 }
@@ -212,7 +237,6 @@ function submit_user(mysqli $conn): void
     if (verify_user_existence($conn, $email, $cpf)) {
         return;
     }
-
     try {
         $address_id = create_address($conn, $_POST);
         create_user($conn, $_POST, $address_id);

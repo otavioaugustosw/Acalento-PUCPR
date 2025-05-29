@@ -14,6 +14,7 @@ function routeToCommon($pageNum)
             include_once 'php/auth_services/logoff_php.php';
             break;
         case 4:
+            is_user_logged_in();
             showError($_GET['error']);
             include_once 'views/common/logged_home.php';
             break;
@@ -21,42 +22,52 @@ function routeToCommon($pageNum)
             include_once 'views/common/register_user.php';
             break;
         case 6:
+            is_user_logged_in();
             include_once 'views/common/logged_home.php';
             break;
         case 7:
+            is_user_logged_in();
             include_once 'views/common/view_user.php';
             break;
         case 8:
+            is_user_logged_in();
             include_once 'views/common/edit_user.php';
             break;
         case 9:
+            is_user_logged_in();
             include_once 'views/common/delete_user_php.php';
             break;
         case 10:
+            is_user_logged_in();
             include_once 'views/common/edit_password.php';
             break;
         case 11:
             include_once 'views/common/login_donation.php';
             break;
         case 12:
+            is_user_logged_in();
             include_once 'views/common/choose_donation_value.php';
             break;
         case 13:
+            is_user_logged_in();
             if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['valor'])) {
                 $_SESSION['valor_doacao'] = $_POST['valor'];
             }
             include_once 'views/common/payment.php';
             break;
         case 14:
+            is_user_logged_in();
             include_once 'views/common/register_user_donation.php';
             break;
         case 15:
             include_once 'views/common/thank_you.php';
             break;
         case 16:
+            is_user_logged_in();
             include_once 'views/common/my_punishments.php';
             break;
         case 17:
+            is_user_logged_in();
             include_once 'views/common/justify_punishment.php';
             break;
         default:
@@ -66,6 +77,7 @@ function routeToCommon($pageNum)
 
 function routeToVoluntary($pageNum)
 {
+    is_user_logged_in();
     switch ($pageNum) {
         case 1:
             include_once 'views/voluntary/cancel_participation_php.php';
@@ -82,9 +94,6 @@ function routeToVoluntary($pageNum)
         case 5:
             include_once 'views/voluntary/confirm_participation_php.php';
             break;
-        case 6:
-            include_once 'views/voluntary/confirm_events.php';
-            break;
         case 7:
             include_once 'views/voluntary/my_events.php';
             break;
@@ -95,21 +104,16 @@ function routeToVoluntary($pageNum)
 
 function routeToAdministrator($pageNum)
 {
+    is_user_logged_in();
     if (!$_SESSION['USER_IS_ADMINISTRATOR']) {
         header('location: index.php?common=4&error=1');
     }
     switch ($pageNum) {
-        case 1:
-            include_once 'views/administrator/create_campaign.php';
-            break;
         case 2:
             include_once 'views/administrator/create_event.php';
             break;
         case 3:
             include_once 'views/administrator/register_donation.php';
-            break;
-        case 4:
-            include_once '';
             break;
         case 5:
             include_once 'views/administrator/manage_events.php';
@@ -119,9 +123,6 @@ function routeToAdministrator($pageNum)
             break;
         case 7:
             include_once 'views/administrator/donations_hub.php';
-            break;
-        case 8:
-            include_once 'views/administrator/view_campaign.php';
             break;
         case 9:
             include_once 'views/administrator/manage_punishments.php';
@@ -138,13 +139,17 @@ function routeToAdministrator($pageNum)
         case 13:
             include_once 'views/administrator/event_check_in.php';
             break;
-        case 14:
-            break;
         case 15:
             include_once 'views/donator/view_donations.php';
             break;
         case 16:
-            include 'views/administrator/register_donation_material.php';
+            include_once 'views/administrator/register_donation_material.php';
+            break;
+        case 17:
+            include_once 'views/administrator/distribute_donations.php';
+            break;
+        case 20:
+            include_once 'views/administrator/decrement_inventory_view.php';
             break;
         default:
             header('location: index.php?common=4&error=2');
@@ -153,11 +158,21 @@ function routeToAdministrator($pageNum)
 
 function routeToDonator($pageNum)
 {
+    is_user_logged_in();
     switch ($pageNum) {
         case 1:
             include_once 'views/donator/view_donations.php';
             break;
         default:
             header('location: index.php?common=4&error=2');
+    }
+}
+
+
+function is_user_logged_in()
+{
+    if (!isset($_SESSION['USER_ID'])) {
+        header("Location: index.php?common=2");
+        exit();
     }
 }

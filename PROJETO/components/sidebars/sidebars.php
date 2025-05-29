@@ -83,7 +83,6 @@ function make_sidebar() {?>
                     <li><a href="index.php?voluntary=2" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Participe de eventos</a></li>
                 <?php } else { ?>
                     <li><a href="index.php?voluntary=2" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Inscrever-se</a></li>
-                    <li><a href="index.php?voluntary=6" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Confirme a presença</a></li>
                     <li><a href="index.php?voluntary=7" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Meus eventos</a></li>
                     <?php
                 }?>
@@ -125,6 +124,8 @@ function make_sidebar() {?>
                     <li><a href="index.php?adm=3" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Registrar doação monetária</a></li>
                     <li><a href="index.php?adm=16" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Registrar doação material</a></li>
                     <li><a href="index.php?adm=7" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Visualizar doações</a></li>
+                    <li><a href="index.php?adm=17" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Distribuir doações</a></li>
+                    <li><a href="index.php?adm=20" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Saída de doações</a></li>
                 </ul>
             </div>
         </li>

@@ -1,7 +1,7 @@
 <?php
 include_once (ROOT . "/php/handlers/time_handler.php");
 include_once (ROOT . "/components/buttons/buttons.php");
-include (ROOT . "/php/handlers/form_validator_php.php");
+include_once (ROOT . "/php/handlers/form_validator_php.php");
 include_once (ROOT . "/models/admin_models_php.php");
 
 function make_table_rows($table_rows, $extra = null)

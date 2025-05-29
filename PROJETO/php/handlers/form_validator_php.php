@@ -190,3 +190,24 @@ function validateFile(string $nameInput, $pasta)
 
     return $pasta . $novoNomeArquivo . "." . $extensao;
 }
+
+function formatCPF($cpf) {
+    $cpf = preg_replace('/\D/', '', $cpf);
+    return preg_replace('/(\d{3})(\d{3})(\d{3})(\d{2})/', '$1.$2.$3-$4', $cpf);
+}
+
+function formatPhoneNumber($telefone) {
+    $telefone = preg_replace('/\D/', '', $telefone);
+    if (strlen($telefone) === 11) {
+        return preg_replace('/(\d{2})(\d{5})(\d{4})/', '($1) $2-$3', $telefone);
+    } elseif (strlen($telefone) === 10) {
+        return preg_replace('/(\d{2})(\d{4})(\d{4})/', '($1) $2-$3', $telefone);
+    }
+    return $telefone;
+}
+function formatCurrency($valor) {
+    return 'R$ ' . number_format($valor, 2, ',', '.');
+}
+
+
+

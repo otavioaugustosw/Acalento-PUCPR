@@ -97,6 +97,12 @@ function routeToVoluntary($pageNum)
         case 7:
             include_once 'views/voluntary/my_events.php';
             break;
+        case 8:
+            include_once 'views/voluntary/my_certificates.php';
+            break;
+        case 9:
+            include_once 'views/voluntary/certificate.php';
+            break;
         default:
             header('location: index.php?common=4&error=2');
     }
@@ -146,11 +152,15 @@ function routeToAdministrator($pageNum)
             include_once 'views/administrator/register_donation_material.php';
             break;
         case 17:
-            include_once 'views/administrator/distribute_donations.php';
+            include_once 'views/administrator/view_users.php';
             break;
         case 20:
+            include_once 'views/administrator/distribute_donations.php';
+            break;
+        case 21:
             include_once 'views/administrator/decrement_inventory_view.php';
             break;
+
         default:
             header('location: index.php?common=4&error=2');
     }

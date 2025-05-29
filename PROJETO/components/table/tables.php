@@ -1,6 +1,7 @@
 <?php
 include_once (ROOT . "/php/handlers/time_handler.php");
 include_once (ROOT . "/components/buttons/buttons.php");
+include (ROOT . "/php/handlers/form_validator_php.php");
 include_once (ROOT . "/models/admin_models_php.php");
 
 function make_table_rows($table_rows, $extra = null)
@@ -130,6 +131,87 @@ function render_checkin_table(array $table_columns, mysqli_result $volunteers, $
             make_table_rows($table_rows);
         }
         ?>
+    </table>
+<?php }
+
+
+function render_users_table(array $table_columns, $users)
+{
+    ?><div hidden="hidden">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-record-circle-fill" viewBox="0 0 16 16" id="circle">
+        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-8 3a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
+    </svg>
+</div>
+    <table class="table table-hover table-amarela">
+        <?php
+        make_table_head($table_columns);
+
+        while ($user = $users->fetch_object()) {
+            $button_inactivate = function () use ($user) {
+                if ($user->inativo) {
+                    makeButton("Reativar", "btn btn-dark-success", "index.php?adm=17&inativar=0&id_user=$user->id");
+                }
+                else {
+                    makeButton("Inativar", "btn btn-danger", "index.php?adm=17&inativar=1&id_user=$user->id");
+                }
+            };
+
+            $button_suspend = function () use ($user) {
+                if ($user->suspenso) {
+                    makeButton("Retirar", "btn btn-dark-success", "index.php?adm=17&suspender=0&id_user=$user->id");
+                }
+                else {
+                    makeButton("Suspender", "btn btn-danger", "index.php?adm=17&suspender=1&id_user=$user->id");
+                }
+            };
+            $table_rows = [
+                $user->nome,
+                $user->email,
+                formatPhoneNumber($user->telefone),
+                formatCPF($user->cpf),
+                $user->eh_doador == 1 ? '<div class="text-center pt-2">
+<svg class="bi me-2" width="20" height="20" aria-hidden="true">
+                <use xlink:href="#circle"/>
+            </svg>
+</div>' : '',
+                $user->eh_voluntario == 1 ? '<div class="text-center pt-2">
+<svg class="bi me-2" width="20" height="20" aria-hidden="true">
+                <use xlink:href="#circle"/>
+            </svg>
+</div>' : '',
+                $user->eh_adm == 1 ? '<div class="text-center pt-2">
+<svg class="bi me-2" width="20" height="20" aria-hidden="true">
+                <use xlink:href="#circle"/>
+            </svg>
+            
+</div>' : '',
+                $button_suspend,
+                $button_inactivate,
+            ];
+            make_table_rows($table_rows);
+        }
+        ?>
+    </table>
+    <?php
+}
+
+function render_certificates_table(array $table_columns, mysqli_result $events)
+{ ?>
+    <table class="table table-hover table-amarela">
+        <?php make_table_head($table_columns); ?>
+        <?php while ($event = $events->fetch_object()) {
+            $button_certificate = function () use ($event) {
+            if ($event->presenca) {
+                makeButton("Visualizar certificado","btn btn-primary", "index.php?voluntary=9&nome_evento=$event->nome_evento&date=$event->data");
+            }
+            };
+            $table_rows = [
+                $event->nome_evento,
+                date("d/m/Y", strtotime($event->data)),
+                $button_certificate
+            ];
+            make_table_rows($table_rows);
+        } ?>
     </table>
 <?php }
 

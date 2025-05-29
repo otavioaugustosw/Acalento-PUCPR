@@ -7,6 +7,7 @@ include_once (ROOT . "/components/cards/cards.php");
 include_once (ROOT .  "/components/sidebars/sidebars.php");
 include_once (ROOT .  "/models/voluntary_models_php.php");
 include_once (ROOT .  "/php/handlers/error_handler_php.php");
+include_once (ROOT .  "/components/back/back.php");
 
 $conn = connectDatabase();
 $events = get_events_where($conn, set_where_my_events(), $_SESSION['USER_ID']);
@@ -42,7 +43,7 @@ $events = get_events_where($conn, set_where_my_events(), $_SESSION['USER_ID']);
         <main class="px-5 row addScroll">
             <div class="container-fluid">
                 <div class="mb-3">
-                    <?php make_buttom_back("index.php?common=6")?>
+                    <?php make_buttom_onclick(); ?>
                     <h2>Meus eventos</h2>
                     <?php make_filter_events(); ?>
                     <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-2 row-cols-xl-2 row-cols-xxl-3 g-5 main">

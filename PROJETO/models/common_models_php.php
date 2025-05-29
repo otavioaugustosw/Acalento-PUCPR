@@ -120,9 +120,15 @@ function get_user_punishments(mysqli $conn, int $user_id, string $where)
  *
  * @return bool|null Retorna true se a suspensão for aplicada com sucesso, false em caso de erro, ou null se o número de punições for menor que 3.
  */
-function apply_user_suspension(mysqli $conn, int $user_id): ?bool
+function apply_user_suspension(mysqli $conn, $user_id, $admin_override = false)
 {
     try {
+        if ($admin_override) {
+            $stmt = $conn->prepare("UPDATE usuario SET suspenso = 1 WHERE id = ?");
+            $stmt->bind_param("i", $user_id);
+            return $stmt->execute();
+        }
+
         $punishments = get_user_punishments($conn, $user_id, "AND inativo = 0");
 
         if ($punishments === false) {
@@ -336,7 +342,7 @@ function create_user(mysqli $conn, array $data, int $address_id): bool
             $nome,
             $cpf,
             $telefone,
-            $data['nascimento'],
+            $data['nascimento']
         );
 
         return $stmt->execute();
@@ -486,4 +492,13 @@ function check_field_exists(mysqli $conn, string $table, string $field, string $
     $result = $stmt->get_result();
 
     return $result->num_rows > 0;
+}
+
+function get_users_where($conn, $where)
+{
+    $query = "
+        SELECT id, nome, telefone, email, cpf, eh_doador, eh_voluntario, eh_adm, inativo, suspenso
+        FROM usuario
+        $where";
+    return $conn->query($query);
 }

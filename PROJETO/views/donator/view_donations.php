@@ -4,8 +4,9 @@ include_once (ROOT .  "/components/sidebars/sidebars.php");
 include_once (ROOT . "/components/filter/filter.php");
 include_once (ROOT . "/php/handlers/filter_php.php");
 include_once (ROOT . "/components/table/tables.php");
-include_once (ROOT . "/components/back/back.php");
 include_once (ROOT . "/models/donator_models_php.php");
+include_once (ROOT .  "/components/back/back.php");
+
 $conn = connectDatabase();
 $where = set_where_donations($_GET['view'] ?? null, $_GET['id'] ?? 0);
 $page_name = "";
@@ -46,7 +47,7 @@ $table_head = ["Item", "Quantidade", "Tipo", "Doador", "Data da doação", "Dest
     <div class="main-content">
         <main class="px-5 row">
             <div class="container-fluid">
-                <?php make_buttom_back("index.php?common=6")?>
+                <?php make_buttom_onclick(); ?>
                 <h2><?= $page_name ?></h2>
                 <?php
                 makeFilter();
@@ -60,9 +61,8 @@ $table_head = ["Item", "Quantidade", "Tipo", "Doador", "Data da doação", "Dest
                     render_donator_donations_table($table_head, $donations);
                 }?>
             </div>
+        </main>
     </div>
-    </main>
-</div>
 </div>
 </body>
 </html>

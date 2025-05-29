@@ -1,9 +1,12 @@
 <?php
 include_once (ROOT . "/php/config/database_php.php");
+include_once (ROOT . "/php/handlers/form_validator_php.php");
 include_once (ROOT . "/components/sidebars/sidebars.php");
 include_once (ROOT . "/php/auth_services/auth_service_php.php");
+include_once (ROOT . "/components/modal/modal.php");
+include_once (ROOT . "/components/cards/cards.php");
+include_once (ROOT . "/components/buttons/buttons.php");
 include_once (ROOT . "/models/common_models_php.php");
-
 $conn = connectDatabase();
 load_user_session_data($conn);
 $user = get_user_data($conn, $_SESSION['USER_ID']);
@@ -22,6 +25,8 @@ if (!$user) {
     <link rel="stylesheet" href="css/sidebar.css">
     <link rel="stylesheet" href="css/form-style.css">
     <link rel="stylesheet" href="css/main-content.css">
+    <link rel="stylesheet" href="css/cards.css">
+
 
 
 
@@ -33,14 +38,14 @@ if (isset($_GET['error'])) {
     showError($_GET['error']);
 }
 
-if (isset($_GET['success'])) {
-    showSucess($_GET['success']);
-}
-?>
-<?php make_mobile_sidebar() ?>
-<div class="d-flex flex-nowrap">
-    <!--    monta a sidebar desktop-->
-    <?php make_sidebar(); ?>
+    if (isset($_GET['success'])) {
+        showSucess($_GET['success']);
+    }
+    ?>
+    <?php make_mobile_sidebar() ?>
+    <div class="d-flex flex-nowrap">
+        <!--    monta a sidebar desktop-->
+        <?php make_sidebar(); ?>
     </div>
 
     <div class="flex-grow-1 p-4 main-content">
@@ -67,12 +72,12 @@ if (isset($_GET['success'])) {
                     <div class="row">
                         <div class="col-md-4 mb-3">
                             <label class="form-label">CPF</label>
-                            <div class="form-control "><?= $user->cpf ?? 'Não informado' ?></div>
+                            <div class="form-control "><?= formatCPF($user->cpf) ?? 'Não informado' ?></div>
                         </div>
 
                         <div class="col-md-4 mb-3">
                             <label class="form-label">Telefone</label>
-                            <div class="form-control "><?= $user->telefone ?? 'Não informado' ?></div>
+                            <div class="form-control "><?= formatPhoneNumber($user->telefone) ?? 'Não informado' ?></div>
                         </div>
 
                         <div class="col-md-4 mb-3">
@@ -129,58 +134,58 @@ if (isset($_GET['success'])) {
                             <label class="form-label">Estado</label>
                             <div class="form-control "><?= $user->estado ?? 'Não informado' ?></div>
                         </div>
+                        <?php
+                        makeModal(
+                            $_SESSION['USER_ID'],
+                            button_text: 'Inativar conta',
+                            modal_title: 'Confirmar inativação',
+                            modal_body: 'Tem certeza que deseja inativar sua conta?',
+                            confirm_text: 'Sim, inativar',
+                            form_action: "index.php?common=9",
+                        );
+                        ?>
 
-                        <!-- Botão de editar -->
-                        <div class="col-md-2 mb-3 d-flex flex-column">
-                            <!-- Texto invisível que mantém o espaço -->
-                            <div class="invisible">Confirmar</div>
-                            <a href="index.php?common=8"
-                               class="btn btn-primary align-self-end w-100 h-100">Editar Dados</a>
-                        </div>
-
-                        <!-- Botão de alterar a senha -->
-                        <div class="col-md-2 mb-3 d-flex flex-column">
-                            <!-- Texto invisível que mantém o espaço -->
-                            <div class="invisible">Confirmar</div>
-                            <a href="index.php?common=10"
-                               class="btn btn-primary align-self-end w-100 h-100">Mudar a senha</a>
-                        </div>
-
-                    </div>
-                        <!-- Botão de deletar -->
-                    <div class="row">
-                        <div class="col-12 text-end">
-                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmarModal">
-                                Inativar Conta
-                            </button>
-                        </div>
-                    </div>
-                        <!-- Modal (tipo popup mas com botão) de confirmação para inativar -->
-                        <div class="modal fade" id="confirmarModal" tabindex="-1" aria-labelledby="confirmarModalLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <form method="POST" action="index.php?common=9">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="confirmarModalLabel">Confirmar Inativação</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            Tem certeza que deseja inativar sua conta?
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                            <button type="submit" name="inativar" class="btn btn-danger">Confirmar</button>
-
-
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                        <?php makeFormButton("index.php?common=8","Editar Dados","","Editar Dados")?>
+                        <?php
+                        $modal_inputs = function () { ?>
+                        <div class="form-floating mb-3">
+                            <input type="password" class="form-control rounded-3" id="Input" placeholder="********" name="password">
+                            <label for="password">Nova senha</label>
+                        <div class="form-floating mb-3">
+                            <input type="password" class="form-control rounded-3" id="Input" placeholder="********" name="passwordConfirm">
+                            <label for="passwordConfirm">Confirmar nova senha</label>
+                    <?php };
+                    make_form_modal(
+                        button_text: "Alterar senha",
+                        modal_title: "Alterar senha",
+                        form_action: "index.php?common=7",
+                        modal_inputs: $modal_inputs,
+                    );?>
+                </div>
             </div>
         </main>
     </div>
-</div>
-</body>
-</html>
+    </body>
+    </html>
+
+<?php
+if (isset($_POST["password"], $_POST["passwordConfirm"])) {
+    $password = $_POST["password"];
+    $passwordConfirm = $_POST["passwordConfirm"];
+
+    if (!has_min_length($password, 8)) {
+        display_validation('password', false);
+        display_validation('passwordConfirm', false);
+        showError(17);
+        return false;
+    }
+    if ($password !== $passwordConfirm) {
+        display_validation('password', false);
+        display_validation('passwordConfirm', false);
+        showError(17);
+        return false;
+    }
+    $senha = generate_password_hash($password);
+    update_password($conn, $_SESSION['USER_ID'], $senha);
+}
+?>

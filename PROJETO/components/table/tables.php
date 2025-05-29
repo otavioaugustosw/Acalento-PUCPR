@@ -1,36 +1,43 @@
 <?php
 include_once (ROOT . "/php/handlers/time_handler.php");
 include_once (ROOT . "/components/buttons/buttons.php");
-function make_table_rows($table_rows)
+include_once (ROOT . "/models/admin_models_php.php");
+
+function make_table_rows($table_rows, $extra = null)
 {
-?>
-
-<thead>
-<tr>
+    ?>
+    <tbody>
+    <tr>
+        <?php
+        foreach ($table_rows as $row){?>
+            <td class="align-middle"><?= gettype($row) == "object" ? $row() : $row ?></td>
+        <?php
+        }
+        if ($extra != null) {
+            foreach ($extra as $table_rows){
+                echo gettype($table_rows) == "object" ? $table_rows() : null;
+            }
+        }
+        ?>
+    </tr>
+    </tbody>
     <?php
-    foreach ($table_rows as $row){?>
-        <td><?= gettype($row) == "object" ? $row() : $row ?></td>
-    <?php } ?>
-</tr>
-</thead>
-
-<?php
 }
 
 function make_table_head($table_columns)
 {
-?>
+    ?>
 
-<thead>
-<tr>
-<?php
-    foreach ($table_columns as $columns){?>
-        <th scope="col"> <?= $columns ?> </th>
-    <?php } ?>
-</tr>
-</thead>
+    <thead>
+    <tr>
+        <?php
+        foreach ($table_columns as $columns){?>
+            <th scope="col"> <?= $columns ?> </th>
+        <?php } ?>
+    </tr>
+    </thead>
 
-<?php
+    <?php
 }
 
 function render_donator_donations_table(array $table_columns, $donations)
@@ -54,7 +61,6 @@ function render_donator_donations_table(array $table_columns, $donations)
     </table>
     <?php
 }
-
 
 function render_punishments_table(array $table_columns, mysqli_result $punishments, bool $common = false)
 {?>
@@ -83,7 +89,7 @@ function render_punishments_table(array $table_columns, mysqli_result $punishmen
 
             $actionButton = function () use ($punishment, $common) {
                 makeButton(
-                        "Ver mais",
+                    "Ver mais",
                     "btn btn-primary",
                     $common ? "index.php?common=17&id=" . $punishment->punicao_id : "index.php?adm=10&id=" . $punishment->punicao_id
                 );
@@ -126,3 +132,115 @@ function render_checkin_table(array $table_columns, mysqli_result $volunteers, $
         ?>
     </table>
 <?php }
+
+function render_distribution_table(array $table_columns, array $fetched_data)
+{
+    foreach ($fetched_data as $data) {
+        if ($data->id_estoque == 1) {
+            if ($data->total_item > 0) {
+                ?><h2 id="quantidadeDisponivel"><?=$data->total_item . ($data->unidade == 'u' ? " unidades" : $data->unidade) . " de " . $data->nome_item . " disponíveis para distribuir"?></h2>
+                <?php
+            }
+            else {
+                ?><h2><?="Não há " . $data->nome_item . " disponíveis para distribuir"?></h2>
+                <?php
+            }
+            break;
+        }
+    }
+    ?>
+
+    <table class="table table-hover table-amarela">
+        <?php
+        make_table_head($table_columns);
+        $available_quantity = 0;
+        foreach ($fetched_data as $data) {
+            if ($data->id_estoque == 1) {
+                $available_quantity = $data->total_item;
+                continue;
+            }
+            $ratio = get_settlement_ratio($data->quantidade_familias, get_total_families($fetched_data));
+            $distributed = empty($_POST["quantidade$data->id_estoque"] ?? get_item_quantity_by_ratio($ratio, $available_quantity)) ? 0 : ($_POST["quantidade$data->id_estoque"] ?? get_item_quantity_by_ratio($ratio, $available_quantity));
+
+            if ($distributed < $data->quantidade_familias) {
+                show_warning(custom: "As doações podem ser insuficientes para todas famílias de $data->nome_assentamento");
+            }
+            $actual_quantity_row = function () use ($data) {?>
+                <td id="actual<?= $data->id_estoque ?>" class="align-middle"><?= $data->total_item ?? 0 ?></td>
+            <?php };
+
+            $distribution_field = function () use ($distributed, $data) {?>
+                <td class="align-middle">
+                    <div style="width: 5em">
+                        <input type="number" min="0" max="999" class="form-control text-center" id="inputQuantidade<?= $data->id_estoque ?>" name="quantidade<?= $data->id_estoque ?>" value="<?= $distributed ?>">
+                    </div>
+                </td>
+                    <?php };
+
+            $total_row = function () use ($data, $distributed) {?>
+                <td id="total<?= $data->id_estoque ?>" class="align-middle"><?= $distributed + $data->total_item ?? 0 ?></td>
+            <?php };
+
+
+
+            make_table_rows([
+                    $data->nome_assentamento,
+                    $data->nome_estoque,
+                    $data->quantidade_familias,
+                    $ratio . "%",
+                ],
+                [
+                    $actual_quantity_row,
+                    $distribution_field,
+                    $total_row
+                ]
+            );
+        }
+        ?>
+    </table>
+    <div class="w-25 d-flex">
+        <?php makeButton("Distribuir", "btn btn-primary w-100", "", submit: true );?>
+    </div>
+    <?php
+}
+
+function render_decrement_table(array $table_columns, array $fetched_data)
+{?>
+    <table class="table table-hover table-amarela">
+        <?php
+
+        make_table_head($table_columns);
+        foreach ($fetched_data as $data) {
+            if ($data->id_estoque == 1) {
+                continue;
+            }
+            $distribution_field = function () use ($data) {?>
+                <td class="align-middle">
+                    <div style="width: 5em">
+                        <input type="hidden" id="actual<?= $data->id_estoque ?>" name="actual<?= $data->id_estoque ?>" value="<?=$data->total_item?>">
+                        <input type="number" min="0" max="999" class="form-control text-center" id="inputQuantidade<?= $data->id_estoque ?>" name="quantidade<?= $data->id_estoque ?>" value="0">
+                    </div>
+                </td>
+            <?php };
+
+            $total_row = function () use ($data) {?>
+                <td id="total<?= $data->id_estoque ?>" class="align-middle"><?=$data->total_item ?? 0 ?></td>
+            <?php };
+
+            make_table_rows([
+                $data->nome_assentamento,
+                $data->nome_estoque,
+            ],
+                [
+                    $distribution_field,
+                    $total_row
+                ]
+            );
+        }
+        ?>
+    </table>
+    <div class="w-25 d-flex">
+        <?php makeButton("Registrar saída", "btn btn-primary w-100", submit: true );?>
+    </div>
+    <?php
+}

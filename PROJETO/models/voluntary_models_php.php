@@ -133,11 +133,71 @@ function toggle_voluntary_presence_event(mysqli $conn, $user_id, $event_id): boo
  * @param mysqli $conn Conexão ativa com o banco de dados.
  * @return mysqli_result|null Resultado da consulta ou null em caso de falha.
  */
-function get_all_settlements(mysqli $conn): ? mysqli_result
+function get_all_settlements(mysqli $conn, ?int $id_item = null): ? mysqli_result
 {
     try {
-        $query = "SELECT id, nome FROM assentamento";
-        $stmt = $conn->prepare($query);
+        if (isset($id_item)) {
+            $query = "
+SELECT
+    e.id AS id_estoque,
+    e.nome AS nome_estoque,
+    a.id AS id_assentamento,
+    a.nome AS nome_assentamento,
+    a.familias AS quantidade_familias,
+    a.inativo AS assentamento_inativo,
+    oid.id AS id_item,
+    oid.nome AS nome_item,
+    COALESCE(MAX(d.unidade_medida), 'u') AS unidade,
+    COALESCE(epi.quantidade, 0) AS total_item,
+    COALESCE((
+        SELECT epi_central.quantidade
+        FROM acalento.estoque_possui_item epi_central
+        WHERE epi_central.id_estoque = 1 AND epi_central.id_opcao_item = oid.id
+    ), 0 ) AS available_quantity
+FROM
+    acalento.assentamento a
+INNER JOIN
+    acalento.estoque e ON e.id = a.id_estoque
+CROSS JOIN
+    acalento.opcao_item_doacao oid
+LEFT JOIN
+    acalento.estoque_possui_item epi ON epi.id_estoque = e.id AND epi.id_opcao_item = oid.id
+LEFT JOIN
+    acalento.doacao d ON d.id_estoque = e.id AND d.id_opcao_item_doacao = oid.id
+WHERE
+    oid.id = ? AND a.inativo = 0
+GROUP BY
+    e.id, e.nome, a.id, a.nome, a.familias, a.inativo, oid.id, oid.nome, epi.quantidade
+ORDER BY
+    a.id;
+        ";
+
+            $stmt = $conn->prepare($query);
+            if (!$stmt) {
+                throw new mysqli_sql_exception("erro da query: " . $conn->error);
+            }
+
+            $stmt->bind_param("i", $id_item);
+        } else {
+            $query = "
+                SELECT
+                    a.id as id_assentamento,
+                    est.id as id_estoque,
+                    a.nome nome_assentamento,
+                    a.familias quantidade_familias,
+                    est.nome nome_estoque,
+                    e.rua,
+                    e.bairro,
+                    e.cidade,
+                    e.estado,
+                    e.numero
+                FROM assentamento a
+                JOIN acalento.endereco e on e.id = a.id_endereco
+                JOIN acalento.estoque est on est.id =  a.id_estoque
+                ";
+            $stmt = $conn->prepare($query);
+        }
+
         $stmt->execute();
 
         return $stmt->get_result();

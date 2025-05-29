@@ -318,3 +318,82 @@ function register_donation_monetary(mysqli $conn, $id_usuario, $valor, $data, $c
         echo $e->getMessage();
     }
 }
+
+function get_settlement_ratio(int $settlement_families, int $total_families): int
+{
+    return $settlement_families > 0 ? ceil(($settlement_families / $total_families) * 100) : 0;
+}
+
+function get_total_families(array $settlements) : int
+{
+    $total = 0;
+    foreach ($settlements as $settlement) {
+        if ($settlement->id_estoque == 1) {
+            continue;
+        }
+        $total += $settlement->quantidade_familias;
+    }
+    return $total;
+}
+
+function get_item_quantity_by_ratio($ratio, $total_items): int
+{
+    return floor($total_items * ($ratio/100));
+}
+
+function distribute_donations($conn, $destination_inventory_id, $quantity_to_transfer, $item_id) {
+    $main_inventory = 1;
+    $conn->begin_transaction();
+    try {
+        $query = "UPDATE estoque_possui_item 
+                              SET quantidade = quantidade - ? 
+                              WHERE id_estoque = ? AND id_opcao_item = ?";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("iii", $quantity_to_transfer, $main_inventory, $item_id);
+        $stmt->execute();
+
+        if ($stmt->affected_rows === 0) {
+            throw new Exception("estoque não encontrado.");
+        }
+        $stmt->close();
+
+        $query = "INSERT INTO estoque_possui_item (id_estoque, id_opcao_item, quantidade)
+                               VALUES (?, ?, ?)
+                               ON DUPLICATE KEY UPDATE quantidade = quantidade + VALUES(quantidade)";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("iii", $destination_inventory_id, $item_id, $quantity_to_transfer);
+        $stmt->execute();
+        $conn->commit();
+        return true;
+
+    } catch (Exception $e) {
+        $conn->rollback();
+        error_log("erro " . $e->getMessage());
+        return false;
+    }
+}
+
+function decrement_item_from_inventory($conn, $quantity_to_decrement, $inventory_id, $item_id)
+{
+    $conn->begin_transaction();
+    try {
+        $query = "UPDATE estoque_possui_item 
+                              SET quantidade = quantidade - ? 
+                              WHERE id_estoque = ? AND id_opcao_item = ?";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("iii", $quantity_to_decrement, $inventory_id, $item_id);
+        $stmt->execute();
+
+        if ($stmt->affected_rows === 0) {
+            throw new Exception("estoque não encontrado.");
+        }
+
+        $stmt->close();
+        $conn->commit();
+        return true;
+    } catch (Exception $e) {
+        $conn->rollback();
+        error_log("erro " . $e->getMessage());
+        return false;
+    }
+}

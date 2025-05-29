@@ -10,22 +10,19 @@ include_once (ROOT . "/components/back/back.php");
 $conn = connectDatabase();
 $selected_item = empty($_POST["id_search"] ?? ($_POST["item"] ?? null)) ? null : $_POST["id_search"] ?? ($_POST["item"] ?? null);
 $settlements_query_result = get_all_settlements($conn, $selected_item);
-$table_head = ["Assentamento", "Estoque", "Famílias dependentes", "Fatia", "Qtd. Atual", "Entrada", "Total"];
+$table_head = ["Assentamento", "Estoque", "Sáida", "Total"];
 $fetched_data = [];
-$available_quantity = 0;
 while ($data = $settlements_query_result->fetch_object()) {
     $fetched_data[] = clone $data;
 }
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
-    $available_quantity = get_available_quantity($fetched_data);
     if (isset($_POST['final']) && $_POST['final']) {
-        validate_distribution($conn, $available_quantity,  $fetched_data[0]->id_item);
+        decrement_quantity($conn, $fetched_data[0]->id_item, $fetched_data);
         $fetched_data = [];
         $settlements_query_result = get_all_settlements($conn, $selected_item);
         while ($data = $settlements_query_result->fetch_object()) {
             $fetched_data[] = clone $data;
         }
-        $available_quantity = get_available_quantity($fetched_data);
     }
 }
 ?>
@@ -41,7 +38,6 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     <link rel="stylesheet" href="css/main-content.css">
     <title>Acalento | Atualizar Evento</title>
 </head>
-
 <body>
 <?php make_mobile_sidebar() ?>
 <div class="d-flex flex-nowrap">
@@ -52,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
             <div class="container-fluid">
                 <div class="mb-3">
                     <?php make_buttom_back("index.php?common=6"); ?>
-                    <h4 class="mt-5">Distribuir doacões</h4>
+                    <h4 class="mt-5">Saída de doacões</h4>
                     <form method="post" action="" class="w-50 mb-5">
                         <div class=" d-inline-flex align-items-center gap-5">
                             <select name="id_search" id="inputItem" class="form-select">
@@ -80,14 +76,8 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                             echo '<h3 class="pb-2">Não há em estoque</h3>';
                         }
                         else {?>
-
                         <?php
-                            render_distribution_table($table_head, $fetched_data);
-                        }
-                        if ($_SERVER['REQUEST_METHOD'] == "POST") {
-                            if (count($_POST) > 1) {
-
-                            }
+                            render_decrement_table($table_head, $fetched_data);
                         }
                         ?>
                     </form>
@@ -113,16 +103,16 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                 const idEstoque = this.id.replace("inputQuantidade", "");
                 const atualElement = document.getElementById(`actual${idEstoque}`);
                 const totalElement = document.getElementById(`total${idEstoque}`);
-                const valorAtual = parseFloat(atualElement.textContent) || 0;
+                const valorAtual = parseFloat(atualElement.value) || 0;
                 const valorInput = parseFloat(this.value) || 0;
-                totalElement.textContent = (valorAtual + valorInput);
+                totalElement.textContent = (valorAtual - valorInput);
             });
         });
     });
 </script>
 </html>
 <?php
-function distribute($conn, $item_id)
+function decrement_quantity($conn, $item_id, $fetched_data)
 {
     $itens = [];
     $quantity = [];
@@ -135,41 +125,23 @@ function distribute($conn, $item_id)
         $quantity[] = intval($value);
 
     }
+
     $inventory_ids = array_map(function($item) {
         return (int) filter_var(trim($item), FILTER_SANITIZE_NUMBER_INT);
     }, $itens);
+
     for ($i = 0; $i < count($inventory_ids); $i++) {
         $distribution[$inventory_ids[$i]] = $quantity[$i];
     }
+
     foreach ($distribution as $inventory_id => $quantity) {
-        distribute_donations($conn, $inventory_id, $quantity, $item_id);
-    }
-}
-
-function validate_distribution($conn, $available_quantity, $item_id) {
-    $sum_itens = 0;
-
-    foreach ($_POST as $key => $value) {
-        if ($key == "item" || $key == "final") {
-            continue;
+        foreach ($fetched_data as $data) {
+            if ($data->id_estoque == $inventory_id && $data->total_item - $quantity < 0) {
+                showError(611);
+                return false;
+            }
         }
-
-        $sum_itens += intval($value);
+        decrement_item_from_inventory($conn, $quantity, $inventory_id, $item_id);
     }
-    if ($sum_itens > $available_quantity) {
-        showError(610);
-    }
-    else {
-        distribute($conn, $item_id);
-        showSucess(610);
-    }
-}
-
-function get_available_quantity($fetched_data)
-{
-    foreach ($fetched_data as $data) {
-        if ($data->id_estoque == 1 && isset($data->total_item)) {
-            return $data->total_item;
-        }
-    }
+    showSucess(611);
 }

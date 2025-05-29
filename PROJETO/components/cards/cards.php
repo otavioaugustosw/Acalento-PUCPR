@@ -186,16 +186,6 @@ function render_event_detail_card($event) {
     );
 }
 
-//function render_campaigns_card($campaigns)
-//{
-//    while ($event = $campaigns->fetch_object()) {
-//        $buttons = function () use ($event) {
-//            makeButton("Visualizar doações", "btn btn-primary", "index.php?adm=15&view=campaign&id=$event->id");
-//        };
-//        make_text_card($event->nome, format_date($event->data), $event->assentamento_nome, $buttons);
-//    }
-//}
-
 function render_events_card(
         $events,
         bool $admin = false,
@@ -314,9 +304,14 @@ function voluntary_event_card($event, $horizontal = false)
                         form_action: 'index.php?voluntary=1');
                 }
             }
-        } else if ($event->inscritos >= $event->lotacao_max) {
+        }
+        else if (has_event_already_occurred($event)) {
+            makeButton("Evento passado", "btn btn-secondary");
+        }
+        else if ($event->inscritos >= $event->lotacao_max) {
             makeButton("Evento Lotado", "btn btn-secondary");
-        } else {
+        }
+        else {
             makeFormButton('index.php?voluntary=3', 'id_evento', $event->id, 'Inscrever-se');
         }
     };

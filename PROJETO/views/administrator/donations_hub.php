@@ -4,6 +4,7 @@ include_once (ROOT . "/components/sidebars/sidebars.php");
 include_once (ROOT . "/components/table/tables.php");
 include_once (ROOT . "/components/cards/cards.php");
 include_once (ROOT . "/models/donator_models_php.php");
+include_once (ROOT .  "/components/back/back.php");
 
 $conn = connectDatabase();
 $all_donations = get_donations_where($conn, "ORDER BY doacao.id DESC LIMIT 5");
@@ -35,6 +36,7 @@ $table_head = ["Item", "Quantidade", "Tipo", "Doador", "Data da doação", "Dest
             <div class="container-fluid">
                 <div class="mb-3">
                     <div class="doacoes">
+                        <?php make_buttom_onclick();?>
                         <div class="d-flex justify-content-between">
                             <h2>Todas as doações</h2>
                             <a class="btn btn-primary" href="index.php?adm=15&view=adm">Ver todas as doações</a>

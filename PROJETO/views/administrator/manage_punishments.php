@@ -31,9 +31,8 @@ $table_head = ["ID", "Nome", "Email", "Data", "Evento", "Status", "Revisar"];
 <div class="d-flex flex-nowrap">
     <?php make_sidebar(); ?>
     <div class="main-content">
-        <main class="px-5 row">
+        <main class="px-5 ">
             <?php make_buttom_back("index.php?common=6");?>
-
             <div class="container-fluid">
                 <h2>Gerenciar penalidades</h2>
                 <?php

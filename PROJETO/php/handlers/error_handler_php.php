@@ -44,6 +44,8 @@ const PAGE_ERROR = [
     41 => "Erro ao inativar o assentamento",
     42 => "Eroo ao inativar sua conta",
     360=> "Erro ao alterar a punição",
+    610=> "Quantidade digitada para distribuição maior que disponível no Estoque Central",
+    611=> "Quantidade inválida, o total não pode ser negativo",
 ];
 
 
@@ -68,6 +70,12 @@ const PAGE_SUCCESS = [
     360=> "Punição confirmada",
     361=> "Punição cancelada",
     362=> "Justificação enviada!",
+    610=> "Distribuição feita com sucesso!",
+    611=> "Atualização de estoque feita com sucesso!",
+];
+
+const WARNING_PAGE = [
+    1 => ""
 ];
 
 function showError($error_num)
@@ -78,4 +86,14 @@ make_red_popup(PAGE_ERROR[$error_num] ?? "Acão inexistente");
 function showSucess($sucess_num)
 {
 make_green_popup(PAGE_SUCCESS[$sucess_num] ?? "Acão inexistente");
+}
+
+function show_warning(?int $warning_num = null, $custom = null)
+{
+    if (isset($custom)) {
+        make_yellow_popup($custom);
+    }
+    else {
+        make_yellow_popup(WARNING_PAGE[$warning_num] ?? "Acão inexistente");
+    }
 }

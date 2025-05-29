@@ -56,7 +56,7 @@ if (isset($_GET['confirmar'])) {
 
         <!-- conteudo -->
         <div class="main-content">
-            <main class="px-5 row align-items-center justify-content-center">
+            <main class="px-5 row">
                 <div class="container-fluid">
                     <?php make_buttom_back("index.php?adm=12");?>
                     <div class="mb-3">

@@ -1,6 +1,7 @@
 .progress-wizard {
+    background-color: var(--tertiary-background) !important;
     position: relative;
-    margin: 2rem 0;
+    padding: 2rem 0;
 }
 
 .step {

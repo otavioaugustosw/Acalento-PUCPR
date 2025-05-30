@@ -172,3 +172,43 @@ function get_last_donation(mysqli $conn, int $user_id)
         return false;
     }
 }
+
+function get_donations_to_validate(mysqli $conn, $where)
+{
+    try {
+        $query = "
+        SELECT doacao_monetaria.*,
+        usuario.nome AS usuario_nome
+        FROM doacao_monetaria
+        JOIN usuario ON doacao_monetaria.id_usuario = usuario.id
+        $where";
+
+        $stmt = $conn->prepare($query);
+        if (!$stmt) {
+            throw new mysqli_sql_exception("erro da query: " . $conn->error);
+        } $stmt->execute();
+
+        return $stmt->get_result();
+
+    } catch (mysqli_sql_exception $e) {
+        return false;
+    }
+}
+
+function validate_donation(mysqli $conn, int $status, int $id_donation)
+{
+    try {
+        $query = "
+        UPDATE doacao_monetaria SET validado = ? WHERE id = ?";
+        $stmt = $conn->prepare($query);
+        if (!$stmt) {
+            throw new mysqli_sql_exception("erro da query: " . $conn->error);
+        }
+
+        $stmt->bind_param("ii", $status, $id_donation);
+        return $stmt->execute();
+
+    } catch (mysqli_sql_exception $e) {
+        return false;
+    }
+}

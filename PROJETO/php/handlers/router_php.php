@@ -42,9 +42,6 @@ function routeToCommon($pageNum)
             include_once 'views/common/choose_donation_value.php';
             break;
         case 13:
-            if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['valor'])) {
-                $_SESSION['valor_doacao'] = $_POST['valor'];
-            }
             include_once 'views/common/payment.php';
             break;
         case 14:
@@ -155,6 +152,9 @@ function routeToAdministrator($pageNum)
         case 17:
             include_once 'views/administrator/view_users.php';
             break;
+        case 19:
+            include_once 'views/administrator/validate_payment.php';
+            break;
         default:
             header('location: index.php?common=4&error=2');
     }
@@ -165,6 +165,12 @@ function routeToDonator($pageNum)
     switch ($pageNum) {
         case 1:
             include_once 'views/donator/view_donations.php';
+            break;
+        case 2:
+            include_once 'views/donator/make_donation.php';
+            break;
+        case 3:
+            include_once 'views/donator/payment_donator.php';
             break;
         default:
             header('location: index.php?common=4&error=2');

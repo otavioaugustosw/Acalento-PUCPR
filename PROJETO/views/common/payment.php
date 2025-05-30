@@ -34,6 +34,10 @@ $qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" . urle
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['comprovante'])) {
     $arquivo = validateFile('comprovante', 'comprovantes');
 
+    if (!$arquivo) {
+        showError(25);
+    }
+
     if ($arquivo) {
         date_default_timezone_set('America/Sao_Paulo');
         $data = date('Y-m-d');
@@ -60,13 +64,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['comprovante'])) {
 </head>
 <body class="d-flex justify-content-center align-items-center">
 
-<div class="position-fixed top-0 start-0 w-100 z-3 py-3">
+<div class="position-fixed top-0 start-0 w-100 z-3 py-3" style="background-color: var(--tertiary-background)">
     <?php render_progress_bar(3); ?>
 </div>
 
-<div class="container">
-    <div class="card shadow-lg mx-auto p-4" style="max-width: 600px; margin-top: 150px">
-        <?php make_buttom_onclick(); ?>
+<div class="container" style="margin-top: 200px; margin-bottom: 100px;">
+    <div class="card mx-auto p-4" style="max-width: 700px;">
+        <div class="mb-2"><?php make_buttom_onclick(); ?></div>
         <h2 class="text-center mb-3">Realize o pagamento</h2>
         <p class="text-center text-muted">Valor: <strong>R$ <?= number_format($valor, 2, ',', '.') ?></strong></p>
 
@@ -74,15 +78,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['comprovante'])) {
             <img src="<?= $qrUrl ?>" alt="QR Code Pix" class="img-fluid" style="max-width: 200px;">
         </div>
 
-        <div class="bg-body-secondary rounded p-3 mb-4 text-center">
+        <div class="bg-body-secondary p-3 mb-4 text-center" style="background-color: var(--secondary-blue) !important; border-radius: 20px !important; border: 1px solid var(--primary-blue) !important;">
             <p class="mb-1 fw-semibold">Copia e Cola:</p>
-            <textarea class="form-control small" rows="3" readonly><?= $pixCode ?></textarea>
+            <textarea id="pixCopiaCola" class="form-control small" rows="3" readonly><?= $pixCode ?></textarea>
+            <button id="botaoCopiar" class="btn btn-primary mt-2" type="button" onclick="copiarPix()">Copiar</button>
         </div>
 
         <form action="" method="POST" enctype="multipart/form-data">
             <div class="mb-3">
                 <label for="comprovante" class="form-label fw-semibold">Comprovante de pagamento</label>
-                <input type="file" name="comprovante" id="comprovante" class="form-control" required accept=".jpg,.jpeg,.png,.pdf">
+                <input type="file" name="comprovante" id="comprovante" class="form-control" accept=".jpg,.jpeg,.png,.pdf">
                 <div id="validacaoComprovante" class="invalid-feedback">
                     Envie um arquivo válido.
                 </div>
@@ -91,20 +96,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['comprovante'])) {
         </form>
     </div>
 </div>
+
+    <script>
+        function copiarPix() {
+            const textarea = document.getElementById('pixCopiaCola');
+            const botao = document.getElementById('botaoCopiar');
+            const texto = textarea.value;
+
+            navigator.clipboard.writeText(texto)
+                .then(() => {
+                    botao.classList.remove('btn-primary');
+                    botao.classList.add('btn-success');
+                    botao.innerHTML = 'Copiado com sucesso!';
+
+                    setTimeout(() => {
+                        botao.classList.remove('btn-success');
+                        botao.classList.add('btn-primary');
+                        botao.innerHTML = 'Copiar';
+                    }, 2000);
+                })
+                .catch(() => {
+                    alert('Falha ao copiar');
+                });
+        }
+    </script>
+
 </body>
 </html>
-
-<?php
-if ($_SERVER["REQUEST_METHOD"] === "FILES") {
-    submitInformation($conn);
-}
-
-function submitInformation($conn)
-{
-
-    if ($_POST['comprovante'] == null) {
-        display_validation('validacaoComprovante', false);
-        return;
-    }
-}
 

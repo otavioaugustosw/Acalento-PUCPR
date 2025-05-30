@@ -24,7 +24,7 @@ function setWhere(string $nome): string
     $db    = connectDatabase();
     $table = $nome; // ex.: "evento"   ou  "item"
 
-    if($table === 'doacao' || $table === 'campanha_doacao') {
+    if($table === 'doacao') {
         $filtro = $_POST['filtro'] ?? 'todos';
     } else {
         $filtro = $_POST['filtro'] ?? 'futuros';
@@ -94,7 +94,7 @@ function setWhere(string $nome): string
     return $where;
 }
 
-function set_where_donations($view, $campaign_id = 0)
+function set_where_donations($view)
 {
     if ($_SESSION['USER_IS_ADMINISTRATOR'] && isset($view)) {
         switch ($view) {
@@ -102,12 +102,6 @@ function set_where_donations($view, $campaign_id = 0)
                 return setWhere('doacao');
             case 'inventory':
                return setWhere('doacao') . " AND doacao.id_estoque IS NOT NULL";
-            case 'campaign':
-                if ($campaign_id <= 0) {
-                    showError(10);
-                    return setWhere('doacao') . " AND id_usuario =" . $_SESSION['USER_ID'];
-                }
-                return setWhere('doacao') . " AND doacao.id_campanha_doacao = $campaign_id";
             default:
                 return setWhere('doacao') . " AND id_usuario =" . $_SESSION['USER_ID'];
         }

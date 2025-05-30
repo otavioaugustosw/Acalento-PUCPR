@@ -4,14 +4,14 @@ include_once (ROOT . "/models/common_models_php.php");
 
 $conn = connectDatabase();
 
-if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['inativar'])) {
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $did_deactivated_user = deactivate_user($conn, $_SESSION['USER_ID']);
 
     if ($did_deactivated_user) {
-        header("Location: index.php?common=7&success=20");
+        header("Location: index.php?common=3");
     } else {
-        showError(1);
         header("Location: index.php?common=7&error=1");
     }
 }
+
 ?>

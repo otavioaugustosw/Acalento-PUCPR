@@ -32,45 +32,93 @@ function get_donations_where(mysqli $conn, string $where)
     }
 }
 
-/**
- * Obtém campanhas de doação com base em um critério de filtro.
- *
- * @param mysqli $conn Conexão ativa com o banco de dados.
- * @param string|null $where Critério de filtro para a consulta (opcional).
- *
- * @return mysqli_result|false Retorna o resultado da consulta, ou false em caso de erro.
- */
-//function get_campaigns_where(mysqli $conn, ?string $where = null)
-//{
-//    try {
-//        // Definir a query com a parte WHERE opcional
-//        $query = "
-//            SELECT campanha_doacao.*,
-//                assentamento.nome AS assentamento_nome
-//            FROM campanha_doacao
-//            LEFT JOIN assentamento ON campanha_doacao.evento_destino = assentamento.id
-//            $where
-//        ";
-//
-//        $stmt = $conn->prepare($query);
-//        if (!$stmt) {
-//            throw new mysqli_sql_exception("erro da query: " . $conn->error);
-//        }
-//
-//        // Caso haja um where, executamos a consulta
-//        $stmt->execute();
-//
-//        return $stmt->get_result();
-//    } catch (mysqli_sql_exception $e) {
-//        return false;
-//    }
-//}
+function get_donations_log_where(mysqli $conn, ?string $where = null)
+{
+    try {
+        // Definir a query com a parte WHERE opcional
+        $query = "
+            SELECT
+                d.id as id_doacao,
+                d.data,
+                d.categoria,
+                d.id_opcao_item_doacao,
+                d.id_estoque as id_estoque_doacao,
+                d.quantidade,
+                d.unidade_medida,
+                a.id as id_assentamento,
+                a.nome as nome_assentamento,
+                a.familias,
+                e.id as id_estoque,
+                e.nome as nome_estoque,
+                oid.id as id_opcao,
+                oid.nome as nome_opcao
+            FROM doacao d
+            JOIN acalento.estoque e on e.id = d.id_estoque
+            JOIN acalento.opcao_item_doacao oid on d.id_opcao_item_doacao = oid.id
+            JOIN acalento.assentamento a on a.id = e.id_assentamento;
+            $where
+        ";
+
+        $stmt = $conn->prepare($query);
+        if (!$stmt) {
+            throw new mysqli_sql_exception("erro da query: " . $conn->error);
+        }
+
+        // Caso haja um where, executamos a consulta
+        $stmt->execute();
+
+        return $stmt->get_result();
+    } catch (mysqli_sql_exception $e) {
+        return false;
+    }
+}
+
+
+function get_item_quantity_inventory(mysqli $conn, int $id_item)
+{
+    try {
+        $query = "
+SELECT
+    e.id AS id_estoque,
+    e.nome AS nome_estoque,
+    a.id AS id_assentamento,
+    a.nome AS nome_assentamento,
+    a.familias quantidade_familias,
+    oid.id AS item_id,
+    oid.nome AS item_nome,
+    COALESCE(MAX(d.unidade_medida), 'u') AS unidade,
+    COALESCE(SUM(d.quantidade), 0) AS total_item
+
+FROM (
+    SELECT * FROM acalento.assentamento
+) a
+CROSS JOIN (
+    SELECT * FROM acalento.opcao_item_doacao WHERE id = ?
+) oid
+INNER JOIN acalento.estoque e on e.id = a.id_estoque
+LEFT JOIN acalento.doacao d ON d.id_estoque = e.id AND d.id_opcao_item_doacao = oid.id
+GROUP BY    e.id, e.nome, a.id, a.nome, a.familias, oid.id, oid.nome;
+        ";
+
+        $stmt = $conn->prepare($query);
+        if (!$stmt) {
+            throw new mysqli_sql_exception("erro da query: " . $conn->error);
+        }
+
+        $stmt->bind_param("i", $id_item);
+        $stmt->execute();
+        return $stmt->get_result();
+    } catch (mysqli_sql_exception $e) {
+
+        var_dump($e->getMessage());
+        return false;
+    }
+}
 
 /**
  * Registra uma nova doação e marca o usuário como doador, se aplicável.
  *
  * @param mysqli $conn Conexão ativa com o banco de dados.
- * @param int $campaign_id ID da campanha de doação.
  * @param int $stock_id ID do estoque associado.
  * @param int $user_id ID do usuário (ou null se não logado).
  * @param array $data Dados da doação (id_opcao_item_doacao, quantidade, unidade_medida, categoria, data).

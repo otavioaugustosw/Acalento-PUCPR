@@ -19,40 +19,30 @@ if (!$punishment) {
 }
 
 ?>
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/css/bootstrap-select.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
-    <link rel="stylesheet" href="css/form-style.css">
-    <link rel="stylesheet" href="css/default.css">
-    <link rel="stylesheet" href="css/sidebar.css">
-    <link rel="stylesheet" href="css/main-content.css">
-    <title>Acalento | Criar evento</title>
-</head>
+    <!doctype html>
+    <html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/css/bootstrap-select.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
+        <link rel="stylesheet" href="css/form-style.css">
+        <link rel="stylesheet" href="css/default.css">
+        <link rel="stylesheet" href="css/sidebar.css">
+        <link rel="stylesheet" href="css/main-content.css">
+        <title>Acalento | Criar evento</title>
+    </head>
 
-<body>
-<!-- monta a sidebar mobile -->
-<?php make_mobile_sidebar() ?>
-<div class="d-flex flex-nowrap">
-    <!--    monta a sidebar desktop-->
-    <?php make_sidebar(); ?>
-    <!-- fim sidebar -->
-
-    <!-- conteudo -->
-    <div class="main-content">
-        <main class="px-5 row align-items-center justify-content-center">
-            <div class="container-fluid">
-                <?php make_buttom_back("index.php?common=11");?>
-                <div class="mb-3">
-                    <!-- aqui vai o que você quer por -->
-                    <h4>Justificar penalidade</h4>
-                    <div class="div">
-
-                    </div>
+    <body>
+    <?php make_mobile_sidebar() ?>
+    <div class="d-flex flex-nowrap">
+        <?php make_sidebar(); ?>
+        <div class="main-content">
+            <main class="px-5">
+                <?php make_buttom_back("index.php?common=16");?>
+                <div class="container-fluid">
+                    <h2>Justificar penalidade</h2>
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Nome Completo</label>
@@ -94,7 +84,7 @@ if (!$punishment) {
                                 <?php
                             } else {
                                 ?>
-                                <div class="col-12">
+                                <div class="col-12 mb-4">
                                     <label for="inputJustification" class="form-label">Justificativa*></label>
                                     <textarea type="text" class="form-control" id="inputJustification" name="justification" rows="5"><?= $_POST['justification'] ?? null ?></textarea>
                                     <div id="inputJustification" class="invalid-feedback">
@@ -111,12 +101,11 @@ if (!$punishment) {
                             ?>
                         </form>
                     </div>
-                </div>
-        </main>
+            </main>
+        </div>
     </div>
-</div>
-</body>
-</html>
+    </body>
+    </html>
 <?php
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // justifica somente se não foi revisado pelo admin ainda

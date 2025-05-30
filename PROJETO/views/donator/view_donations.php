@@ -18,9 +18,6 @@ switch ($_GET['view'] ?? null){
     case 'inventory':
         $page_name = "Doações em estoque";
         break;
-    case 'campaign':
-        $page_name = "Doações da campanha";
-        break;
     default:
         $page_name = "Minhas doações";
         break;

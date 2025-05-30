@@ -4,6 +4,7 @@ include_once (ROOT . "/php/handlers/form_validator_php.php");
 include_once (ROOT . "/components/sidebars/sidebars.php");
 include_once (ROOT . "/models/common_models_php.php");
 include_once (ROOT . "/components/buttons/buttons.php");
+include_once (ROOT .  "/components/back/back.php");
 
 
 $conn = connectDatabase();
@@ -34,6 +35,9 @@ if (!$user) {
 
     <div class="flex-grow-1 p-4 main-content">
         <main class="container-fluid align-content-center">
+            <div class="mb-5">
+                <?php make_buttom_back("index.php?common=7");?>
+            </div>
             <h2 class="my-4">Editar Meus Dados</h2>
 
 
@@ -85,7 +89,7 @@ if (!$user) {
                         <div class="col-md-3 mb-3">
                             <label class="form-label">CEP</label>
                             <input type="text" class="form-control" name="cep" id="cep"
-                                   value="<?= $_POST['cep'] ?? $user->cep ?>" maxlength="9">
+                                   value="<?= $_POST['cep'] ?? formatCEP($user->cep)?>" maxlength="9">
                         </div>
 
                         <div class="col-md-4 mb-3">
@@ -96,7 +100,7 @@ if (!$user) {
 
                         <div class="col-md-2 mb-3">
                             <label class="form-label">Número</label>
-                            <input type="text" class="form-control" name="numero" id="numero"
+                            <input type="number" class="form-control" name="numero" id="numero"
                                    value="<?= $_POST['numero'] ?? $user->numero ?>" maxlength="6">
                         </div>
 
@@ -148,91 +152,113 @@ function validate_address(): bool
         !is_numeric_only(preg_replace('/\D/', '', $_POST['cep'])) ||
         !has_max_length(preg_replace('/\D/', '', $_POST['cep']), 8)) {
         display_validation('cep', false);
+        showError(28);
         return false;
     }
 
     if (!isset($_POST['rua']) || !is_alpha_only($_POST['rua']) || !has_max_length($_POST['rua'], 50)) {
         display_validation('rua', false);
+        showError(29);
         return false;
     }
 
     if (!isset($_POST['numero']) || !is_numeric_only($_POST['numero']) || !has_max_length($_POST['numero'], 50)) {
         display_validation('numero', false);
+        showError(30);
         return false;
     }
 
     if (!isset($_POST['bairro']) || !is_alpha_only($_POST['bairro']) || !has_max_length($_POST['bairro'], 50)) {
         display_validation('bairro', false);
+        showError(31);
         return false;
     }
 
     if (!isset($_POST['cidade']) || !is_alpha_only($_POST['cidade']) || !has_max_length($_POST['cidade'], 50)) {
         display_validation('cidade', false);
+        showError(32);
         return false;
     }
 
     if (!isset($_POST['estado']) || !is_alpha_only($_POST['estado']) || !has_max_length($_POST['estado'], 50)) {
         display_validation('estado', false);
+        showError(33);
         return false;
     }
-
     return true;
 }
-
 
 function validate_user(): bool
 {
     if (!isset($_POST['nome']) || !is_full_name($_POST['nome']) || !has_max_length($_POST['nome'], 50)) {
         display_validation('nome', false);
+        showError(34);
         return false;
     }
 
     if (!isset($_POST['cpf']) || !is_cpf_valid($_POST['cpf'])) {
         display_validation('cpf', false);
+        showError(35);
         return false;
     }
 
     if (!isset($_POST['telefone']) || !is_numeric_only(preg_replace('/\D/', '', $_POST['telefone']))) {
         display_validation('telefone', false);
+        showError(36);
         return false;
     }
 
     if (!isset($_POST['email']) || !is_valid_email($_POST['email'])) {
         display_validation('email', false);
+        showError(37);
         return false;
     }
 
     if (!isset($_POST['nascimento']) || !is_date_valid($_POST['nascimento'])) {
         display_validation('nascimento', false);
+        showError(38);
         return false;
     }
 
-    return true;
+    if (!isset($_POST['nascimento']) || !is_age_valid($_POST['nascimento'])) {
+        display_validation('nascimento', false);
+        showError(39);
+        return false;
+    }
+    else{
+        return true;
+    }
 }
 
 
-function submit_user(mysqli $conn, $address_id): void
+function submit_user(mysqli $conn, $address_id): bool
 {
     if (!validate_user() || !validate_address()) {
-        return;
+        return false;
     }
 
     $cpf = preg_replace('/\D/', '', $_POST['cpf']);
     $email = $_POST['email'];
 
     if (verify_user_existence($conn, $email, $cpf, $_SESSION['USER_ID'])) {
-        return;
+        return false;
     }
 
     try {
         update_user_and_address($conn, $_SESSION['USER_ID'], $address_id, $_POST);
-        ?> <?php
+        return true;
     } catch (Exception $e) {
         showError(15);
+        return false;
     }
 }
 
+
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["cpf"])) {
-    submit_user($conn, $user->id_endereco);
+    if (submit_user($conn, $user->id_endereco)) {
+        showSucess(22);
+    }
 }
+
+
 ?>

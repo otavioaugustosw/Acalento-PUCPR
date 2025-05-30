@@ -186,16 +186,6 @@ function render_event_detail_card($event) {
     );
 }
 
-//function render_campaigns_card($campaigns)
-//{
-//    while ($event = $campaigns->fetch_object()) {
-//        $buttons = function () use ($event) {
-//            makeButton("Visualizar doações", "btn btn-primary", "index.php?adm=15&view=campaign&id=$event->id");
-//        };
-//        make_text_card($event->nome, format_date($event->data), $event->assentamento_nome, $buttons);
-//    }
-//}
-
 function render_events_card(
         $events,
         bool $admin = false,

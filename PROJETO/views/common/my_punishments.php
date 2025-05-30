@@ -28,12 +28,12 @@ $table_head = ["ID", "Nome", "Email", "Data", "Evento", "Status", "Revisar"];
 </head>
 <body>
 <?php make_mobile_sidebar() ?>
-<div class="d-flex ">
+<div class="d-flex flex-nowrap">
     <?php make_sidebar(); ?>
     <div class="main-content">
-        <main class="px-5 row">
+        <main class="px-5">
+            <?php make_buttom_back("index.php?common=6");?>
             <div class="container-fluid">
-                <?php make_buttom_back("index.php?common=6");?>
                 <h2>Minhas penalidades</h2>
                 <?php
                 makeFilter();

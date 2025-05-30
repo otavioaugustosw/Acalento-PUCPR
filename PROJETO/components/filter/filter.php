@@ -99,3 +99,25 @@ function make_filter_user() { ?>
     </form>
 <?php }
 
+function make_filter_validate()
+{ ?>
+<form method="POST" action="" class="mb-4">
+    <div class="row g-3 align-items-center">
+        <div class="col-md-4">
+            <select name="filtro" id="filtro" class="form-select">
+                <option value="">Selecione</option>
+                <option value="todos">Todos</option>
+                <option value="aprovar">Aprovar</option>
+                <option value="aprovados">Aprovados</option>
+                <option value="nao_aprovados">Não aprovados</option>
+            </select>
+        </div>
+
+        <div class="col-md-2 ">
+            <?php makeButton("Filtrar", "btn btn-primary w-100", "", true );?>
+        </div>
+    </div>
+</form>
+<?php
+}
+

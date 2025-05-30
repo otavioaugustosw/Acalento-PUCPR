@@ -174,3 +174,33 @@ function set_where_user() {
 
     return $where;
 }
+
+function set_where_validate()
+{
+    $filtro = $_POST['filtro'] ?? 'aprovar';
+
+    /* sanitização */
+    $opcoes_valida = ['aprovar', 'nao_aprovados', 'aprovados', 'todos'];
+    if (!in_array($filtro,$opcoes_valida)) {
+        $filtro = 'aprovar';
+    }
+
+    $where = '';
+
+    switch ($filtro) {
+        case 'aprovar':
+            $where = 'WHERE validado = 0';
+            break;
+        case 'nao_aprovados':
+            $where = 'WHERE validado = 2';
+            break;
+        case 'aprovados':
+            $where = 'WHERE validado = 1';
+            break;
+        case 'todos':
+            $where = 'WHERE 1=1';
+            break;
+    }
+
+    return $where;
+}

@@ -337,7 +337,7 @@ function render_distribution_table(array $table_columns, array $fetched_data)
                         <input type="number" min="0" max="999" class="form-control text-center" id="inputQuantidade<?= $data->id_estoque ?>" name="quantidade<?= $data->id_estoque ?>" value="<?= $distributed ?>">
                     </div>
                 </td>
-                    <?php };
+            <?php };
 
             $total_row = function () use ($data, $distributed) {?>
                 <td id="total<?= $data->id_estoque ?>" class="align-middle"><?= $distributed + $data->total_item ?? 0 ?></td>
@@ -346,11 +346,11 @@ function render_distribution_table(array $table_columns, array $fetched_data)
 
 
             make_table_rows([
-                    $data->nome_assentamento,
-                    $data->nome_estoque,
-                    $data->quantidade_familias,
-                    $ratio . "%",
-                ],
+                $data->nome_assentamento,
+                $data->nome_estoque,
+                $data->quantidade_familias,
+                $ratio . "%",
+            ],
                 [
                     $actual_quantity_row,
                     $distribution_field,
@@ -366,6 +366,10 @@ function render_distribution_table(array $table_columns, array $fetched_data)
     <?php
 }
 
+function render_decrement_table(array $table_columns, array $fetched_data)
+{?>
+    <table class="table table-hover table-amarela">
+        <?php
 
         make_table_head($table_columns);
         foreach ($fetched_data as $data) {

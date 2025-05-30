@@ -102,9 +102,10 @@ function make_sidebar() {?>
         <div class="collapse" id="doacoes-collapse">
             <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                 <?php if (!$_SESSION['USER_IS_DONATOR']) { ?>
-                    <!--                        <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Faça a sua primeira doação</a></li>-->
+                    <li><a href="index.php?donator=2" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Faça a sua primeira doação</a></li>
                 <?php } else {?>
                     <li><a href="index.php?donator=1" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Suas doações</a></li>
+                    <li><a href="index.php?donator=2" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Faça uma doação</a></li>
 
                 <?php }?>
             </ul>
@@ -127,6 +128,7 @@ function make_sidebar() {?>
                     <li><a href="index.php?adm=16" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Registrar doação material</a></li>
                     <li><a href="index.php?adm=7" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Visualizar doações</a></li>
                     <li><a href="index.php?adm=17" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Visualizar usuários</a></li>
+                    <li><a href="index.php?adm=19" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Validar doações monetárias</a></li>
                 </ul>
             </div>
         </li>

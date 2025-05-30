@@ -209,5 +209,59 @@ function render_certificates_table(array $table_columns, mysqli_result $events)
     </table>
 <?php }
 
+function render_validate_donation_table(array $table_columns, $donations)
+{ ?>
+    <table class="table table-hover table-amarela">
+        <?php make_table_head($table_columns);
+        while ($donation = $donations->fetch_object()) {
+            $validate_button = function () use ($donation) {
+                ?>
+                <div class="d-flex gap-2">
+                    <?php
+                    if ($donation->validado == 0) {
+                        makeButton("Aprovar", 'btn btn-primary', 'index.php?adm=19&validado=1&id_donation=' . $donation->id);
+                        makeButton("Não aprovar", "btn btn-danger", 'index.php?adm=19&validado=2&id_donation=' . $donation->id);
+                    } elseif ($donation->validado == 1) {
+                        makeButton("Aprovado", 'btn btn-dark-success', '#');
+                    } elseif ($donation->validado == 2) {
+                        makeButton("Não aprovado", 'btn btn-danger', '#');
+                    }
+                    ?>
+                </div>
+                <?php
+            };
+
+            $comprovante_modal = function () use ($donation) {
+                ob_start(); ?>
+                <a data-bs-toggle="modal" data-bs-target="#modalComprovante<?= $donation->id ?>">
+                    <img src="<?= $donation->link_media ?>" alt="Comprovante" width="60" style="cursor: zoom-in;">
+                </a>
+
+                <div class="modal fade" id="modalComprovante<?= $donation->id ?>" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-body text-center">
+                                <img src="<?= $donation->link_media ?>" alt="Comprovante" class="img-fluid rounded">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <?php
+                return ob_get_clean();
+            };
+
+            $table_rows = [
+                $donation->usuario_nome,
+                $donation->valor,
+                $comprovante_modal,
+                $validate_button
+            ];
+
+            make_table_rows($table_rows);
+        }
+        ?>
+    </table>
+<?php
+}
 
 

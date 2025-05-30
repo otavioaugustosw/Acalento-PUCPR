@@ -34,11 +34,14 @@ $conn = connectDatabase();
             <?php make_buttom_onclick(); ?>
             <h2 class="text-center">Escolha o valor da sua doação</h2>
 
-            <form action="index.php?common=13" method="POST" class="d-flex flex-column align-items-center gap-3">
+            <form action="" method="POST" class="d-flex flex-column align-items-center gap-3">
                 <div class="mb-3 w-100">
                     <label for="valor" class="form-label">Valor</label>
-                    <input type="text" class="form-control text-center" name="valor" id="valor" required placeholder="R$00,00"
+                    <input type="text" class="form-control text-center" name="valor" id="inputValor" placeholder="R$00,00"
                     value="">
+                    <div id="validacaoValor" class="invalid-feedback">
+                        Digite um valor válido
+                    </div>
                 </div>
                 <button type="submit" class="btn btn-primary ">Avançar para o pagamento</button>
             </form>
@@ -50,7 +53,7 @@ $conn = connectDatabase();
 <script src="https://cdn.jsdelivr.net/gh/plentz/jquery-maskmoney@master/dist/jquery.maskMoney.min.js"></script>
 <script>
     $(document).ready(function(){
-        $('#valor').maskMoney({
+        $('#inputValor').maskMoney({
             prefix: 'R$ ',
             allowNegative: false,
             thousands: '.',
@@ -59,5 +62,23 @@ $conn = connectDatabase();
         });
     });
 </script>
-
 </html>
+<?php
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    submitInformation($conn);
+}
+
+function submitInformation($conn) {
+    $valor = $_POST["valor"] ?? '';
+    $valorLimpo = preg_replace('/\D/', '', $valor);
+
+    if (!is_numeric_only($valorLimpo)) {
+        display_validation('inputValor', false);
+        return;
+    }
+
+    $_SESSION['valor_doacao'] = $valor;
+    echo "<script>window.location.href = 'index.php?common=13';</script>";
+    exit;
+}
+?>

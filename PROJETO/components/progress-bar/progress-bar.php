@@ -1,6 +1,6 @@
 <?php
 function render_progress_bar(int $etapa) { ?>
-    <div class="d-flex align-items-center justify-content-between w-100 progress-wizard">
+    <div class="position-fixed d-flex align-items-center justify-content-between w-100 progress-wizard">
 
         <!-- Etapa 1 -->
         <div class="step <?= $etapa >= 1 ? 'active' : '' ?>">

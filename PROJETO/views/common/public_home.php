@@ -50,11 +50,19 @@ include_once (ROOT . "/components/cards/cards.php");
                     amanhã mais justo para todos!", "Seja voluntário!", "#", "btn btn-primary 
                     largura-completa", "assets/imagens/teste5.jpeg");?>
                 </div>
-                <div class="col-md-4">
-                    <?php make_event_card_reveal("Doação Monetária", "Faça a sua doação e ajude centenas de 
-                    crianças a terem um futuro melhor!", "Doe Agora!", "index.php?common=11", "btn btn-primary 
-                    largura-completa", "assets/imagens/teste4.jpeg");?>
-                </div>
+                <?php if(isset($_SESSION['USER_NAME'])) { ?>
+                    <div class="col-md-4">
+                        <?php make_event_card_reveal("Doação Monetária", "Faça a sua doação e ajude centenas de 
+                        crianças a terem um futuro melhor!", "Doe Agora!", "index.php?common=12", "btn btn-primary 
+                        largura-completa", "assets/imagens/teste4.jpeg");?>
+                    </div>
+                <?php } else { ?>
+                    <div class="col-md-4">
+                        <?php make_event_card_reveal("Doação Monetária", "Faça a sua doação e ajude centenas de 
+                        crianças a terem um futuro melhor!", "Doe Agora!", "index.php?common=11", "btn btn-primary 
+                        largura-completa", "assets/imagens/teste4.jpeg");?>
+                    </div>
+                <?php } ?>
             </div>
 </main>
 </body>

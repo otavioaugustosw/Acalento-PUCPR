@@ -29,7 +29,6 @@ $conn = connectDatabase();
 
 <!-- Conteúdo centralizado -->
 <div class="d-flex justify-content-center align-items-center min-vh-100 pt-5">
-    <?php make_buttom_onclick(); ?>
     <div class="row shadow rounded overflow-hidden" style="width: 65%; height: 60vh">
         <!-- Lado esquerdo -->
         <div class="col-md-6 bg-login-left d-flex flex-column justify-content-center align-items-center p-5" style="background-color: var(--secondary-background)">

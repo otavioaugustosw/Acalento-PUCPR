@@ -178,14 +178,13 @@ function validateFile(string $nameInput, $pasta)
     $nomeArquivo = $arquivo["name"];
     $novoNomeArquivo = uniqid();
     $extensao = strtolower(pathinfo($nomeArquivo, PATHINFO_EXTENSION));
-    $permitidos = ['pdf', 'jpg', 'jpeg', 'png', 'gif'];
+    $permitidos = ['pdf', 'jpg', 'jpeg', 'png'];
     if (!in_array($extensao, $permitidos)) {
-        showError(25);
-        exit;
+        return false;
     }
     $teste = move_uploaded_file($arquivo["tmp_name"], $pasta . $novoNomeArquivo . "." . $extensao);
     if (!$teste) {
-        exit;
+        return false;
     }
 
     return $pasta . $novoNomeArquivo . "." . $extensao;

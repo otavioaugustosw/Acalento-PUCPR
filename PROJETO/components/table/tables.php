@@ -49,12 +49,52 @@ function render_donator_donations_table(array $table_columns, $donations)
         make_table_head($table_columns);
         while ($donation = $donations->fetch_object()) {
             $table_rows = [
+                $donation->usuario_nome ?? 'Doador não cadastrado',
                 $donation->opcao_nome,
                 $donation->quantidade,
                 $donation->categoria,
-                $donation->usuario_nome ?? 'Doador não cadastrado',
                 format_date($donation->data),
                 $donation->campanha_doacao_nome ?? 'Estoque'
+            ];
+            make_table_rows($table_rows);
+        }
+        ?>
+    </table>
+    <?php
+}
+
+
+function render_monetary_donations_table(array $table_columns, $donations)
+{
+    ?>
+    <table class="table table-hover table-amarela">
+        <?php
+        make_table_head($table_columns);
+        while ($donation = $donations->fetch_object()) {
+            $table_rows = [
+                $donation->usuario_nome,
+                $donation->valor,
+                format_date($donation->data)
+            ];
+            make_table_rows($table_rows);
+        }
+        ?>
+    </table>
+    <?php
+}
+
+function render_all_donations_table(array $table_columns, $donations)
+{
+    ?>
+    <table class="table table-hover table-amarela">
+        <?php
+        make_table_head($table_columns);
+        while ($donation = $donations->fetch_object()) {
+            $table_rows = [
+                $donation->doador,
+                $donation->tipo,
+                $donation->item,
+                format_date($donation->data)
             ];
             make_table_rows($table_rows);
         }

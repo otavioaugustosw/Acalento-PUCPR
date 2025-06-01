@@ -212,35 +212,34 @@ function get_all_punishments(mysqli $conn, string $where = ""): mysqli_result|fa
     try {
         $query = "
             SELECT 
-                up.id AS punicao_id,
-                up.motivo,
-                up.justificativa,
-                up.data_punicao,
-                up.inativo,
-                up.revisado,
-                u.id AS usuario_id,
-                u.nome AS usuario_nome,
-                u.email AS usuario_email,
-                e.id AS evento_id,
-                e.nome AS evento_nome,
-                e.data AS evento_data
-            FROM usuario_punicao up
-            JOIN usuario u ON up.id_usuario = u.id
-            LEFT JOIN evento e ON up.id_evento = e.id
+                usuario_punicao.id AS punicao_id,
+                usuario_punicao.motivo,
+                usuario_punicao.justificativa,
+                usuario_punicao.data_punicao,
+                usuario_punicao.inativo,
+                usuario_punicao.revisado,
+                usuario.id AS usuario_id,
+                usuario.nome AS usuario_nome,
+                usuario.email AS usuario_email,
+                evento.id AS evento_id,
+                evento.nome AS evento_nome,
+                evento.data AS evento_data
+            FROM usuario_punicao 
+            JOIN usuario ON usuario_punicao.id_usuario = usuario.id
+            LEFT JOIN evento ON usuario_punicao.id_evento = evento.id
              $where  
-            ORDER BY up.data_punicao DESC
+            ORDER BY usuario_punicao.data_punicao DESC
         ";
 
-        $stmt = $conn->prepare($query);
-        if (!$stmt) {
-            throw new mysqli_sql_exception("erro na query" . $conn->error);
+        $result = $conn->query($query);
+        if (!$result) {
+            throw new mysqli_sql_exception("Erro na query: " . $conn->error);
         }
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $stmt->close();
+
         return $result;
 
     } catch (mysqli_sql_exception $e) {
+        // Opcional: logar o erro
         return false;
     }
 }

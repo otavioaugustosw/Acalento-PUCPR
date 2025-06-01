@@ -9,13 +9,13 @@ include_once (ROOT . "/php/handlers/filter_php.php");
 include_once (ROOT . "/components/filter/filter.php");
 
 $conn = connectDatabase();
-$donation = get_donations_to_validate($conn, set_where_validate());
+$donation = get_monetary_donations($conn, set_where_validate());
 $table_head = ["Usuário", "Valor", "Comprovante", "Validar"];
 if (isset($_GET['validado'], $_GET['id_donation'])) {
     $status = intval($_GET['validado']);
     $id = intval($_GET['id_donation']);
     validate_donation($conn, $status, $id);
-    $donation = get_donations_to_validate($conn, set_where_validate()
+    $donation = get_monetary_donations($conn, set_where_validate()
     );
 
 }

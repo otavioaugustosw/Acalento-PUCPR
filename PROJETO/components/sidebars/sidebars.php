@@ -120,18 +120,17 @@ function make_sidebar() {?>
             </button>
             <div class="collapse" id="admin-collapse">
                 <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                    <li><a href="index.php?adm=12" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Check-in de Eventos</a></li>
                     <li><a href="index.php?adm=9" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Gerenciar penalidades</a></li>
                     <li><a href="index.php?adm=5" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Gerenciar eventos</a></li>
-                    <li><a href="index.php?adm=12" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Check-in de Eventos</a></li>
-                    <li><a href="index.php?adm=3" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Registrar doação monetária</a></li>
-                    <li><a href="index.php?adm=16" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Registrar doação material</a></li>
                     <li><a href="index.php?adm=7" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Visualizar doações</a></li>
                     <li><a href="index.php?adm=17" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Visualizar usuários</a></li>
+                    <li><a href="index.php?adm=8" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Visualizar assentamentos</a></li>
+                    <li><a href="index.php?adm=16" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Registrar doação material</a></li>
+                    <li><a href="index.php?adm=3" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Registrar doação monetária</a></li>
+                    <li><a href="index.php?adm=19" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Validar doações monetárias</a></li>
                     <li><a href="index.php?adm=20" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Distribuir doações</a></li>
                     <li><a href="index.php?adm=21" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Saída de doações</a></li>
-                    <li><a href="index.php?adm=22" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Visualizar usuários</a></li>
-                    <li><a href="index.php?adm=8" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Visualizar assentamentos</a></li>
-                    <li><a href="index.php?adm=19" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Validar doações monetárias</a></li>
                 </ul>
             </div>
         </li>

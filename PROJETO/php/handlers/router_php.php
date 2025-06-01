@@ -172,7 +172,7 @@ function routeToAdministrator($pageNum)
             include_once 'views/administrator/decrement_inventory_view.php';
             break;
         case 22:
-            include_once 'views/administrator/view_users.php';
+            include_once 'views/administrator/inventory_donations.php';
             break;
         default:
             header('location: index.php?common=4&error=2');

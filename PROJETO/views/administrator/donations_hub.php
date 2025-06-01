@@ -7,10 +7,11 @@ include_once (ROOT . "/models/donator_models_php.php");
 include_once (ROOT .  "/components/back/back.php");
 
 $conn = connectDatabase();
-$all_donations = get_donations_where($conn, "ORDER BY doacao.id DESC LIMIT 5");
+$all_donations = get_all_donations($conn, '','', 'ORDER BY data DESC LIMIT 5');
 $inventory_donations = get_donations_where($conn, "WHERE doacao.id_estoque IS NOT NULL ORDER BY doacao.id DESC LIMIT 5");
-$inventory_donations = get_donations_where($conn, "WHERE doacao.id_estoque IS NOT NULL ORDER BY doacao.id DESC LIMIT 5");
-$table_head = ["Item", "Quantidade", "Tipo", "Doador", "Data da doação", "Destino"];
+$table_head1 = ["Item", "Quantidade", "Tipo", "Doador", "Data da doação", "Destino"];
+$table_head2 = ["Doador", "Tipo", "Doação", "Data"];
+
 
 ?>
 <!doctype html>
@@ -49,14 +50,14 @@ $table_head = ["Item", "Quantidade", "Tipo", "Doador", "Data da doação", "Dest
                             echo '<h3 class="d-flex justify-content-center p-5">Nenhuma doação encontrada</h3>';
                         }
                         else {
-                            render_donator_donations_table($table_head, $all_donations);
+                            render_all_donations_table($table_head2, $all_donations);
                         }
                         ?>
                     </div>
                     <div>
                         <div class="d-flex justify-content-between">
                             <h2>Doações em estoque</h2>
-                            <a class="btn btn-primary" href="index.php?adm=15&view=inventory">Ver todas as doações em estoque</a>
+                            <a class="btn btn-primary" href="index.php?adm=22">Ver todas as doações em estoque</a>
                         </div>
                         <?php
                         if (!$inventory_donations) {
@@ -66,7 +67,7 @@ $table_head = ["Item", "Quantidade", "Tipo", "Doador", "Data da doação", "Dest
                             echo '<h3 class="d-flex justify-content-center p-5">Não há doações no estoque</h3>';
                         }
                         else {
-                            render_donator_donations_table($table_head, $inventory_donations);
+                            render_donator_donations_table($table_head1, $inventory_donations);
                         }
                         ?>
                     </div>

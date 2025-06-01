@@ -108,6 +108,19 @@ load_user_session_data($conn);
         });
     });
 </script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/plentz/jquery-maskmoney@master/dist/jquery.maskMoney.min.js"></script>
+<script>
+    $(document).ready(function(){
+        $('#inputValor').maskMoney({
+            prefix: 'R$ ',
+            allowNegative: false,
+            thousands: '.',
+            decimal: ',',
+            affixesStay: true
+        });
+    });
+</script>
 </body>
 </html>
 <?php
@@ -121,13 +134,30 @@ function submitInformation($conn)
     $validado = 1;
 
     $campoArquivo = $_FILES["comprovante"];
-    $caminho = validateFile("comprovante", 'comprovantes');
-
     $id_usuario = $_POST['id_usuario'] == 0 ? null : $_POST['id_usuario'];
-    $valor = isset($_POST['valor']) && $_POST['valor'] !== '' ? (float) $_POST['valor'] : null;
+    $valor_bruto = isset($_POST['valor']) && $_POST['valor'] !== '' ? (float) $_POST['valor'] : null;
+
+    $valor_limpo = str_replace(['R$', '.', ' '], '', $valor_bruto);
+    $valor = (float) str_replace(',', '.', $valor_limpo);
 
     if ($id_usuario !== null && !is_numeric($id_usuario)) {
-        display_validation('inputDoador', false);
+        ?>
+        <script>
+            setTimeout(() => {
+                const select = document.getElementById("inputDoador");
+                const wrapper = select?.closest(".choices");
+                const feedback = document.getElementById("validacaoUsuario");
+
+                if (wrapper) {
+                    wrapper.style.setProperty('--default-border', '2px solid #e53935');
+                }
+
+                if (feedback) {
+                    feedback.style.display = "block";
+                }
+            }, 150); // tempo suficiente pro Choices montar o HTML
+        </script>
+        <?php
         return;
     }
 
@@ -151,10 +181,12 @@ function submitInformation($conn)
         return;
     }
 
-    if ($campoArquivo === null) {
-        displayValidation('inputComprovante', false);
+    if (!isset($_FILES["comprovante"]) || $_FILES["comprovante"]["error"] !== UPLOAD_ERR_OK) {
+        display_validation('inputComprovante', false);
         return;
     }
+
+    $caminho = validateFile("comprovante", 'comprovantes');
 
     register_donation_monetary($conn, $id_usuario, $valor, $_POST['data'], $caminho , $validado);
 }

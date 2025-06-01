@@ -24,12 +24,16 @@ function setWhere(string $nome): string
     $db    = connectDatabase();
     $table = $nome; // ex.: "evento"   ou  "item"
 
-    if($table === 'doacao') {
+    if($table === 'doacao' || $table === 'doacao_monetaria') {
         $filtro = $_POST['filtro'] ?? 'todos';
     } else {
         $filtro = $_POST['filtro'] ?? 'futuros';
     }
     $dia    = $_POST['dia']    ?? '';
+
+    if (($filtro === '' || $filtro === null) && ($dia === '' || $dia === null)) {
+        $filtro = 'todos';
+    }
 
     /* sanitização… ------------------------------------------------- */
     $opcoesValidas = ['futuros','passados','todos', 'mes'];
@@ -94,19 +98,40 @@ function setWhere(string $nome): string
     return $where;
 }
 
-function set_where_donations($view)
+function set_where_donation($view, $filtro = 'todos'): array
 {
-    if ($_SESSION['USER_IS_ADMINISTRATOR'] && isset($view)) {
-        switch ($view) {
-            case 'adm':
-                return setWhere('doacao');
-            case 'inventory':
-               return setWhere('doacao') . " AND doacao.id_estoque IS NOT NULL";
-            default:
-                return setWhere('doacao') . " AND id_usuario =" . $_SESSION['USER_ID'];
-        }
-    } else {
-        return setWhere('doacao') . " AND id_usuario =" . $_SESSION['USER_ID'];
+    $usuario_id = $_SESSION['USER_ID'];
+
+    $opcoes_validas = ['material', 'monetario', 'todos'];
+    if (!in_array($filtro, $opcoes_validas)) {
+        $filtro = 'todos';
+    }
+
+    $base_material = setWhere('doacao');
+    $base_monetario = setWhere('doacao_monetaria');
+
+    if ($view !== 'adm') {
+        $base_material .= " AND doacao.id_usuario = $usuario_id";
+        $base_monetario .= " AND doacao_monetaria.id_usuario = $usuario_id";
+    }
+
+    switch ($filtro) {
+        case 'material':
+            return [
+                'where_material' => $base_material,
+                'where_monetario' => 'WHERE 1=0'
+            ];
+        case 'monetario':
+            return [
+                'where_material' => 'WHERE 1=0',
+                'where_monetario' => $base_monetario
+            ];
+        case 'todos':
+        default:
+            return [
+                'where_material' => $base_material,
+                'where_monetario' => $base_monetario
+            ];
     }
 }
 
@@ -121,17 +146,17 @@ function set_where_my_events(){
     }
 
     $where = '';
-    $usuario = 'id_usuario =' . $_SESSION['USER_ID'];
+    $usuario = 'id_usuario = ' . $_SESSION['USER_ID'];
 
     switch ($filtro) {
         case 'ha_confirmar':
-            $where = 'WHERE participacao_confirmada = 0 AND evento.data > CURRENT_DATE AND ' . $usuario;
+            $where = 'WHERE participacao_confirmada = 0 AND ' . $usuario;
             break;
         case 'confirmado':
-            $where = 'WHERE participacao_confirmada = 1 AND presenca = 0 AND evento.data > CURRENT_DATE AND ' . $usuario;
+            $where = 'WHERE participacao_confirmada = 1 AND presenca = 0 AND ' . $usuario;
             break;
         case 'presente':
-            $where = 'WHERE presenca = 1 AND evento.data > CURRENT_DATE AND ' . $usuario;
+            $where = 'WHERE presenca = 1 AND ' . $usuario;
             break;
         case 'todos':
             $where = 'WHERE ' . $usuario;
@@ -197,4 +222,39 @@ function set_where_validate()
     }
 
     return $where;
+}
+
+function set_where_punicao($admin = false): string
+{
+    $filtro = $_POST['filtro'] ?? 'todos';
+    $dia    = $_POST['dia']    ?? '';
+
+    $opcoesValidas = ['futuros','passados','todos', 'mes'];
+    if (!in_array($filtro, $opcoesValidas)) $filtro = 'futuros';
+    if ($dia !== '' && !preg_match('/^\d{4}-\d{2}-\d{2}$/', $dia)) $dia = '';
+
+    if ($dia !== '') {
+        return "WHERE DATE(usuario_punicao.data_punicao) = '$dia'";
+    }
+
+    $user = '';
+    if ($admin) {
+        $user = "usuario_punicao.id_usuario != " . $_SESSION['USER_ID'];
+    } else {
+        $user = "usuario_punicao.id_usuario = " . $_SESSION['USER_ID'];
+    }
+
+    switch ($filtro) {
+        case 'futuros':
+            return "WHERE usuario_punicao.data_punicao >= NOW() AND $user";
+        case 'passados':
+            return "WHERE usuario_punicao.data_punicao <= NOW() AND $user";
+        case 'mes':
+            return "WHERE usuario_punicao.data_punicao BETWEEN
+                DATE_FORMAT(DATE_SUB(CURRENT_DATE, INTERVAL 1 MONTH), '%Y-%m-01') AND 
+                LAST_DAY(DATE_SUB(CURRENT_DATE, INTERVAL 1 MONTH)) AND $user";
+        case 'todos':
+        default:
+            return "WHERE $user";
+    }
 }

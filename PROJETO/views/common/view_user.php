@@ -26,10 +26,6 @@ if (!$user) {
     <link rel="stylesheet" href="css/form-style.css">
     <link rel="stylesheet" href="css/main-content.css">
     <link rel="stylesheet" href="css/cards.css">
-
-
-
-
     <title>Meus Dados</title>
 </head>
 <body>

@@ -8,8 +8,7 @@ include_once (ROOT . "/models/admin_models_php.php");
 include_once (ROOT .  "/components/back/back.php");
 
 $conn = connectDatabase();
-$where = " WHERE up.id_usuario =" . $_SESSION['USER_ID'];
-$punishments = get_all_punishments($conn, $where);
+$punishments = get_all_punishments($conn, set_where_punicao());
 $table_head = ["ID", "Nome", "Email", "Data", "Evento", "Status", "Revisar"];
 
 ?>
@@ -36,9 +35,11 @@ $table_head = ["ID", "Nome", "Email", "Data", "Evento", "Status", "Revisar"];
             <div class="container-fluid">
                 <h2>Minhas penalidades</h2>
                 <?php
-                makeFilter();
+                makeFilter(true);
                 if (!$punishments) {
                     showError(7);
+                    die("Erro na query: " . $conn->error);
+
                 }
                 if ($punishments->num_rows <= 0) {
                     echo '<h3 class="d-flex justify-content-center p-5">Nenhuma penalidade registrada.</h3>';

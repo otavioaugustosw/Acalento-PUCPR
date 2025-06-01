@@ -17,8 +17,10 @@ load_user_session_data($conn);
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/css/bootstrap-select.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
+    <script src="assets/js/confirmation.js" defer></script>
     <link rel="stylesheet" href="css/form-style.css">
     <link rel="stylesheet" href="css/default.css">
     <link rel="stylesheet" href="css/sidebar.css">
@@ -78,7 +80,7 @@ load_user_session_data($conn);
                                 <option value="">Selecione o item</option>
                                 <?php $item = $conn->query("SELECT id, nome FROM opcao_item_doacao");
                                 while ($a = $item->fetch_object()) { ?>
-                                    <option value="<?php echo $a->id;?>" <?= (isset($_POST['id_opcao']) && $_POST['id_opcao'] == $a->id) ? 'selected' : '' ?>><?php echo $a->nome; ?></option>
+                                    <option value="<?php echo $a->id;?>" <?= (isset($_POST['id_opcao_item_doacao']) && $_POST['id_opcao_item_doacao'] == $a->id) ? 'selected' : '' ?>><?php echo $a->nome; ?></option>
                                 <?php } ?>
                             </select>
                             <div id="validacaoItem" class="invalid-feedback">
@@ -122,7 +124,7 @@ load_user_session_data($conn);
                                 $valores_enum = ['Alimentício', 'Brinquedo', 'Limpeza', 'Outros'];
 
                                 foreach ($valores_enum as $valor) { ?>
-                                    <option value="<?php echo $valor; ?>" <?= (($_POST['tipo'] ?? '') == $valor) ? 'selected' : '' ?>>
+                                    <option value="<?php echo $valor; ?>" <?= (($_POST['categoria'] ?? '') == $valor) ? 'selected' : '' ?>>
                                         <?php echo $valor; ?>
                                     </option>
                                 <?php } ?>
@@ -161,6 +163,22 @@ load_user_session_data($conn);
     });
 </script>
 
+
+<script>
+    document.querySelector("form").addEventListener("submit", function () {
+        const select = document.getElementById("inputDoador");
+        const wrapper = select?.closest(".choices");
+        const feedback = document.getElementById("validacaoUsuario");
+
+        if (wrapper) {
+            wrapper.style.removeProperty('--default-border');
+        }
+
+        if (feedback) {
+            feedback.style.display = "none";
+        }
+    });
+</script>
 </body>
 </html>
 <?php
@@ -180,7 +198,23 @@ function submitInformation($conn)
     $opcoes_validas_categoria = ['Alimentício', 'Brinquedo', 'Limpeza', 'Outros'];
 
     if (!is_numeric($id_usuario)) {
-        display_validation('inputDoador', false);
+        ?>
+        <script>
+            setTimeout(() => {
+                const select = document.getElementById("inputDoador");
+                const wrapper = select?.closest(".choices");
+                const feedback = document.getElementById("validacaoUsuario");
+
+                if (wrapper) {
+                    wrapper.style.setProperty('--default-border', '2px solid #e53935');
+                }
+
+                if (feedback) {
+                    feedback.style.display = "block";
+                }
+            }, 150); // tempo suficiente pro Choices montar o HTML
+        </script>
+        <?php
         return;
     }
 
@@ -217,6 +251,15 @@ function submitInformation($conn)
     $did_create_donation = create_material_donation($conn, $idEstoque, $id_usuario, $_POST);
 
     if ($did_create_donation) {
+        echo '<script>
+    window.addEventListener("load", function () {
+        if (typeof clearFormManual === "function") {
+            clearFormManual();
+        } else {
+            console.error("clearFormManual não está disponível");
+        }
+    });
+    </script>';
         showSucess(3);
     }
     else {

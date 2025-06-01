@@ -1,29 +1,19 @@
 <?php
-include (ROOT . "/php/config/database_php.php");
-include(ROOT . "/php/handlers/form_validator_php.php");
-include(ROOT . "/components/sidebars/sidebars.php");
+include_once (ROOT . "/php/config/database_php.php");
+include_once (ROOT . "/php/handlers/form_validator_php.php");
+include_once (ROOT . "/components/sidebars/sidebars.php");
+include_once (ROOT . "/models/common_models_php.php");
+include_once (ROOT . "/components/buttons/buttons.php");
+include_once (ROOT .  "/components/back/back.php");
+
+
 $conn = connectDatabase();
-$id_usuario = $_SESSION['USER_ID'];
-$id_endereco = $_SESSION['USER_ADDRESS_ID'];
-
-//pega os dados do usuário e endereço
-$query = "SELECT u.*, e.* 
-          FROM usuario u 
-          LEFT JOIN endereco e ON u.id_endereco = e.id 
-          WHERE u.id =" . $_SESSION['USER_ID'];
-$resultado = $conn->query($query);
-
-if (!$resultado) {
-    showError(1);
-}
-
-$dados = $resultado->fetch_object();
-
-if (!$dados) {
-    showError(1);
+load_user_session_data($conn);
+$user = get_user_data($conn, $_SESSION['USER_ID']);
+if (!$user) {
+    showError(7);
 }
 ?>
-
 <!doctype html>
 <html lang="en">
 <head>
@@ -45,6 +35,9 @@ if (!$dados) {
 
     <div class="flex-grow-1 p-4 main-content">
         <main class="container-fluid align-content-center">
+            <div class="mb-5">
+                <?php make_buttom_back("index.php?common=7");?>
+            </div>
             <h2 class="my-4">Editar Meus Dados</h2>
 
 
@@ -56,34 +49,34 @@ if (!$dados) {
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Nome Completo</label>
-                            <input type="text" class="form-control" name="nome"
-                                   value="<?= $dados->nome ?? '' ?>">
+                            <input type="text" class="form-control" name="nome" id="nome"
+                                   value="<?= $_POST['nome'] ?? $user->nome ?>">
                         </div>
 
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Email</label>
-                            <input type="email" class="form-control" name="email"
-                                   value="<?= $dados->email ?? '' ?>">
+                            <input type="email" class="form-control" name="email" id="email"
+                                   value="<?= $_POST['email'] ?? $user->email ?>">
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-md-4 mb-3">
                             <label class="form-label">CPF</label>
-                            <input type="text" class="form-control" name="cpf"
-                                   value="<?= $dados->cpf ?? '' ?>">
+                            <input type="text" class="form-control" name="cpf" id="cpf"
+                                   value="<?= $_POST['cpf'] ?? formatCPF($user->cpf) ?>">
                         </div>
 
                         <div class="col-md-4 mb-3">
                             <label class="form-label">Telefone</label>
-                            <input type="text" class="form-control" name="telefone"
-                                   value="<?= $dados->telefone ?? '' ?>">
+                            <input type="text" class="form-control" name="telefone" id="telefone"
+                                   value="<?= $_POST['telefone'] ?? formatPhoneNumber($user->telefone) ?>">
                         </div>
 
                         <div class="col-md-4 mb-3">
                             <label class="form-label">Data de Nascimento</label>
-                            <input type="date" class="form-control" name="nascimento"
-                                   value="<?= $dados->nascimento ?? '' ?>">
+                            <input type="date" class="form-control" name="nascimento" id="nascimento"
+                                   value="<?= $_POST['nascimento'] ?? $user->nascimento ?>">
                         </div>
                     </div>
                 </div>
@@ -96,25 +89,25 @@ if (!$dados) {
                         <div class="col-md-3 mb-3">
                             <label class="form-label">CEP</label>
                             <input type="text" class="form-control" name="cep" id="cep"
-                                   value="<?= $dados->cep ?? '' ?>" maxlength="9">
+                                   value="<?= $_POST['cep'] ?? formatCEP($user->cep)?>" maxlength="9">
                         </div>
 
                         <div class="col-md-4 mb-3">
                             <label class="form-label">Logradouro</label>
                             <input type="text" class="form-control" name="rua" id="rua"
-                                   value="<?= $dados->rua ?? '' ?>" maxlength="50">
+                                   value="<?= $_POST['rua'] ?? $user->rua ?>" maxlength="50">
                         </div>
 
                         <div class="col-md-2 mb-3">
                             <label class="form-label">Número</label>
-                            <input type="text" class="form-control" name="numero" id="numero"
-                                   value="<?= $dados->numero ?? '' ?>" maxlength="6">
+                            <input type="number" class="form-control" name="numero" id="numero"
+                                   value="<?= $_POST['numero'] ?? $user->numero ?>" maxlength="6">
                         </div>
 
                         <div class="col-md-3 mb-3">
                             <label class="form-label">Complemento </label>
                             <input type="text" class="form-control" id="complemento" name="complemento"
-                                   maxlength="50" value="<?= $dados->complemento ?? '' ?>">
+                                   maxlength="50" value="<?= $_POST['complemento'] ?? $user->complemento ?>">
                         </div>
                     </div>
 
@@ -122,24 +115,22 @@ if (!$dados) {
                         <div class="col-md-3 mb-3">
                             <label class="form-label">Bairro</label>
                             <input type="text" class="form-control" name="bairro" id="bairro"
-                                   value="<?= $dados->bairro ?? '' ?>" maxlength="50">
+                                   value="<?= $_POST['bairro'] ?? $user->bairro ?>" maxlength="50">
                         </div>
 
                         <div class="col-md-3 mb-3">
                             <label class="form-label">Cidade</label>
                             <input type="text" class="form-control" name="cidade" id="cidade"
-                                   value="<?= $dados->cidade ?? '' ?>" maxlength="50">
+                                   value="<?= $_POST['cidade'] ?? $user->cidade ?>" maxlength="50">
                         </div>
 
                         <div class="col-md-3 mb-3">
                             <label class="form-label">Estado</label>
                             <input type="text" class="form-control" name="estado" id="estado"
-                                   value="<?= $dados->estado ?? '' ?>" maxlength="50">
+                                   value="<?= $_POST['estado'] ?? $user->estado ?>" maxlength="50">
                         </div>
-
-                        <div class="col-md-3 mb-3">
-                            <div class="invisible">Confirmar</div>
-                            <button type="submit" class="btn btn-primary mt-1">Salvar Alterações</button>
+                        <div class="col-md-3 mt-5 mb-3">
+                            <button type="submit" class="btn btn-primary largura-completa">Salvar alterações</button>
                         </div>
                     </div>
 
@@ -154,157 +145,120 @@ if (!$dados) {
 </html>
 
 <?php
-function validateAddress() {
-    if (!isNumericOnly(preg_replace('/\D/', '', $_POST['cep'])) || !hasMaxLength(preg_replace('/\D/', '', $_POST['cep']), 8)) {
-        displayValidation('cep' , false);
+
+function validate_address(): bool
+{
+    if (!isset($_POST['cep']) ||
+        !is_numeric_only(preg_replace('/\D/', '', $_POST['cep'])) ||
+        !has_max_length(preg_replace('/\D/', '', $_POST['cep']), 8)) {
+        display_validation('cep', false);
+        showError(28);
         return false;
     }
 
-    if (!isAlphaOnly($_POST['rua']) || !hasMaxLength($_POST['rua'], 50)) {
-        displayValidation('rua', false);
+    if (!isset($_POST['rua']) || !is_alpha_only($_POST['rua']) || !has_max_length($_POST['rua'], 50)) {
+        display_validation('rua', false);
+        showError(29);
         return false;
     }
 
-    if (!isNumericOnly($_POST['numero']) || !hasMaxLength($_POST['numero'], 50)) {
-        displayValidation('numero', false);
+    if (!isset($_POST['numero']) || !is_numeric_only($_POST['numero']) || !has_max_length($_POST['numero'], 50)) {
+        display_validation('numero', false);
+        showError(30);
         return false;
     }
 
-    if (!isAlphaOnly($_POST['bairro']) || !hasMaxLength($_POST['bairro'], 50)) {
-        displayValidation('bairro', false);
+    if (!isset($_POST['bairro']) || !is_alpha_only($_POST['bairro']) || !has_max_length($_POST['bairro'], 50)) {
+        display_validation('bairro', false);
+        showError(31);
         return false;
     }
 
-    if (!isAlphaOnly($_POST['cidade']) || !hasMaxLength($_POST['cidade'], 50)) {
-        displayValidation('cidade', false);
+    if (!isset($_POST['cidade']) || !is_alpha_only($_POST['cidade']) || !has_max_length($_POST['cidade'], 50)) {
+        display_validation('cidade', false);
+        showError(32);
         return false;
     }
 
-    if (!isAlphaOnly($_POST['estado']) || !hasMaxLength($_POST['estado'], 50)) {
-        displayValidation('estado', false);
+    if (!isset($_POST['estado']) || !is_alpha_only($_POST['estado']) || !has_max_length($_POST['estado'], 50)) {
+        display_validation('estado', false);
+        showError(33);
         return false;
     }
     return true;
 }
 
-function validateUser()
+function validate_user(): bool
 {
-    if (!isFullName($_POST['nome']) || !hasMaxLength($_POST['nome'], 50)) {
-        displayValidation('nome', false);
+    if (!isset($_POST['nome']) || !is_full_name($_POST['nome']) || !has_max_length($_POST['nome'], 50)) {
+        display_validation('nome', false);
+        showError(34);
         return false;
     }
 
-    if (!isCPFValid($_POST['cpf'])) {
-        displayValidation('cpf' , false);
+    if (!isset($_POST['cpf']) || !is_cpf_valid($_POST['cpf'])) {
+        display_validation('cpf', false);
+        showError(35);
         return false;
     }
 
-    if (!isNumericOnly(preg_replace('/\D/', '', $_POST['telefone']))) {
-        displayValidation('telefone', false);
+    if (!isset($_POST['telefone']) || !is_numeric_only(preg_replace('/\D/', '', $_POST['telefone']))) {
+        display_validation('telefone', false);
+        showError(36);
         return false;
     }
 
-    if (!isValidEmail($_POST['email'])) {
-        displayValidation('email', false);
+    if (!isset($_POST['email']) || !is_valid_email($_POST['email'])) {
+        display_validation('email', false);
+        showError(37);
         return false;
     }
 
-
-    if (!isDateValid($_POST['nascimento'])) {
-        displayValidation('nascimento', false);
+    if (!isset($_POST['nascimento']) || !is_date_valid($_POST['nascimento'])) {
+        display_validation('nascimento', false);
+        showError(38);
         return false;
     }
-    return true;
-}
 
-function verifyUserExistence($conn, $email, $cpf)
-{
-    try {
-        // Verifica se já existe cadastro com o Email
-        $query = "SELECT email, id FROM usuario WHERE email = ? AND id != ?";
-        $stmt = $conn->prepare($query);
-        $stmt->bind_param("si", $email, $_SESSION['USER_ID']);
-        $stmt->execute();
-        $resultEmail = $stmt->get_result();
-
-        if ($resultEmail->num_rows > 0) {
-            showError(16);
-            var_dump($resultEmail);
-            return true;
-        }
-
-        // Verifica se já existe cadastro com o CPF
-        $query = "SELECT cpf, id FROM usuario WHERE cpf = ? AND id != ?";
-        $stmt = $conn->prepare($query);
-        $stmt->bind_param("si", $cpf, $_SESSION['USER_ID']);
-        $stmt->execute();
-        $resultCpf = $stmt->get_result();
-
-        if ($resultCpf->num_rows > 0) {
-            showError(19);
-            var_dump($resultCpf);
-            return true;
-        }
-        // Não encontrou nem email nem cpf já cadastrados
+    if (!isset($_POST['nascimento']) || !is_age_valid($_POST['nascimento'])) {
+        display_validation('nascimento', false);
+        showError(39);
         return false;
-
-    } catch (Exception $e) {
-        showError(15);
+    }
+    else{
+        return true;
     }
 }
 
-function submitUser($conn, $id_usuario, $id_endereco)
-{
-    $cep = preg_replace('/\D/', '', $_POST['cep']);
-    $rua = $_POST['rua'];
-    $numero = $_POST['numero'];
-    $bairro = $_POST['bairro'];
-    $cidade = $_POST['cidade'];
-    $estado = $_POST['estado'];
-    $complemento = $_POST['complemento'];
 
-    try {
-        // cria o novo endereço
-        $query = "UPDATE endereco
-        SET cep = ?, rua = ?, numero = ?, bairro = ?, cidade = ?, estado = ?, complemento = ? WHERE id = ?";
-        $stmt = $conn->prepare($query);
-        $stmt->bind_param("ssissssi", $cep, $rua, $numero, $bairro, $cidade, $estado, $complemento, $id_endereco);
-        $stmt->execute();
-    } catch (Exception $e) {
-        showError(15);
+function submit_user(mysqli $conn, $address_id): bool
+{
+    if (!validate_user() || !validate_address()) {
+        return false;
     }
 
-    $id_endereco = $_SESSION['USER_ADDRESS_ID'];
-    $email = $_POST['email'];
-    $nome = ucwords(strtolower($_POST['nome']));
     $cpf = preg_replace('/\D/', '', $_POST['cpf']);
-    $telefone = preg_replace('/\D/', '', $_POST['telefone']);
-    $nascimento = $_POST['nascimento'];
+    $email = $_POST['email'];
+
+    if (verify_user_existence($conn, $email, $cpf, $_SESSION['USER_ID'])) {
+        return false;
+    }
 
     try {
-        $query = "UPDATE usuario 
-        SET id_endereco = ?, email = ?, nome = ?, cpf = ?, telefone = ?, nascimento = ? WHERE id = ?";
-        $stmt = $conn->prepare($query);
-        $stmt->bind_param("isssssi", $id_endereco, $email, $nome, $cpf, $telefone, $nascimento, $id_usuario);
-        $stmt->execute();
+        update_user_and_address($conn, $_SESSION['USER_ID'], $address_id, $_POST);
+        return true;
     } catch (Exception $e) {
         showError(15);
+        return false;
     }
 }
 
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    if (validateUser() && validateAddress()) {
-        $cpf = preg_replace('/\D/', '', $_POST['cpf']);
-        $email = $_POST['email'];
-        if (verifyUserExistence($conn, $email, $cpf)) {
-        } else {
-            submitUser($conn, $id_usuario, $id_endereco);
-            ?>
-            <script>
-                window.location.href = "index.php?common=7";
-            </script>
-            <?php
-        }
+
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["cpf"])) {
+    if (submit_user($conn, $user->id_endereco)) {
+        showSucess(22);
     }
 }
+
+
 ?>

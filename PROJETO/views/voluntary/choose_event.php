@@ -1,15 +1,16 @@
 <?php
 // todos includes e queries sempre no cabeçalho do código
-include(ROOT . "/php/config/database_php.php");
-include(ROOT . "/php/handlers/filter_php.php");
-include(ROOT . "/components/filter/filter.php");
-include(ROOT . "/components/cards/cards.php");
-include(ROOT .  "/components/sidebars/sidebars.php");
-include(ROOT .  "/models/voluntary_models_php.php");
+include_once (ROOT . "/php/config/database_php.php");
+include_once (ROOT . "/php/handlers/filter_php.php");
+include_once (ROOT . "/components/filter/filter.php");
+include_once (ROOT . "/components/cards/cards.php");
+include_once (ROOT .  "/components/sidebars/sidebars.php");
+include_once (ROOT .  "/models/voluntary_models_php.php");
+include_once (ROOT .  "/php/handlers/error_handler_php.php");
+include_once (ROOT .  "/components/back/back.php");
 
 $conn = connectDatabase();
-$subscribed_events = get_subscribed_events($conn, $_SESSION['USER_ID']);
-$events = get_events_where($conn, setWhere('evento'));
+$events = get_events_where($conn, setWhere('evento'), $_SESSION['USER_ID']);
 
 ?>
 <!doctype html>
@@ -28,11 +29,22 @@ $events = get_events_where($conn, setWhere('evento'));
 <body>
 <?php make_mobile_sidebar() ?>
 <div class="d-flex flex-nowrap">
-    <?php make_sidebar(); ?>
+    <?php make_sidebar();
+
+    if (isset($_GET['error'])){
+        showError($_GET['error']);
+    }
+
+    if (isset($_GET['success'])){
+        showSucess($_GET['success']);
+    }
+    ?>
     <div class="main-content">
         <main class="px-5 row addScroll">
             <div class="container-fluid">
                 <div class="mb-3">
+                    <?php make_buttom_back("index.php?common=6")?>
+
                     <h2>Eventos</h2>
                     <?php makeFilter() ?>
                     <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-2 row-cols-xl-2 row-cols-xxl-3 g-5 main">
@@ -44,7 +56,7 @@ $events = get_events_where($conn, setWhere('evento'));
                             echo '<h3>Nenhum evento cadastrado</h3>';
                         }
                         else {
-                            render_events_card($events, $subscribed_events , voluntary: true);
+                            render_events_card($events, voluntary: true);
                         }
                         ?>
                     </div>

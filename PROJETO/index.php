@@ -1,9 +1,9 @@
 <?php
 define('ROOT', dirname(__FILE__));
 require (ROOT . '/php/config/bootstrap_php.php');
-include (ROOT . '/php/config/session_php.php');
-include (ROOT . '/php/handlers/router_php.php');
-include (ROOT . '/php/handlers/formater_php.php');
+include_once (ROOT . '/php/config/session_php.php');
+include_once (ROOT . '/php/handlers/router_php.php');
+include_once(ROOT . '/php/handlers/time_handler.php');
 
 if (isset($_GET['common'])) {
     routeToCommon($_GET['common']);

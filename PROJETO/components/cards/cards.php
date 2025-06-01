@@ -1,6 +1,9 @@
 <?php
-include (ROOT . '/components/buttons/buttons.php');
-include (ROOT . '/components/modal/modal.php');
+include_once (ROOT. '/components/back/back.php');
+include_once (ROOT . '/components/buttons/buttons.php');
+include_once (ROOT . '/components/modal/modal.php');
+include_once (ROOT . '/php/handlers/time_handler.php');
+
 function make_text_card($title, $text1, $text2, $buttons = null)
 {?>
     <div class="col">
@@ -16,19 +19,23 @@ function make_text_card($title, $text1, $text2, $buttons = null)
         </div>
     </div>
 <?php }
-function make_vertical_card($title, $text1,$text2, $text3, $sub_text, $image_Link = "assets/imagens/default.jpg", $buttons = null, $extra = null)
+function make_vertical_card($card_link, $title, $text1,$text2, $text3, $sub_text, $image_Link = "assets/imagens/default.jpg", $buttons = null, $extra = null)
 { ?>
     <div class="col">
         <div class="card vertical h-100 amarelo horizontal ">
+            <a class="detail-link" href="<?= $card_link ?>">
             <figure class="imagem-vertical degrade-vertical">
                 <img src="<?= $image_Link != "" ? $image_Link : "assets/imagens/default.jpg" ?>" class="card-img-top">
             </figure>
+            </a>
             <div class="card-body">
+                <a class="detail-link" href="<?= $card_link ?>">
                 <h5 class="card-title"><?= $title ?></h5>
                 <p class="card-text"><?= $text1 ?></p>
                 <p class="card-text"><?= $text2 ?></p>
                 <p class="card-text"><?= $text3 ?></p>
                 <p class="card-text descricao"><?= $sub_text ?></p>
+                </a>
                 <div class="mt-auto">
                 <div class="row">
                 <?= isset($buttons) ? $buttons() : null ?>
@@ -37,10 +44,11 @@ function make_vertical_card($title, $text1,$text2, $text3, $sub_text, $image_Lin
                 <?= isset($extra) ? $extra() : null ?>
             </div>
         </div>
+        </a>
     </div>
 <?php
 }
-function make_horizontal_card($title, $text1,$text2, $text3, $sub_text, $image_Link = "assets/imagens/default.jpg", $buttons = null, $extra = null)
+function make_horizontal_card($card_link, $title, $text1,$text2, $text3, $sub_text, $image_Link = "assets/imagens/default.jpg", $buttons = null, $extra = null)
 { ?>
     <div class="col">
         <div class="card mb-3 amarelo mx-auto" >
@@ -52,11 +60,13 @@ function make_horizontal_card($title, $text1,$text2, $text3, $sub_text, $image_L
                 </div>
                 <div class="col-md-8">
                     <div class="card-body d-flex flex-column ">
+                        <a class="detail-link" href="<?= $card_link ?>">
                         <h5 class="card-title"><?= $title ?></h5>
                         <p class="card-text"><?= $text1 ?></p>
                         <p class="card-text"><?= $text2 ?></p>
                         <p class="card-text"><?= $text3 ?></p>
                         <p class="card-text descricao"><?= $sub_text ?></p>
+                        </a>
                         <div class="mt-auto d-flex justify-content-between gap-2">
                             <?= isset($buttons) ? $buttons() : null ?>
                         </div>
@@ -68,148 +78,274 @@ function make_horizontal_card($title, $text1,$text2, $text3, $sub_text, $image_L
     </div>
 <?php }
 
-function render_campaigns_card($campaigns)
-{
-    while ($event = $campaigns->fetch_object()) {
-        $buttons = function () use ($event) {
-            makeButton("Visualizar doações", "btn btn-primary", "index.php?adm=10&id=$event->id");
-        };
-        make_text_card($event->nome, format_date($event->data), $event->assentamento_nome, $buttons);
-    }
+function make_big_card($title, $text1,$text2, $text3, $text4, $sub_text, $image_Link = "assets/imagens/default.jpg", $buttons = null)
+{ ?>
+    <div class="col h-100">
+        <div class="card big-card h-100 amarelo ">
+            <figure class="imagem-vertical degrade-vertical h-50">
+                <img src="<?= $image_Link != "" ? $image_Link : "assets/imagens/default.jpg" ?>" class="card-img-top">
+            </figure>
+            <div class="card-body">
+                <h5 class="card-title"><strong><?= $title ?></strong></h5>
+                <p class="card-text"><strong><?= $text1 ?></strong></p>
+                <p class="card-text"><?= $text2 ?></p>
+                <p class="card-text"><?= $text3 ?></p>
+                <p class="card-text"><?= $text4 ?></p>
+                <p class="card-text descricao"><?= $sub_text ?></p>
+                <div class="mt-auto">
+                    <div class="row">
+                        <?= isset($buttons) ? $buttons() : null ?>
+                    </div>
+                </div>
+                <?= isset($extra) ? $extra() : null ?>
+            </div>
+        </div>
+    </div>
+<?php }
+
+function make_event_card_reveal($title, $text1, $btnText, $btnHref, $btnClass, $imgPath)
+{ ?>
+    <div class="card-fade-reveal">
+        <div class="card-img-wrapper">
+            <img src="<?= $imgPath ?>" alt="<?= htmlspecialchars($title) ?>">
+
+            <!-- Título sobre imagem -->
+            <div class="card-title-overlay">
+                <span class="badge btn-primary mb-1 p-2">DOAÇÕES</span>
+                <h2 class="m-0 fw-bold text-dark"><?= $title ?></h2>
+            </div>
+        </div>
+
+        <!-- Conteúdo que sobe no hover -->
+        <div class="card-hover-body">
+            <h2 class="fw-bold m-0"><?= $title ?></h2>
+            <p class="mb-3"><?= $text1 ?></p>
+            <a href="<?= $btnHref ?>" class="btn btn-primary largura-completa"><?= $btnText ?></a>
+        </div>
+    </div>
+<?php
+}
+
+function render_event_detail_card($event) {
+    $formated_date = format_date($event->data);
+    $formated_hour = format_hour($event->hora);
+    $formated_cep = substr($event->cep, 0, 5) . '-' . substr($event->cep, 5, 3);
+    $isPunishable = is_event_in_days($event, 3);
+    $buttons = function () use ($event, $isPunishable){
+        if ($event->esta_inscrito) {
+            if ($event->presenca) {
+                makeButton("Presença validada", "btn btn-success");
+            }
+            else if ($event->confirmacao && has_event_already_occurred($event)) {
+                makeButton("Falta registrada", "btn btn-dark-danger");
+            }
+            else if ($event->confirmacao) {
+                makeButton("Participação confirmada", "btn btn-dark-success");
+            }
+            else {
+                if (has_event_already_occurred($event)) {
+                    makeButton("Evento passado", "btn btn-secondary");
+                }
+                else {
+                    makeModal(
+                        $event->id,
+                        button_text: 'Não posso ir',
+                        modal_title: 'Cancelar inscrição',
+                        modal_body: $isPunishable ?
+                            'Você irá receber uma punição por cancelar em menos de 3 dias antes do evento
+                    sua inscrição e outra pessoa poderá se inscrever em seu lugar.' : 'Você irá cancelar sua inscrição e outra pessoa poderá se inscrever em seu lugar. Você pode cancelar até 3 dias antes do evento.',
+                        confirm_text: 'Sim, cancelar',
+                        form_action: 'index.php?voluntary=1'
+                    );
+                    makeModal(
+                        $event->id,
+                        modal_id: "confirm",
+                        button_classes: "btn btn-primary largura-completa",
+                        button_text: 'Confirmar participação',
+                        modal_title: 'Confirmar participação',
+                        modal_body: 'Ao confirmar sua presença, não será possível cancelar. Ausências não justificadas poderão gerar penalidades',
+                        confirm_btn_class: 'btn btn-primary',
+                        form_action: 'index.php?voluntary=5'
+                    );
+                }
+            }
+        } else if ($event->inscritos >= $event->lotacao_max) {
+            makeButton("Evento Lotado", "btn btn-secondary");
+        } else {
+            makeFormButton('index.php?voluntary=3', 'id_evento', $event->id, 'Inscrever-se');
+        }
+    };
+    make_big_card($event->nome,
+            $event->cidade,
+            $event->assentamento_nome,
+            "$event->rua,  $event->numero, $event->bairro,  $formated_cep, " . $event->complemento ?? "",
+        "$formated_date às $formated_hour",
+            $event->descricao,
+            $event->link_media,
+            $buttons
+    );
 }
 
 function render_events_card(
         $events,
-        $subscribed_events = null,
         bool $admin = false,
         bool $voluntary = false,
         bool $horizontal = false,
+        bool $check_in = false
 )
 {
+
+    if ($check_in) {
+        while ($event = $events->fetch_object()) {
+            if (!$event->inativo) {
+                check_in_event_card($event, $horizontal);
+            }
+        }
+    }
     if ($admin) {
         while ($event = $events->fetch_object()) {
-            $horizontal ? horizontal_admin_event_card($event) : vertical_admin_event_card($event);
+            admin_event_card($event, $horizontal);
         }
         return;
     }
     if ($voluntary) {
         while ($event = $events->fetch_object()) {
-            $horizontal ? horizontal_voluntary_event_card($event, $subscribed_events) : vertical_voluntary_event_card($event, $subscribed_events);
+            voluntary_event_card($event, $horizontal);
         }
-        return;
     }
 }
 
-function vertical_admin_event_card($event)
+function render_one_event_card(
+    $event,
+    bool $admin = false,
+    bool $voluntary = false,
+    bool $horizontal = false,
+)
 {
-    $data_formatada = format_date($event->data);
-    $hora_formatada = format_hour($event->hora);
 
+    if ($admin) {
+        admin_event_card($event, $horizontal);
+        return;
+    }
+    if ($voluntary) {
+        voluntary_event_card($event, $horizontal);
+    }
+}
+
+function admin_event_card($event, $horizontal = false)
+{
+    $formated_date = format_date($event->data);
+    $formated_hour = format_hour($event->hora);
+    $card_link = "index.php?voluntary=4&id=$event->id";
+    $title = $event->nome;
+    $text1 = $event->assentamento_nome;
+    $text2 = "$formated_date às $formated_hour";
+    $text3 = "$event->inscritos/$event->lotacao_max inscritos";
+    $sub_text = $event->descricao;
+    $image_link = $event->link_media;
     $buttons_render = function () use ($event) {
         makeButton("Editar", "btn btn-primary", "index.php?adm=6&id=$event->id");
         makeModal(
-            $event->id,
+            id: $event->id,
             button_text: 'Deletar',
             modal_title: 'Confirmar exclusão',
             modal_body: 'Tem certeza que deseja deletar esse evento',
             cancel_text: "Cancelar",
             confirm_text: 'Sim, deletar',
-            form_action: "index.php?adm=4&id=$event->id"
+            form_action: "index.php?adm=5&id=$event->id&delete=1"
         );
     };
-    make_vertical_card(
-        $event->nome,
-        $event->assentamento_nome,
-        "$data_formatada às $hora_formatada",
-        "$event->inscritos/$event->lotacao_max inscritos",
-        $event->descricao,
-        $event->link_imagem,
-        $buttons_render
-    );
+
+    if ($horizontal)  {
+        make_horizontal_card($card_link, $title, $text1, $text2, $text3, $sub_text, $image_link, $buttons_render);
+    } else {
+        make_vertical_card($card_link, $title, $text1, $text2, $text3, $sub_text, $image_link, $buttons_render);
+    }
 }
 
-function horizontal_admin_event_card($event)
+function voluntary_event_card($event, $horizontal = false)
 {
-    $data_formatada = format_date($event->data);
-    $hora_formatada = format_hour($event->hora);
-
-    $buttons_render = function () use ($event) {
-        makeButton("Editar", "btn btn-primary", "index.php?adm=6&id=$event->id");
-        makeModal(
-            $event->id,
-            button_text: 'Deletar',
-            modal_title: 'Confirmar exclusão',
-            modal_body: 'Tem certeza que deseja deletar esse evento',
-            cancel_text: "Cancelar",
-            confirm_text: 'Sim, deletar',
-            form_action: "index.php?adm=4&id=$event->id"
-        );
-    };
-    make_horizontal_card(
-            $event->nome,
-            $event->assentamento_nome,
-            "$data_formatada às $hora_formatada",
-            "$event->inscritos/$event->lotacao_max inscritos",
-            $event->descricao,
-            $event->link_imagem,
-            $buttons_render
-    );
-}
-
-function vertical_voluntary_event_card($event, $subscribed_events)
-{
-    $data_formatada = format_date($event->data);
-    $hora_formatada = format_hour($event->hora);
-
-    $buttons_render = function () use ($event, $subscribed_events) {
-        if (in_array($event->id, $subscribed_events)) {
-            makeModal($event->id, button_text: 'Cancelar inscrição',
-                modal_title: 'Cancelar inscrição',
-                modal_body: 'Tem certeza que deseja cancelar a inscrição?',
-                confirm_text: 'Sim, cancelar',
-                form_action: 'index.php?voluntary=1');
-        } else if ($event->inscritos >= $event->lotacao_max) {
+    $formated_date = format_date($event->data);
+    $formated_hour = format_hour($event->hora);
+    $card_link = "index.php?voluntary=4&id=$event->id";
+    $title = $event->nome;
+    $text1 = $event->assentamento_nome;
+    $text2 = "$formated_date às $formated_hour";
+    $text3 = "$event->inscritos/$event->lotacao_max inscritos";
+    $sub_text = $event->descricao;
+    $image_link = $event->link_media;
+    $isPunishable = is_event_in_days($event, 3);
+    $buttons_render = function () use ($event, $isPunishable){
+        if ($event->esta_inscrito) {
+            if ($event->presenca) {
+                makeButton("Presença validada", "btn btn-success");
+            }
+            else if ($event->confirmacao && has_event_already_occurred($event)) {
+                makeButton("Falta registrada", "btn btn-dark-danger");
+            }
+            else if ($event->confirmacao) {
+                makeButton("Participação confirmada", "btn btn-dark-success");
+            }
+            else if (!has_event_already_occurred($event)) {
+                makeButton("Ir para área da confirmação", "btn btn-primary", "index.php?voluntary=4&id=$event->id");
+            }
+            else {
+                if (has_event_already_occurred($event)) {
+                    makeButton("Evento passado", "btn btn-secondary");
+                }
+                else {
+                    makeModal(
+                        $event->id,
+                        button_text: 'Cancelar inscrição',
+                        modal_title: 'Cancelar inscrição',
+                        modal_body: $isPunishable ?
+                            'Você irá receber uma punição por cancelar em menos de 3 dias antes do evento
+                    sua inscrição e outra pessoa poderá se inscrever em seu lugar.' : 'Você irá cancelar sua inscrição e outra pessoa poderá se inscrever em seu lugar. Você pode cancelar até 3 dias antes do evento',                    confirm_text: 'Sim, cancelar',
+                        form_action: 'index.php?voluntary=1');
+                }
+            }
+        }
+        else if (has_event_already_occurred($event)) {
+            makeButton("Evento passado", "btn btn-secondary");
+        }
+        else if ($event->inscritos >= $event->lotacao_max) {
             makeButton("Evento Lotado", "btn btn-secondary");
-        } else {
+        }
+        else {
             makeFormButton('index.php?voluntary=3', 'id_evento', $event->id, 'Inscrever-se');
         }
     };
-    make_vertical_card(
-        $event->nome,
-        "$data_formatada às $hora_formatada",
-        $event->assentamento_nome,
-        "$event->inscritos/$event->lotacao_max inscritos",
-        $event->descricao,
-        $event->link_imagem,
-        $buttons_render
-    );
+
+    if ($horizontal)  {
+        make_horizontal_card($card_link, $title, $text1, $text2, $text3, $sub_text, $image_link, $buttons_render);
+    } else {
+        make_vertical_card($card_link, $title, $text1, $text2, $text3, $sub_text, $image_link, $buttons_render);
+    }
 }
 
-function horizontal_voluntary_event_card($event, $subscribed_events)
+function check_in_event_card($event, $horizontal = false)
 {
-    $data_formatada = format_date($event->data);
-    $hora_formatada = format_hour($event->hora);
-
-    $buttons_render = function () use ($event, $subscribed_events) {
-        if (in_array($event->id, $subscribed_events)) {
-            makeModal($event->id, button_text: 'Cancelar inscrição',
-                modal_title: 'Cancelar inscrição',
-                modal_body: 'Tem certeza que deseja cancelar a inscrição?',
-                confirm_text: 'Sim, cancelar',
-                form_action: 'index.php?voluntary=1');
-        } else if ($event->inscritos >= $event->lotacao_max) {
-            makeButton("Evento Lotado", "btn btn-secondary");
-        } else {
-            makeFormButton('index.php?voluntary=3', 'id_evento', $event->id, 'Inscrever-se');
+    $formated_date = format_date($event->data);
+    $formated_hour = format_hour($event->hora);
+    $card_link = "index.php?voluntary=4&id=$event->id";
+    $title = $event->nome;
+    $text1 = $event->assentamento_nome;
+    $text2 = "$formated_date às $formated_hour";
+    $text3 = "$event->inscritos/$event->lotacao_max inscritos";
+    $sub_text = $event->descricao;
+    $image_link = $event->link_media;
+    $buttons_render = function () use ($event){
+        if ($event->evento_comecou) {
+            makeButton("Realizar check-in dos voluntários", "btn btn-primary", "index.php?adm=13&id=" . $event->id);
+        }
+        else {
+            makeButton("Ver voluntários confirmados", "btn btn-secondary", "index.php?adm=13&id=" . $event->id);
         }
     };
-    make_horizontal_card(
-        $event->nome,
-        "$data_formatada às $hora_formatada",
-        $event->assentamento_nome,
-        "$event->inscritos/$event->lotacao_max inscritos",
-        $event->descricao,
-        $event->link_imagem,
-        $buttons_render
-    );
+
+    if ($horizontal)  {
+        make_horizontal_card($card_link, $title, $text1, $text2, $text3, $sub_text, $image_link, $buttons_render);
+    } else {
+        make_vertical_card($card_link, $title, $text1, $text2, $text3, $sub_text, $image_link, $buttons_render);
+    }
 }

@@ -1,3 +1,7 @@
+<?php
+include_once (ROOT . "/components/cards/cards.php");
+?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -7,13 +11,14 @@
     <link rel="stylesheet" href="css/header.css">
     <link rel="stylesheet" href="css/default.css">
     <link rel="stylesheet" href="css/main-content.css">
+    <link rel="stylesheet" href="css/card-reveal.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
 <body>
 
 <!-- Header fixo -->
-<?php include(ROOT . "/components/header/header.php");?>
+<?php include_once (ROOT . "/components/header/header.php");?>
 
 <!-- Conteúdo principal -->
 <main style="margin-top: 120px;">  <!-- margem para descolar do header -->
@@ -28,17 +33,37 @@
             </article>
         </div>
     </section>
+    <div class="container">
+        <div class="mb-3">
+            <div class="mt-5 mb-4">
+                <h2>Seja um Apoiador Acalento!</h2>
+            </div>
 
-    <!-- IMAGEM PARA O LADO ESQUERDO -->
-    <section class="text-image left">
-        <div class="container d-flex align-items-center gap-4 flex-row-reverse">
-            <img src="assets/imagens/teste2.jpg" alt="Imagem 2" class="img-fluid">
-            <article>
-                <h2>Doar também é</h2>
-                <p>Doar é também dizer: você importa. É um gesto silencioso que grita cuidado, que constrói futuros e devolve dignidade. Cada doação, grande ou pequena, é uma semente de mudança no coração de quem mais precisa.</p>
-            </article>
-        </div>
-    </section>
+            <div class="row">
+                <div class="col-md-4">
+                    <?php make_event_card_reveal("Doação Material", "Doe itens e transforme recursos em esperança 
+                    para quem mais precisa!", "Doe Agora!", "index.php?common=2", "btn btn-primary 
+                    largura-completa", "assets/imagens/teste3.jpeg");?>
+                </div>
+                <div class="col-md-4">
+                    <?php make_event_card_reveal("Seja voluntário", "Ofereça seu tempo e ajude a construir um 
+                    amanhã mais justo para todos!", "Seja voluntário!", "#", "btn btn-primary 
+                    largura-completa", "assets/imagens/teste5.jpeg");?>
+                </div>
+                <?php if(isset($_SESSION['USER_NAME'])) { ?>
+                    <div class="col-md-4">
+                        <?php make_event_card_reveal("Doação Monetária", "Faça a sua doação e ajude centenas de 
+                        crianças a terem um futuro melhor!", "Doe Agora!", "index.php?common=12", "btn btn-primary 
+                        largura-completa", "assets/imagens/teste4.jpeg");?>
+                    </div>
+                <?php } else { ?>
+                    <div class="col-md-4">
+                        <?php make_event_card_reveal("Doação Monetária", "Faça a sua doação e ajude centenas de 
+                        crianças a terem um futuro melhor!", "Doe Agora!", "index.php?common=11", "btn btn-primary 
+                        largura-completa", "assets/imagens/teste4.jpeg");?>
+                    </div>
+                <?php } ?>
+            </div>
 </main>
 </body>
 </html>

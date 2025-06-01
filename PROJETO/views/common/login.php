@@ -1,13 +1,13 @@
 <?php
-include(ROOT . '/php/config/session_php.php');
-include(ROOT . '/php/config/database_php.php');
-include(ROOT . '/php/auth_services/auth_service_php.php');
-include(ROOT . '/php/handlers/form_validator_php.php');
+include_once (ROOT . '/php/config/session_php.php');
+include_once (ROOT . '/php/config/database_php.php');
+include_once (ROOT . '/php/auth_services/auth_service_php.php');
+include_once (ROOT . '/php/handlers/form_validator_php.php');
 
 $conn = connectDatabase();
 ?>
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
@@ -31,6 +31,7 @@ $conn = connectDatabase();
             <input type="password" class="form-control" name="password" id="password" required placeholder="••••••••">
         </div>
         <button type="submit" class="btn btn-primary w-100">Entrar</button>
+        <a href="index.php?common=5" class="btn btn-secondary w-100 mt-2">Cadastre-se</a>
     </form>
 </div>
 </body>
@@ -38,20 +39,28 @@ $conn = connectDatabase();
 <?php
 if(isset($_POST['email'], $_POST['password'])) {
     $result = authenticate_user($conn, $_POST['email'], $_POST['password']);
-    displayValidation('email', isValidEmail($_POST['email']));
-    displayValidation('password', hasContent($_POST['password']));
+    display_validation('email', is_valid_email($_POST['email']));
+    display_validation('password', has_content($_POST['password']));
     if ($result['status']) {
         header('Location: index.php?common=6');
         exit;
     } else {
-       displayValidation('email', false);
-       displayValidation('password',false);
+       display_validation('email', false);
+       display_validation('password',false);
         ?>
         <div class="toast-container position-absolute p-3 top-0 start-50 translate-middle-x">
             <div class="toast text-bg-danger border-0 show" id="toastRuim">
                 <div class="d-flex">
                     <div class="toast-body">
-                        <?= $result['statusName'] == "BLOCK" ? "Tentativas excedidas, tente novamente mais tarde." : "E-mail ou senha incorretos."?>
+                        <?php if ($result['statusName'] == "BLOCK") : ?>
+                            Tentativas excedidas, tente novamente mais tarde.
+                        <?php elseif ($result['statusName'] == "SUSPENDED_USER") : ?>
+                            Você está suspenso.
+                        <?php elseif ($result['statusName'] == "INACTIVE_USER") : ?>
+                            Você está inativado.
+                        <?php else : ?>
+                            E-mail ou senha incorretos.
+                        <?php endif; ?>
                     </div>
                     <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Fechar"></button>
                 </div>

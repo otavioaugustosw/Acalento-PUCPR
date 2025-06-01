@@ -1,0 +1,100 @@
+.badge-card {
+    margin-top: 2rem;
+    padding: 1.5rem 1.5rem 0.5rem 1.5rem;
+    border-radius: var(--btn-radius);
+    font-size: 1rem;
+}
+
+.badge-card a {
+    color: var(--primary-blue);
+    font-family: var(--text-font), serif;
+    text-decoration: none;
+    font-weight: 600;
+    padding-left: 3px;
+}
+
+.badge-pattern {
+    background-color: var(--secondary-yellow);
+    border: 1px solid var(--primary-blue);
+}
+
+.badge-primary-donation {
+    background-color: var(--secondary-green);
+    border: 1px solid var(--dark-green);
+}
+
+.badge-primary-donation p {
+    color: var(--dark-green);
+}
+
+.badge-secondary-donation {
+    background-color: var(--secondary-red);
+    border: 1px solid var(--primary-red);
+}
+
+.badge-secondary-donation p {
+    color: var(--primary-red);
+}
+
+.badge-tertiary-donation {
+    background-color: var(--secondary-blue);
+    border: 1px solid var(--primary-blue)
+}
+
+.badge-tertiary-donation p {
+    color: var(--primary-blue)
+}
+
+.badge-quaternary-donation {
+    background-color: var(--tertiary-yellow);
+    border: 1px solid var(--primary-yellow);
+}
+
+.badge-quaternary-donation p {
+    color: var(--primary-yellow);
+}
+
+.badge-card.badge-primary-voluntary {
+    background-color: var(--secondary-blue);
+    border: 1px solid var(--primary-blue)
+}
+
+.badge-primary-voluntary p {
+    color: var(--primary-blue)
+}
+
+.badge-secondary-voluntary {
+    background-color: var(--secondary-green);
+    border-radius: 1px solid var(--dark-green);
+}
+
+.badge-secondary-voluntary p {
+    color: var(--dark-green);
+}
+
+.badge-tertiary-voluntary {
+    background-color: var(--secondary-red);
+    border: 1px solid var(--primary-red);
+}
+
+.badge-tertiary-voluntary p {
+    color: var(--primary-red);
+}
+
+.badge-quaternary-voluntary {
+    background-color: var(--tertiary-blue);
+    border: 1px solid var(--primary-blue)
+}
+
+.badge-quaternary-voluntary p {
+    color: var(--primary-blue)
+}
+
+.badge-final {
+    background-color: var(--quaternary-yellow);
+    border: 1px solid var(--quintenary-yellow)
+}
+
+.badge-final p {
+    color: var(--quintenary-yellow)
+}

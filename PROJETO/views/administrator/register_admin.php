@@ -1,8 +1,10 @@
 <?php
-include (ROOT . "/php/config/database_php.php");
-include(ROOT . "/php/auth_services/auth_service_php.php");
-include(ROOT . "/php/handlers/form_validator_php.php");
-include(ROOT .  "/components/sidebars/sidebars.php");
+include_once  (ROOT . "/php/config/database_php.php");
+include_once (ROOT . "/php/auth_services/auth_service_php.php");
+include_once (ROOT . "/php/handlers/form_validator_php.php");
+include_once(ROOT .  "/components/sidebars/sidebars.php");
+include_once(ROOT .  "/models/admin_models_php.php");
+include_once(ROOT .  "/models/common_models_php.php");
 
 $conn = connectDatabase();
 ?>
@@ -29,7 +31,7 @@ $conn = connectDatabase();
     <div class="flex-grow-1 p-4 main-content">
         <main class="container-fluid align-content-center">
             <h2 class="form-title">Informações de cadastro</h2>
-            <form method="POST" action="index.php?adm=12">
+            <form method="POST" action="index.php?adm=11">
 
                 <div class="row">
                     <!-- Nome -->
@@ -164,169 +166,128 @@ $conn = connectDatabase();
 
 <?php
 
-function validateAddress() {
-    if (!isNumericOnly(preg_replace('/\D/', '', $_POST['cep'])) || !hasMaxLength(preg_replace('/\D/', '', $_POST['cep']), 8)) {
-        displayValidation('cep' , false);
+function validate_address(): bool
+{
+    if (!isset($_POST['cep']) ||
+        !is_numeric_only(preg_replace('/\D/', '', $_POST['cep'])) ||
+        !has_max_length(preg_replace('/\D/', '', $_POST['cep']), 8)) {
+        display_validation('cep', false);
+        showError(28);
         return false;
     }
 
-    if (!isAlphaOnly($_POST['rua']) || !hasMaxLength($_POST['rua'], 50)) {
-        displayValidation('rua', false);
+    if (!isset($_POST['rua']) || !is_alpha_only($_POST['rua']) || !has_max_length($_POST['rua'], 50)) {
+        display_validation('rua', false);
+        showError(29);
         return false;
     }
 
-    if (!isNumericOnly($_POST['numero']) || !hasMaxLength($_POST['numero'], 50)) {
-        displayValidation('numero', false);
+    if (!isset($_POST['numero']) || !is_numeric_only($_POST['numero']) || !has_max_length($_POST['numero'], 50)) {
+        display_validation('numero', false);
+        showError(30);
         return false;
     }
 
-    if (!isAlphaOnly($_POST['bairro']) || !hasMaxLength($_POST['bairro'], 50)) {
-        displayValidation('bairro', false);
+    if (!isset($_POST['bairro']) || !is_alpha_only($_POST['bairro']) || !has_max_length($_POST['bairro'], 50)) {
+        display_validation('bairro', false);
+        showError(31);
         return false;
     }
 
-    if (!isAlphaOnly($_POST['cidade']) || !hasMaxLength($_POST['cidade'], 50)) {
-        displayValidation('cidade', false);
+    if (!isset($_POST['cidade']) || !is_alpha_only($_POST['cidade']) || !has_max_length($_POST['cidade'], 50)) {
+        display_validation('cidade', false);
+        showError(32);
         return false;
     }
 
-    if (!isAlphaOnly($_POST['estado']) || !hasMaxLength($_POST['estado'], 50)) {
-        displayValidation('estado', false);
+    if (!isset($_POST['estado']) || !is_alpha_only($_POST['estado']) || !has_max_length($_POST['estado'], 50)) {
+        display_validation('estado', false);
+        showError(33);
         return false;
     }
     return true;
 }
 
-function validateUser()
+function validate_user(): bool
 {
-    if (!isFullName($_POST['nome']) || !hasMaxLength($_POST['nome'], 50)) {
-        displayValidation('nome', false);
+    if (!isset($_POST['nome']) || !is_full_name($_POST['nome']) || !has_max_length($_POST['nome'], 50)) {
+        display_validation('nome', false);
+        showError(34);
         return false;
     }
 
-    if (!isCPFValid($_POST['cpf'])) {
-        displayValidation('cpf' , false);
+    if (!isset($_POST['cpf']) || !is_cpf_valid($_POST['cpf'])) {
+        display_validation('cpf', false);
+        showError(35);
         return false;
     }
 
-    if (!isNumericOnly(preg_replace('/\D/', '', $_POST['telefone']))) {
-        displayValidation('telefone', false);
+    if (!isset($_POST['telefone']) || !is_numeric_only(preg_replace('/\D/', '', $_POST['telefone']))) {
+        display_validation('telefone', false);
+        showError(36);
         return false;
     }
 
-    if (!isValidEmail($_POST['email'])) {
-        displayValidation('email', false);
+    if (!isset($_POST['email']) || !is_valid_email($_POST['email'])) {
+        display_validation('email', false);
+        showError(37);
         return false;
     }
 
-
-    if (!isDateValid($_POST['nascimento'])) {
-        displayValidation('nascimento', false);
+    if (!isset($_POST['nascimento']) || !is_date_valid($_POST['nascimento'])) {
+        display_validation('nascimento', false);
+        showError(38);
         return false;
     }
 
-    if (!hasMinLength($_POST['senha'], 8) || !($_POST['senha'] === $_POST['confirmarSenha']) ) {
-        displayValidation('senha', false);
-        displayValidation('confirmarSenha', false);
-        return false;
+    if (isset( $_POST['senha'])){
+        $password =$_POST['senha'];
+        $uppercase = preg_match('@[A-Z]@', $password);
+        $lowercase = preg_match('@[a-z]@', $password);
+        $number    = preg_match('@[0-9]@', $password);
+        $specialChars = preg_match('@[^\w]@', $password);
+
+        if(!$uppercase || !$lowercase || !$number || !$specialChars || !($_POST['senha'] === $_POST['confirmarSenha']) || mb_strlen($password) < 8) {
+            display_validation('senha', false);
+            display_validation('confirmarSenha', false);
+            showError(40);
+        }
+
     }
 
     return true;
 }
 
-function verifyUserExistence($sql, $email, $cpf)
+/**
+ * Controla todo o fluxo de cadastro do usuário, incluindo validações,
+ * verificação de existência e persistência no banco de dados.
+ *
+ * @param mysqli $conn Conexão ativa com o banco de dados.
+ * @return void
+ */
+function submit_user(mysqli $conn): void
 {
-    try {
-        // Verifica se já existe cadastro com o Email
-        $query = "SELECT email FROM usuario WHERE email = ?";
-        $stmt = $sql->prepare($query);
-        $stmt->bind_param("s", $email);
-        $stmt->execute();
-        $resultEmail = $stmt->get_result();
-
-        if ($resultEmail->num_rows > 0) {
-            showError(16);
-            exit();
-        }
-
-        // Verifica se já existe cadastro com o CPF
-        $query = "SELECT cpf FROM usuario WHERE cpf = ?";
-        $stmt = $sql->prepare($query);
-        $stmt->bind_param("s", $cpf);
-        $stmt->execute();
-        $resultCpf = $stmt->get_result();
-
-        if ($resultCpf->num_rows > 0) {
-            showError(19);
-            exit();
-        }
-
-        // Não encontrou nem email nem cpf já cadastrados
-        return false;
-
-    } catch (Exception $e) {
-        showError(15);
-        exit();
-    }
-}
-
-
-function submitUser($conn)
-{
-    $cep = preg_replace('/\D/', '', $_POST['cep']);
-    $rua = $_POST['rua'];
-    $numero = $_POST['numero'];
-    $bairro = $_POST['bairro'];
-    $cidade = $_POST['cidade'];
-    $estado = $_POST['estado'];
-    $complemento = $_POST['complemento'];
-
-    try {
-        // cria o novo endereço
-        $query = "INSERT INTO endereco (cep, rua, numero, bairro, cidade, estado, complemento) 
-                VALUES (?, ?, ?, ?, ?, ?, ?)";
-        $stmt = $conn->prepare($query);
-        $stmt->bind_param("ssissss", $cep, $rua, $numero, $bairro, $cidade, $estado, $complemento);
-        $stmt->execute();
-    } catch (Exception $e) {
-        showError(15);
-        exit();
+    if (!validate_user() || !validate_address()) {
+        return;
     }
 
-    $id_endereco = $conn->insert_id;
-    $email = $_POST['email'];
-    $senha = generate_password_hash($_POST['senha']);
-    $nome = $_POST['nome'];
     $cpf = preg_replace('/\D/', '', $_POST['cpf']);
-    $telefone = preg_replace('/\D/', '', $_POST['telefone']);
-    $nascimento = $_POST['nascimento'];
-    $eh_adm = $_POST['tipo_usuario'];
+    $email = $_POST['email'];
+
+    if (verify_user_existence($conn, $email, $cpf)) {
+        return;
+    }
 
     try {
-        // cria o novo endereço
-        $query = "INSERT INTO usuario(id_endereco, email, senha, nome, cpf, telefone, nascimento, eh_adm)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        $stmt = $conn->prepare($query);
-        $stmt->bind_param("issssssi", $id_endereco, $email, $senha, $nome, $cpf, $telefone, $nascimento, $eh_adm);
-        $stmt->execute();
+        $address_id = create_address($conn, $_POST);
+        create_user_admin($conn, $_POST, $address_id);
+        ?> <script> window.location.href = 'index.php?common=6' </script> <?php
     } catch (Exception $e) {
         showError(15);
-        exit();
     }
 }
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    if (validateUser() && validateAddress()) {
-        $cpf = preg_replace('/\D/', '', $_POST['cpf']);
-        $email = $_POST['email'];
-        if (!verifyUserExistence($conn, $email, $cpf)) {
-            submitUser($conn);
-            ?>
-            <script>
-                window.location.href = "index.php?common=6";
-            </script>
-            <?php
-        }
-    }
+    submit_user($conn);
 }
 ?>

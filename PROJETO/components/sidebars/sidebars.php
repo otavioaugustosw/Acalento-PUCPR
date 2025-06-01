@@ -13,13 +13,21 @@ function make_sidebar() {?>
     <symbol id="puzzle" viewBox="0 0 16 16">
         <path d="M3.112 3.645A1.5 1.5 0 0 1 4.605 2H7a.5.5 0 0 1 .5.5v.382c0 .696-.497 1.182-.872 1.469a.5.5 0 0 0-.115.118l-.012.025L6.5 4.5v.003l.003.01q.005.015.036.053a.9.9 0 0 0 .27.194C7.09 4.9 7.51 5 8 5c.492 0 .912-.1 1.19-.24a.9.9 0 0 0 .271-.194.2.2 0 0 0 .036-.054l.003-.01v-.008l-.012-.025a.5.5 0 0 0-.115-.118c-.375-.287-.872-.773-.872-1.469V2.5A.5.5 0 0 1 9 2h2.395a1.5 1.5 0 0 1 1.493 1.645L12.645 6.5h.237c.195 0 .42-.147.675-.48.21-.274.528-.52.943-.52.568 0 .947.447 1.154.862C15.877 6.807 16 7.387 16 8s-.123 1.193-.346 1.638c-.207.415-.586.862-1.154.862-.415 0-.733-.246-.943-.52-.255-.333-.48-.48-.675-.48h-.237l.243 2.855A1.5 1.5 0 0 1 11.395 14H9a.5.5 0 0 1-.5-.5v-.382c0-.696.497-1.182.872-1.469a.5.5 0 0 0 .115-.118l.012-.025.001-.006v-.003l-.003-.01a.2.2 0 0 0-.036-.053.9.9 0 0 0-.27-.194C8.91 11.1 8.49 11 8 11s-.912.1-1.19.24a.9.9 0 0 0-.271.194.2.2 0 0 0-.036.054l-.003.01v.002l.001.006.012.025c.016.027.05.068.115.118.375.287.872.773.872 1.469v.382a.5.5 0 0 1-.5.5H4.605a1.5 1.5 0 0 1-1.493-1.645L3.356 9.5h-.238c-.195 0-.42.147-.675.48-.21.274-.528.52-.943.52-.568 0-.947-.447-1.154-.862C.123 9.193 0 8.613 0 8s.123-1.193.346-1.638C.553 5.947.932 5.5 1.5 5.5c.415 0 .733.246.943.52.255.333.48.48.675.48h.238z"/>
     </symbol>
+
     <symbol id="person" viewBox="0 0 16 16">
         <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
-
     </symbol>
 
     <symbol id="doorOpen" viewBox="0 0 16 16">
         <path d="M1.5 15a.5.5 0 0 0 0 1h13a.5.5 0 0 0 0-1H13V2.5A1.5 1.5 0 0 0 11.5 1H11V.5a.5.5 0 0 0-.57-.495l-7 1A.5.5 0 0 0 3 1.5V15zM11 2h.5a.5.5 0 0 1 .5.5V15h-1zm-2.5 8c-.276 0-.5-.448-.5-1s.224-1 .5-1 .5.448.5 1-.224 1-.5 1"/>
+    </symbol>
+
+    <symbol id="key" viewBox="0 0 16 16">
+        <path d="M3.5 11.5a3.5 3.5 0 1 1 3.163-5H14L15.5 8 14 9.5l-1-1-1 1-1-1-1 1-1-1-1 1H6.663a3.5 3.5 0 0 1-3.163 2M2.5 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/>
+    </symbol>
+
+    <symbol id="guard" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M8 0c-.69 0-1.843.265-2.928.56-1.11.3-2.229.655-2.887.87a1.54 1.54 0 0 0-1.044 1.262c-.596 4.477.787 7.795 2.465 9.99a11.8 11.8 0 0 0 2.517 2.453c.386.273.744.482 1.048.625.28.132.581.24.829.24s.548-.108.829-.24a7 7 0 0 0 1.048-.625 11.8 11.8 0 0 0 2.517-2.453c1.678-2.195 3.061-5.513 2.465-9.99a1.54 1.54 0 0 0-1.044-1.263 63 63 0 0 0-2.887-.87C9.843.266 8.69 0 8 0m-.55 8.502L7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0M8.002 12a1 1 0 1 1 0-2 1 1 0 0 1 0 2"/>
     </symbol>
 </svg>
 
@@ -53,6 +61,15 @@ function make_sidebar() {?>
     </li>
 
     <li class="sidebar-item mb-1">
+        <a  href="index.php?common=16" class="btn btn-toggle  d-inline-flex align-items-center rounded border-0 collapsed">
+            <svg class="bi me-2" width="20" height="20" aria-hidden="true">
+                <use xlink:href="#guard"/>
+            </svg>
+            MInhas penalidades
+        </a>
+    </li>
+
+    <li class="sidebar-item mb-1">
         <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
                 data-bs-toggle="collapse" data-bs-target="#eventos-collapse" aria-expanded="false">
             <svg class="bi me-2" width="20" height="20" aria-hidden="true">
@@ -64,14 +81,12 @@ function make_sidebar() {?>
             <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                 <?php if (!$_SESSION['USER_IS_VOLUNTARY']) { ?>
                     <li><a href="index.php?voluntary=2" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Participe de eventos</a></li>
-                <?php } ?>
-                <?php if ($_SESSION['USER_IS_ADMINISTRATOR']) { ?>
-                    <li><a href="index.php?adm=2" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Cadastrar evento</a></li>
-                    <li><a href="index.php?adm=5" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Editar evento</a></li>
-                <?php } ?>
-                <?php if ($_SESSION['USER_IS_VOLUNTARY']) { ?>
+                <?php } else { ?>
                     <li><a href="index.php?voluntary=2" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Inscrever-se</a></li>
-                <?php } ?>
+                    <li><a href="index.php?voluntary=7" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Meus eventos</a></li>
+                    <li><a href="index.php?voluntary=8" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Meus certificados</a></li>
+                    <?php
+                }?>
             </ul>
         </div>
     </li>
@@ -86,20 +101,40 @@ function make_sidebar() {?>
         <div class="collapse" id="doacoes-collapse">
             <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                 <?php if (!$_SESSION['USER_IS_DONATOR']) { ?>
-                    <!--                        <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Faça a sua primeira doação</a></li>-->
-                <?php } ?>
-                <?php if ($_SESSION['USER_IS_ADMINISTRATOR']) { ?>
-                    <li><a href="index.php?adm=1" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Cadastrar campanha</a></li>
-                    <li><a href="index.php?adm=8" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Visualizar campanhas</a></li>
-                    <li><a href="index.php?adm=3" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Registrar doação</a></li>
-                    <li><a href="index.php?adm=7" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Visualizar doações</a></li>
-                <?php } ?>
-                <?php if ($_SESSION['USER_IS_DONATOR']) { ?>
+                    <li><a href="index.php?donator=2" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Faça a sua primeira doação</a></li>
+                <?php } else {?>
                     <li><a href="index.php?donator=1" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Suas doações</a></li>
-                <?php } ?>
+                    <li><a href="index.php?donator=2" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Faça uma doação</a></li>
+
+                <?php }?>
             </ul>
         </div>
     </li>
+    <?php if ($_SESSION['USER_IS_ADMINISTRATOR']) { ?>
+        <li class="sidebar-item mb-1">
+            <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#admin-collapse" aria-expanded="false">
+                <svg class="bi me-2" width="20" height="20" aria-hidden="true">
+                    <use xlink:href="#key" />
+                </svg>
+                Administrador
+            </button>
+            <div class="collapse" id="admin-collapse">
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                    <li><a href="index.php?adm=12" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Check-in de Eventos</a></li>
+                    <li><a href="index.php?adm=9" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Gerenciar penalidades</a></li>
+                    <li><a href="index.php?adm=5" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Gerenciar eventos</a></li>
+                    <li><a href="index.php?adm=7" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Visualizar doações</a></li>
+                    <li><a href="index.php?adm=17" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Visualizar usuários</a></li>
+                    <li><a href="index.php?adm=8" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Visualizar assentamentos</a></li>
+                    <li><a href="index.php?adm=16" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Registrar doação material</a></li>
+                    <li><a href="index.php?adm=3" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Registrar doação monetária</a></li>
+                    <li><a href="index.php?adm=19" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Validar doações monetárias</a></li>
+                    <li><a href="index.php?adm=20" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Distribuir doações</a></li>
+                    <li><a href="index.php?adm=21" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Saída de doações</a></li>
+                </ul>
+            </div>
+        </li>
+    <?php } ?>
 </ul>
 <!-- fim da navegão -->
 <div class="sidebar-footer border-top d-flex mt-auto py-2">

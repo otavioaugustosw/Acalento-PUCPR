@@ -16,8 +16,10 @@ $last_events = get_last_event($conn, $_SESSION['USER_ID']);
 $all_donations = get_donations_where($conn, "ORDER BY doacao.id DESC LIMIT 10");
 $all_my_donations = get_donations_where_badges($conn, $_SESSION['USER_ID']);
 $last_donations = get_last_donation($conn, $_SESSION['USER_ID']);
-$my_donations = get_donations_where($conn, set_where_donations('myown'));
-$table_head = ["Item", "Quantidade", "Tipo", "Doador", "Data da doação", "Destino"];?>
+$my_donations = get_all_donations($conn, 'WHERE doacao.id_usuario = ' . $_SESSION['USER_ID'],
+    'WHERE doacao_monetaria.id_usuario = ' . $_SESSION['USER_ID'], 'ORDER BY data DESC LIMIT 5');
+$table_head = ["Item", "Quantidade", "Tipo", "Doador", "Data da doação", "Destino"];
+$table_head1 = ["Doador", "Tipo", "Doação", "Data"]; ?>
 
 <!doctype html>
 <html lang="en">
@@ -94,7 +96,7 @@ $table_head = ["Item", "Quantidade", "Tipo", "Doador", "Data da doação", "Dest
                                 if ($my_donations->num_rows <= 0) {
                                     echo '<h3 class="p-5">Nenhuma doação encontrada.</h3>';
                                 } else {
-                                    render_donator_donations_table($table_head, $my_donations);
+                                    render_all_donations_table($table_head1, $my_donations);
                                 } ?>
                                 <h2 class="p-0 mb-1">Próximos eventos</h2>
                                 <?php
@@ -120,7 +122,7 @@ $table_head = ["Item", "Quantidade", "Tipo", "Doador", "Data da doação", "Dest
                             if ($my_donations->num_rows <= 0) {
                                 echo '<h3 class="p-5">Nenhuma doação encontrada.</h3>';
                             } else {
-                                render_donator_donations_table($table_head, $my_donations);
+                                render_donator_donations_table($table_head1, $my_donations);
                             }
                             ?>
 

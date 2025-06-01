@@ -221,7 +221,7 @@ function get_last_donation(mysqli $conn, int $user_id)
     }
 }
 
-function get_donations_to_validate(mysqli $conn, $where)
+function get_monetary_donations(mysqli $conn, $where)
 {
     try {
         $query = "
@@ -256,6 +256,43 @@ function validate_donation(mysqli $conn, int $status, int $id_donation)
         $stmt->bind_param("ii", $status, $id_donation);
         return $stmt->execute();
 
+    } catch (mysqli_sql_exception $e) {
+        return false;
+    }
+}
+
+function get_all_donations(mysqli $conn, $where_material, $where_monetario, $condicao)
+{
+    try {
+        $query = "
+        SELECT doacao.data,
+        'Material' as tipo,
+        usuario.nome as doador,
+        opcao_item_doacao.nome as item
+        FROM doacao
+        JOIN usuario ON doacao.id_usuario = usuario.id
+        JOIN opcao_item_doacao ON doacao.id_opcao_item_doacao = opcao_item_doacao.id
+        $where_material
+        
+        UNION ALL 
+        
+        SELECT doacao_monetaria.data,
+        'Monetário' as tipo,
+        usuario.nome as doador,
+        doacao_monetaria.valor as item
+        FROM doacao_monetaria
+        JOIN usuario ON doacao_monetaria.id_usuario = usuario.id
+        $where_monetario
+        $condicao
+        ";
+
+        $stmt = $conn->prepare($query);
+        if (!$stmt) {
+            throw new mysqli_sql_exception("erro da query: " . $conn->error);
+        }
+        $stmt->execute();
+
+        return $stmt->get_result();
     } catch (mysqli_sql_exception $e) {
         return false;
     }

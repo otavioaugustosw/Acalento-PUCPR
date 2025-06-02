@@ -502,3 +502,91 @@ function get_users_where($conn, $where)
         $where";
     return $conn->query($query);
 }
+
+function total_donations(mysqli $conn): int
+{
+    try {
+        $query = "
+        SELECT COUNT(*) AS total_doacoes_mes_atual
+        FROM (
+            SELECT id FROM doacao 
+            WHERE DATE(data) BETWEEN DATE_FORMAT(CURRENT_DATE, '%Y-%m-01') AND LAST_DAY(CURRENT_DATE)
+            UNION ALL
+            SELECT id FROM doacao_monetaria 
+            WHERE DATE(data) BETWEEN DATE_FORMAT(CURRENT_DATE, '%Y-%m-01') AND LAST_DAY(CURRENT_DATE)
+        ) AS todas;
+        ";
+
+        $stmt = $conn->prepare($query);
+        if (!$stmt) {
+            throw new mysqli_sql_exception("Erro na query: " . $conn->error);
+        }
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $dados = $result->fetch_assoc();
+        return (int) ($dados['total_doacoes_mes_atual'] ?? 0);
+
+    } catch (mysqli_sql_exception $e) {
+        return 0;
+    }
+}
+
+function last_this_month_donations_monetary(mysqli $conn)
+{
+    try {
+        $query_atual = "
+            SELECT SUM(valor) AS total_mes_atual
+            FROM doacao_monetaria
+            WHERE DATE(data) BETWEEN DATE_FORMAT(CURRENT_DATE, '%Y-%m-01') AND LAST_DAY(CURRENT_DATE)
+        ";
+        $stmt1 = $conn->prepare($query_atual);
+        $stmt1->execute();
+        $total_atual = $stmt1->get_result()->fetch_assoc()['total_mes_atual'] ?? 0;
+
+        $query_passado = "
+            SELECT SUM(valor) AS total_mes_passado
+            FROM doacao_monetaria
+            WHERE DATE(data) BETWEEN DATE_FORMAT(CURRENT_DATE - INTERVAL 1 MONTH, '%Y-%m-01') AND LAST_DAY(CURRENT_DATE - INTERVAL 1 MONTH)
+        ";
+        $stmt2 = $conn->prepare($query_passado);
+        $stmt2->execute();
+        $total_passado = $stmt2->get_result()->fetch_assoc()['total_mes_passado'] ?? 0;
+
+        return [
+            'atual' => (float) $total_atual,
+            'passado' => (float) $total_passado
+        ];
+    } catch (mysqli_sql_exception $e) {
+        return false;
+    }
+}
+
+function last_this_month_donations_material(mysqli $conn)
+{
+    try {
+        $query_atual = "
+            SELECT COUNT(*) AS total_materiais_mes_atual
+            FROM doacao
+            WHERE DATE(data) BETWEEN DATE_FORMAT(CURRENT_DATE, '%Y-%m-01') AND LAST_DAY(CURRENT_DATE)
+        ";
+        $stmt1 = $conn->prepare($query_atual);
+        $stmt1->execute();
+        $total_atual = $stmt1->get_result()->fetch_assoc()['total_materiais_mes_atual'] ?? 0;
+
+        $query_passado = "
+            SELECT COUNT(*) AS total_materiais_mes_passado
+            FROM doacao
+            WHERE DATE(data) BETWEEN DATE_FORMAT(CURRENT_DATE - INTERVAL 1 MONTH, '%Y-%m-01') AND LAST_DAY(CURRENT_DATE - INTERVAL 1 MONTH)
+        ";
+        $stmt2 = $conn->prepare($query_passado);
+        $stmt2->execute();
+        $total_passado = $stmt2->get_result()->fetch_assoc()['total_materiais_mes_passado'] ?? 0;
+
+        return [
+            'atual' => (int) $total_atual,
+            'passado' => (int) $total_passado
+        ];
+    } catch (mysqli_sql_exception $e) {
+        return false;
+    }
+}

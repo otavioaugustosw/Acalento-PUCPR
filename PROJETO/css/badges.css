@@ -38,7 +38,7 @@
 
 .badge-tertiary-donation {
     background-color: var(--secondary-blue);
-    border: 1px solid var(--primary-blue)
+    border: 1px solid var(--primary-blue);
 }
 
 .badge-tertiary-donation p {
@@ -56,11 +56,11 @@
 
 .badge-card.badge-primary-voluntary {
     background-color: var(--secondary-blue);
-    border: 1px solid var(--primary-blue)
+    border: 1px solid var(--primary-blue);
 }
 
 .badge-primary-voluntary p {
-    color: var(--primary-blue)
+    color: var(--primary-blue);
 }
 
 .badge-secondary-voluntary {
@@ -83,18 +83,66 @@
 
 .badge-quaternary-voluntary {
     background-color: var(--tertiary-blue);
-    border: 1px solid var(--primary-blue)
+    border: 1px solid var(--primary-blue);
 }
 
 .badge-quaternary-voluntary p {
-    color: var(--primary-blue)
+    color: var(--primary-blue);
 }
 
 .badge-final {
     background-color: var(--quaternary-yellow);
-    border: 1px solid var(--quintenary-yellow)
+    border: 1px solid var(--quintenary-yellow);
 }
 
 .badge-final p {
-    color: var(--quintenary-yellow)
+    color: var(--quintenary-yellow);
+}
+
+.badge-circular {
+    width: 230px;
+    height: 230px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1rem;
+    padding: 1rem;
+    margin: 0.5rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    transition: transform 0.3s ease;
+    position: relative;
+}
+
+.badge-circular:hover {
+    transform: scale(1.05);
+}
+
+.badge-circular .badge-variacao {
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-top: 6px;
+}
+
+
+/* Cores dos estados */
+.badge-sucesso {
+    background-color: #e8f5e9;
+    border: 3px solid #4CAF50;
+    color: #2e7d32;
+}
+
+.badge-perigo {
+    background-color: var(--secondary-red);
+    border: 3px solid #F44336;
+    color: #b71c1c;
+}
+
+.badge-alerta {
+    background-color: #fff8e1;
+    border: 3px solid #FFC107;
+    color: #8d6e63;
 }

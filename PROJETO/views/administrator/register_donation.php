@@ -135,8 +135,7 @@ function submitInformation($conn)
 
     $campoArquivo = $_FILES["comprovante"];
     $id_usuario = $_POST['id_usuario'] == 0 ? null : $_POST['id_usuario'];
-    $valor_bruto = isset($_POST['valor']) && $_POST['valor'] !== '' ? (float) $_POST['valor'] : null;
-
+    $valor_bruto = $_POST['valor'] ?? '';
     $valor_limpo = str_replace(['R$', '.', ' '], '', $valor_bruto);
     $valor = (float) str_replace(',', '.', $valor_limpo);
 

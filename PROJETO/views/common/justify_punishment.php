@@ -10,7 +10,7 @@ include_once (ROOT .  "/components/back/back.php");
 $conn = connectDatabase();
 $punishment_id = $_GET['id'] ?? 7;
 
-$punishment = get_all_punishments($conn, " WHERE up.id = $punishment_id");
+$punishment = get_all_punishments($conn, " WHERE usuario_punicao.id = $punishment_id");
 
 if (!$punishment) {
     showError(7);

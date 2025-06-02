@@ -5,15 +5,19 @@ include_once (ROOT . "/components/table/tables.php");
 include_once (ROOT . "/components/cards/cards.php");
 include_once (ROOT . "/models/donator_models_php.php");
 include_once (ROOT . "/models/voluntary_models_php.php");
+include_once (ROOT . "/models/common_models_php.php");
 include_once (ROOT . "/php/handlers/filter_php.php");
 include_once(ROOT . "/php/handlers/badge_handler.php");
 include_once (ROOT . "/components/carousel/carousel.php");
 
 $conn = connectDatabase();
+$monetarias = last_this_month_donations_monetary($conn);
+$materiais = last_this_month_donations_material($conn);
+$total_doacoes = total_donations($conn);
 $next_events = get_events_where($conn, 'WHERE evento.data >= NOW() AND evento.inativo = 0 ORDER BY evento.id DESC LIMIT 3;',  $_SESSION['USER_ID']);
 $all_my_events = get_total_participation_events($conn, $_SESSION['USER_ID']);
 $last_events = get_last_event($conn, $_SESSION['USER_ID']);
-$all_donations = get_donations_where($conn, "ORDER BY doacao.id DESC LIMIT 10");
+$all_donations = get_donations_where($conn, "ORDER BY doacao.id DESC LIMIT 5");
 $all_my_donations = get_donations_where_badges($conn, $_SESSION['USER_ID']);
 $last_donations = get_last_donation($conn, $_SESSION['USER_ID']);
 $my_donations = get_all_donations($conn, 'WHERE doacao.id_usuario = ' . $_SESSION['USER_ID'],
@@ -50,7 +54,25 @@ $table_head1 = ["Doador", "Tipo", "Doação", "Data"]; ?>
                         <h5 class="p-0" style="font-weight: 550">Obrigado por fazer parte do acalento</h5>
                         <?php
                         if ($_SESSION['USER_IS_ADMINISTRATOR']) { ?>
-                        <div class="col-md-6">
+                            <div class="d-flex flex-wrap justify-content-around align-items-center my-4 gap-5">
+                                <?php
+                                make_total_donations_badge($total_doacoes);
+                                make_monetary_donations_badge($monetarias['atual'], $monetarias['passado']);
+                                make_material_donations_badge($materiais['atual'], $materiais['passado']);
+                                ?>
+                            </div>
+
+                            <h2>Últimos eventos cadastrados</h2>
+                            <?php
+                            if (!$next_events) {
+                                showError(7);
+                            }
+                            if ($next_events->num_rows <= 0) {
+                                echo '<h3>Nenhum evento cadastrado</h3>';
+                            } else {
+                                make_cards_carousel($next_events);
+                            } ?>
+
                             <h2>Últimas doações recebidas</h2>
                             <?php
                             if (!$all_donations) {
@@ -61,20 +83,6 @@ $table_head1 = ["Doador", "Tipo", "Doação", "Data"]; ?>
                                 echo '<h3 class="p-5">Nenhuma doação encontrada.</h3>';
                             } else {
                                 render_donator_donations_table($table_head, $all_donations);
-                            }
-                            ?>
-                        </div>
-
-                        <div class="col-md-6 px-4">
-                            <h2>Últimos eventos cadastrados</h2>
-                            <?php
-                            if (!$next_events) {
-                                showError(7);
-                            }
-                            if ($next_events->num_rows <= 0) {
-                                echo '<h3>Nenhum evento cadastrado</h3>';
-                            } else {
-                                render_events_card($next_events, admin: true, horizontal: true);
                             }
 
                         // voluntário e doador

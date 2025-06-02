@@ -12,7 +12,7 @@ $conn = connectDatabase();
 $punishment_id = $_GET['id'] ?? 7;
 
 // usuario não pode retirar ou confirmar sua propria punição mesmo sendo admin
-$punishment = get_all_punishments($conn, " WHERE up.id = $punishment_id AND up.id_usuario !=" . $_SESSION['USER_ID']);
+$punishment = get_all_punishments($conn, " WHERE usuario_punicao.id = $punishment_id AND usuario_punicao.id_usuario !=" . $_SESSION['USER_ID']);
 
 if (!$punishment) {
     showError(7);

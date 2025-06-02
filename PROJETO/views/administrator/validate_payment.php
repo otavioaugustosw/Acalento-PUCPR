@@ -45,8 +45,17 @@ if (isset($_GET['validado'], $_GET['id_donation'])) {
                 <div class="mb-3">
                     <?php make_buttom_back("");?>
                     <h2>Validar doações monetárias</h2>
-                    <?php make_filter_validate();
-                    render_validate_donation_table($table_head, $donation) ?>
+                    <?php
+                    make_filter_validate();
+                    if (!$donation) {
+                    showError(7);
+                    }
+                    if ($donation->num_rows <= 0) {
+                    echo '<h3 class="d-flex justify-content-center p-5">Nenhuma doação para validar</h3>';
+                    }
+                    else {
+                    render_validate_donation_table($table_head, $donation);
+                    } ?>
                 </div>
             </div>
         </main>

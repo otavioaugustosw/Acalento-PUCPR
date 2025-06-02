@@ -62,8 +62,8 @@ $settlements = get_all_settlements($conn);
                             <label class="form-label">Assentamento</label>
                             <select name="id_assentamento" class="form-select">
                                 <?php while ($settlement = $settlements->fetch_object()) { ?>
-                                    <option value="<?php echo $settlement->id; ?>" <?php echo ($settlement->id == $event->id_assentamento) ? "selected" : ""; ?>>
-                                        <?php echo $settlement->nome; ?>
+                                    <option value="<?= $settlement->id_assentamento; ?>" <?= ($settlement->id_assentamento == $event->id_assentamento) ? "selected" : ""; ?>>
+                                        <?= $settlement->nome_assentamento; ?>
                                     </option>
                                 <?php } ?>
                             </select>

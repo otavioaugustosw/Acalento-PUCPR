@@ -73,7 +73,9 @@ $settlements = get_all_settlements($conn);
                             <select name="id_assentamento" id="inputAssentamento" class="form-select">
                                 <option value="">Selecione um assentamento</option>
                                 <?php while ($a = $settlements->fetch_object()) { ?>
-                                <option value="<?php echo $a->id;?>" <?= (isset($_POST['id_assentamento']) && $_POST['id_assentamento'] == $a->id) ? 'selected' : '' ?>><?php echo $a->nome; ?></option>
+                                    <option value="<?= $a->id_assentamento; ?>" <?= (isset($_POST['id_assentamento']) && $_POST['id_assentamento'] == $a->id_assentamento) ? 'selected' : '' ?>>
+                                        <?= $a->nome_assentamento; ?>
+                                    </option>
                                 <?php } ?>
                             </select>
                             <div id="validacaoAssentamento" class="invalid-feedback">

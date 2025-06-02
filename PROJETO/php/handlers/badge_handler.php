@@ -79,3 +79,64 @@ function last_events_badge($days)
 <?php }
 }
 
+function make_total_donations_badge($total_doacoes_mes) {
+    if ($total_doacoes_mes > 0) { ?>
+        <div class="badge-circular badge-alerta">
+            <p class="mb-0">📦</p>
+            <strong class="mt-1"><?= $total_doacoes_mes ?> doações</strong>
+            <small class="badge-variacao">No total deste mês</small>
+        </div>
+    <?php } else { ?>
+        <div class="badge-circular badge-perigo">
+            <p class="mb-0">📭</p>
+            <strong class="mt-1">0 doações</strong>
+            <small class="badge-variacao">Ainda não recebemos doações</small>
+        </div>
+    <?php }
+}
+
+function make_monetary_donations_badge($total_atual, $total_passado) {
+    $diferenca = $total_atual - $total_passado;
+    $porcentagem = $total_passado > 0 ? ($diferenca / $total_passado) * 100 : 0;
+
+    if ($diferenca > 0) {
+        $classe = 'badge-sucesso';
+        $texto = "⬆️ Aumento de " . number_format($porcentagem, 1, ',', '.') . "%";
+    } elseif ($diferenca < 0) {
+        $classe = 'badge-perigo';
+        $texto = "⬇️ Queda de " . number_format(abs($porcentagem), 1, ',', '.') . "%";
+    } else {
+        $classe = 'badge-alerta';
+        $texto = "➡️ Mesmo valor do mês passado";
+    }
+    ?>
+    <div class="badge-circular <?= $classe ?>">
+        <p class="mb-0">💰</p>
+        <strong class="mt-1">R$ <?= number_format($total_atual, 2, ',', '.') ?></strong>
+        <small class="badge-variacao"><?= $texto ?></small>
+    </div>
+    <?php
+}
+
+function make_material_donations_badge($materiais_mes_atual, $materiais_mes_passado) {
+    $diferenca = $materiais_mes_atual - $materiais_mes_passado;
+    $porcentagem = $materiais_mes_passado > 0 ? ($diferenca / $materiais_mes_passado) * 100 : 0;
+
+    if ($diferenca > 0) {
+        $classe = 'badge-sucesso';
+        $texto = "⬆️ Aumento de " . number_format($porcentagem, 1, ',', '.') . "%";
+    } elseif ($diferenca < 0) {
+        $classe = 'badge-perigo';
+        $texto = "⬇️ Queda de " . number_format(abs($porcentagem), 1, ',', '.') . "%";
+    } else {
+        $classe = 'badge-alerta';
+        $texto = "➡️ Mesmo número do mês passado";
+    }
+    ?>
+    <div class="badge-circular <?= $classe ?>">
+        <p class="mb-0">🎁</p>
+        <strong class="mt-1"><?= $materiais_mes_atual ?> itens</strong>
+        <small class="badge-variacao"><?= $texto ?></small>
+    </div>
+    <?php
+}

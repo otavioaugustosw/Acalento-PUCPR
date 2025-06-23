@@ -31,7 +31,7 @@ $table_head1 = ["Doador", "Tipo", "Doação", "Data"];
 $monetary_donatios = get_monetary_donations($conn, $where['where_monetario']);
 $table_head2 = ["Doador", "Valor", "Data"];
 $material_donations = get_donations_where($conn, $where['where_material']);
-$table_head3 = ["Item", "Quantidade", "Tipo", "Doador", "Data da doação", "Destino"];
+$table_head3 = ["Doador", "Item", "Quantidade", "Tipo", "Data da doação", "Destino"];
 ?>
 
 <!doctype html>

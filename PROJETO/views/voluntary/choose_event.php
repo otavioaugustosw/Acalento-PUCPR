@@ -10,7 +10,7 @@ include_once (ROOT .  "/php/handlers/error_handler_php.php");
 include_once (ROOT .  "/components/back/back.php");
 
 $conn = connectDatabase();
-$events = get_events_where($conn, setWhere('evento'), $_SESSION['USER_ID']);
+$events = get_events_where($conn, set_where_events('evento'), $_SESSION['USER_ID']);
 
 ?>
 <!doctype html>

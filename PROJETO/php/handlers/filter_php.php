@@ -18,6 +18,55 @@ function hasColumn(mysqli $bd, string $tabela, string $coluna): bool
     return $existe;
 }
 
+function set_where_events(string $nome)
+{
+    $db    = connectDatabase();
+    $table = $nome; // ex.: "evento"   ou  "item"
+
+    $dia    = $_POST['dia']    ?? '';
+
+    $filtro = $_POST['filtro'] ?? 'futuros';
+
+    if (($filtro === '' || $filtro === null) && ($dia === '' || $dia === null)) {
+        $filtro = 'todos';
+    }
+
+    $opcoesValidas = ['futuros','passados','todos', 'mes'];
+    if (!in_array($filtro,$opcoesValidas)) $filtro = 'futuros';
+
+    if ($dia!=='' && !preg_match('/^\d{4}-\d{2}-\d{2}$/',$dia)) $dia='';
+
+    /* monta o WHERE ------------------------------------------------ */
+    $where = '';
+
+    if ($dia !== '') {
+        // dia exato tem prioridade
+        $where = "WHERE DATE($table.data) = '$dia' AND $table.inativo = 0";
+    } else {
+        switch ($filtro) {
+            case 'futuros':
+                $where = "WHERE $table.data >= NOW() AND $table.inativo = 0";
+                break;
+
+            case 'passados':
+                $where = "WHERE $table.data <= NOW() AND $table.inativo = 0";
+                break;
+            case "mes":
+                /* DATESUB: para subtrair um mês do dia de hoje (CURRENT_DATE)
+                DATE_FORMAT: pega a data e formata ela, nessa caso formata para o primeiro dia do mês
+                LAST_DAY: pega o último dia do mês */
+                $where = "WHERE $table.data BETWEEN
+                    DATE_FORMAT(DATE_SUB(CURRENT_DATE, INTERVAL 1 MONTH), '%Y-%m-01') AND LAST_DAY(DATE_SUB(CURRENT_DATE, INTERVAL 1 MONTH))
+                    AND $table.inativo = 0";
+                break;
+            case 'todos':
+                $where = "WHERE $table.inativo = 0";
+                break;
+        }
+    }
+    return $where;
+}
+
 
 function setWhere(string $nome): string
 {
@@ -150,16 +199,16 @@ function set_where_my_events(){
 
     switch ($filtro) {
         case 'ha_confirmar':
-            $where = 'WHERE participacao_confirmada = 0 AND ' . $usuario;
+            $where = 'WHERE participacao_confirmada = 0 AND evento.inativo = 0 AND ' . $usuario;
             break;
         case 'confirmado':
-            $where = 'WHERE participacao_confirmada = 1 AND presenca = 0 AND ' . $usuario;
+            $where = 'WHERE participacao_confirmada = 1 AND presenca = 0 AND evento.inativo = 0 AND ' . $usuario;
             break;
         case 'presente':
-            $where = 'WHERE presenca = 1 AND ' . $usuario;
+            $where = 'WHERE presenca = 1 AND evento.inativo = 0 AND ' . $usuario;
             break;
         case 'todos':
-            $where = 'WHERE ' . $usuario;
+            $where = 'WHERE evento.inativo = 0 AND ' . $usuario;
             break;
     }
     return $where;

@@ -10,7 +10,7 @@ include_once (ROOT .  "/components/back/back.php");
 $conn = connectDatabase();
 
 // busca no banco de dados por assentamentos
-$settlements = get_all_settlements($conn);
+$settlements = get_settlements_info($conn);
 
 ?>
 
@@ -72,9 +72,10 @@ $settlements = get_all_settlements($conn);
                             <label for="inputAssentamento" class="form-label">Local*</label>
                             <select name="id_assentamento" id="inputAssentamento" class="form-select">
                                 <option value="">Selecione um assentamento</option>
-                                <?php while ($a = $settlements->fetch_object()) { ?>
-                                    <option value="<?= $a->id_assentamento; ?>" <?= (isset($_POST['id_assentamento']) && $_POST['id_assentamento'] == $a->id_assentamento) ? 'selected' : '' ?>>
-                                        <?= $a->nome_assentamento; ?>
+                                <?php while ($a = $settlements->fetch_object()) {
+                                    ?>
+                                    <option value="<?= $a->id; ?>" <?= (isset($_POST['id_assentamento']) && $_POST['id_assentamento'] == $a->id) ? 'selected' : '' ?>>
+                                        <?= $a->nome; ?>
                                     </option>
                                 <?php } ?>
                             </select>

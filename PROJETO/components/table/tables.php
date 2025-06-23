@@ -74,7 +74,8 @@ function render_monetary_donations_table(array $table_columns, $donations)
             $table_rows = [
                 $donation->usuario_nome,
                 $donation->valor,
-                format_date($donation->data)
+                format_date($donation->data),
+                $donation->tipo
             ];
             make_table_rows($table_rows);
         }
@@ -242,7 +243,7 @@ function render_certificates_table(array $table_columns, mysqli_result $events)
         <?php while ($event = $events->fetch_object()) {
             $button_certificate = function () use ($event) {
             if ($event->presenca) {
-                makeButton("Visualizar certificado","btn btn-primary", "index.php?voluntary=9&nome_evento=$event->nome_evento&date=$event->data");
+                makeButton("Visualizar certificado","btn btn-primary", "index.php?voluntary=9&nome_evento=$event->nome_evento&date=$event->data&settlement=$event->assentamento&time=$event->hora");
             }
             };
             $table_rows = [

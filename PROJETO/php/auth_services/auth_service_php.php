@@ -91,7 +91,7 @@ function _is_password_correct($password, $hashedPassword): array
 
 function load_user_session_data($conn): array
 {
-    $query = "SELECT email, nome, eh_doador, eh_adm, eh_voluntario, id_endereco FROM usuario WHERE id = ?;";
+    $query = "SELECT email, nome, eh_doador, eh_adm, eh_voluntario, id_endereco, cpf FROM usuario WHERE id = ?;";
     $stmt = $conn->prepare($query);
     $stmt->bind_param("i", $_SESSION['USER_ID']);
     $stmt->execute();
@@ -107,6 +107,7 @@ function load_user_session_data($conn): array
     $_SESSION['USER_IS_ADMINISTRATOR'] = $user->eh_adm;
     $_SESSION['USER_IS_VOLUNTARY'] = $user->eh_voluntario;
     $_SESSION['USER_ADDRESS_ID'] = $user->id_endereco;
+    $_SESSION['USER_CPF'] = $user->cpf;
 
     return MESSAGES["USER_AUTHENTICATED"];
 }

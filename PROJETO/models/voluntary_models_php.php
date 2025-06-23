@@ -283,11 +283,15 @@ function get_confirmed_events(mysqli $conn, int $user_id): mysqli_result|false {
     $query = "
         SELECT 
             evento.id,
+            evento.id_assentamento,
             evento.nome AS nome_evento,
             evento.data,
+            evento.hora,
+            assentamento.nome AS assentamento,
             upe.presenca
         FROM usuario_participa_evento upe
         JOIN evento ON evento.id = upe.id_evento
+        JOIN assentamento ON evento.id_assentamento = assentamento.id
         WHERE upe.id_usuario = ?
           AND upe.participacao_confirmada = 1
           AND upe.presenca = 1

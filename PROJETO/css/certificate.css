@@ -1,24 +1,60 @@
 body {
     background-size: cover;
     color:var(--primary-background);
-    height: 100vh;
 }
 .certificado {
-    text-align: center;
-    padding: 100px 60px;
+    padding: 55px 60px;
     background-color: var(--tertiary-background);
-    margin: 50px auto;
-    width: 80%;
-    box-shadow: 0 0 15px var(--primary-blue);
+    width: 95%;
+    border: 8px double var(--primary-blue);
+    margin: auto;
 }
-.certificado h1 {
+
+.title {
+    margin-bottom: 25px;
+}
+
+.title h1 {
     font-size: 48px;
-    margin-bottom: 20px;
+    margin-left: 10px;
 }
-.certificado p {
-    font-size: 20px;
-    line-height: 1.6;
+
+.content {
+    text-align: center;
+    margin-bottom: 30px;
 }
+
+.content p {
+    font-size: 16px;
+    line-height: 1.7;
+    margin-bottom: 10px;
+}
+
+.content h4 {
+    margin-bottom: 30px;
+    font-size: 40px;
+}
+
+.bottom {
+    display: flex;
+    justify-content: center;
+}
+
+.bottom p {
+    font-size: 15px;
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+.signed {
+    margin-top: 20px;
+    color: var(--primary-blue);
+    font-family: 'Herr Von Muellerhoff', cursive;
+    font-size: 40px;
+    margin-bottom: -30px;
+    text-align: center;
+}
+
 
 @media print {
     @page {

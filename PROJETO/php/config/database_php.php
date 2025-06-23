@@ -11,5 +11,5 @@ function connectDatabase()
         );
     } catch (mysqli_sql_exception $E) {
         header('Location: index.php');
-}
+    }
 }

@@ -2,6 +2,8 @@
 
 Trabalho apresentado como requisito para a disciplina de Experiência Criativa – Projetando Soluções Computacionais, do curso de Bacharelado em Engenharia de Software da PUCPR (2025).
 
+![acalento3](https://github.com/user-attachments/assets/00390d09-9d9c-4c87-aa5a-5cb7261cf72b)
+
 ## Sobre o Projeto
 Este projeto é um software on-line projetado para simplificar a gestão de estoque e eventos para a ONG Acalento. Seu objetivo principal é centralizar e otimizar as operações da ONG, incluindo o controle de doações e a organização de ações humanitárias, ao mesmo tempo em que facilita a captação de novos doadores e voluntários.
 
@@ -24,12 +26,16 @@ O sistema foi desenvolvido para atender três perfis de usuários principais:
   * **Gestão de Eventos:** Cadastrar novos eventos e atividades.
   * **Controle de Presença:** Controlar a participação de crianças nas atividades.
 
+![acalento4](https://github.com/user-attachments/assets/ee7388ea-9b8d-44c7-9d20-09b047082216)
+
 **Para Voluntários:**
 
 * **Participação:** Acessar e visualizar os eventos disponíveis.
 * **Inscrição:** Inscrever-se para participar de novas atividades humanitárias.
 * **Histórico:** Visualizar o histórico de eventos que já participou.
 * **Cadastro:** Manter seu cadastro de voluntário atualizado.
+
+![acalento2](https://github.com/user-attachments/assets/38fdfcb1-464d-4d2e-87f3-7305af98786d)
 
 **Para Doadores:**
 
